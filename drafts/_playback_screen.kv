@@ -1,0 +1,102 @@
+#:kivy 1.9.0
+#:import HorizontalBlurEffect kivy.uix.effectwidget.HorizontalBlurEffect
+#:import VerticalBlurEffect kivy.uix.effectwidget.VerticalBlurEffect
+#:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
+
+<PlaybackScreen>:
+    BoxLayout:
+        spacing:10
+
+        FloatLayout:
+            id: albumzone
+            size_hint: (0.45, 1)
+
+            AlbumCover:
+                id: cover
+                source: app.mm.current_cover
+                border: device_image.device not in ['tv', 'radio']
+                pos_hint: {'center_x': 0.65, 'y': 0.37}
+                height: albumzone.width * 0.9
+
+            DeviceImage:
+                id: device_image
+                size_hint_x: 1.2
+                pos_hint: {'x': 0, 'center_y': 0.32}
+                uri: app.mm.current_uri
+                playing: app.mm.current_state == 'playing'
+
+            BoxLayout:
+                id: option_buttons
+                size_hint: (0.6, 0.1)
+                pos_hint: {'right': 1}
+                spacing: 5
+                padding_x: 10
+
+                CheckBox:
+                    id: chk_random
+                    active: app.mm.options.random
+                    on_active: app.mm.mopidy.tracklist.set_random(args[1])
+                    background_checkbox_down: 'atlas://images/options/random_on'
+                    background_checkbox_normal: 'atlas://images/options/random_off'
+
+                CheckBox:
+                    id: chk_single
+                    active: app.mm.options.single
+                    on_active: app.mm.mopidy.tracklist.set_single(args[1])
+                    background_checkbox_down: 'atlas://images/options/single_on'
+                    background_checkbox_normal: 'atlas://images/options/single_off'
+
+                CheckBox:
+                    id: chk_repeat
+                    active: app.mm.options.repeat
+                    on_active: app.mm.mopidy.tracklist.set_repeat(args[1])
+                    background_checkbox_down: 'atlas://images/options/repeat_on'
+                    background_checkbox_normal: 'atlas://images/options/repeat_off'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+
+            BoxLayout:
+                id: volume_control
+                size_hint: (0.6, 0.1)
+                pos_hint: {'right': 1}
+                opacity: 0.4
+
+                CheckBox:
+                    id: chk_mute
+                    active: app.mm.mute
+                    on_active: app.mm.mopidy.mixer.set_mute(args[1])
+                    background_checkbox_down: default_atlas + 'audio-volume-muted'
+                    background_checkbox_normal: default_atlas + 'audio-volume-high'
+                    size_hint_x: 0.2
+
+                SeekSlider:
+                    range: (0, 100)
+                    value: app.mm.volume
+                    on_seek: app.mm.mopidy.mixer.set_volume(int(args[1]))
+
+            TrackInfo:
+                title: app.mm.current_title
+                artists: app.mm.current_track.get('artists', []) if app.mm.current_track else []
+                album: app.mm.current_track.get('album', {}) if app.mm.current_track else {}
+                on_item_press: app.mm.lookup_item(args[1])
+                padding_x: 20
+
+            PlaybackSlider:
+                id: pb_slider
+                size_hint_y: 0.2
+                position: app.mm.time_position
+                duration: app.mm.current_track.length if app.mm.current_track and 'length' in app.mm.current_track else None
+                resolution: app.mm.pos_resolution
+                on_seek: app.mm.seek_position(args[1])
+
+            PlaybackControl:
+                size_hint: 0.9, 0.25
+                pos_hint: {'center_y': 0.5}
+                opacity: 0.5
+                playing: app.mm.current_state == 'playing'
+                on_play_pause: app.mm.toggle_play_pause()
+                on_stop: app.mm.stop_track()
+                on_previous: app.mm.previous_track()
+                on_next: app.mm.next_track()

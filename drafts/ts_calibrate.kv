@@ -1,0 +1,21 @@
+#:kivy 1.9.0
+
+<Target>:
+    size_hint: (None, None)
+    size: (20, 20)
+    canvas:
+        Color:
+            rgba: (0,0,1,0.9)
+        Rectangle:
+            pos: (self.x - self.width/2, self.y - self.height/2)
+            size: self.size
+
+TSCalibrate:
+    Label: 
+        id: 'label'
+        valign: 'middle'
+        halign: 'center'
+        pos_hint: {'center': (0.5, 0.5)}
+        font_size: 40
+        text: 'x:%d y:%d' % (int(root.toque_x), int(root.toque_y))
+   
