@@ -36,7 +36,6 @@ class TrackListScreen(Screen):
         return [tl_track for tl_track in self.tracklist
                 if self.matches_filter(tl_track['track'], self.filter)]
 
-
     def on_tracklist(self, *args):
         self.do_filter()
 

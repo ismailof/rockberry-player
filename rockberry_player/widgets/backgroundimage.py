@@ -13,18 +13,6 @@ class BackgroundImage(EffectWidget):
     blur_size = NumericProperty(64)
     outbounds = NumericProperty(0)
 
-    #proxy = ProxyImage()
-
-    #def on_uri(self, *args):
-        #AlbumCoverRetriever.request_image(self.uri, self.update_image)
-
-    #def update_image(self, *args):
-        #self.proxy.source = AlbumCoverRetriever.select_image(self.uri, self.size)
-        #self.proxy.bind(on_load=self.cover_loaded)
-
-    #def cover_loaded(self, *args):
-        #self.ids['main'].texture = self.ids['proxy'].texture
-
 
 Builder.load_string("""
 #:import HBlur kivy.uix.effectwidget.HorizontalBlurEffect

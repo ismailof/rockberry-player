@@ -1,14 +1,13 @@
 #!/usr/bin/python
 import kivy
+import logging
 kivy.require('1.9.2')
 
 from kivy.app import App
+from kivy.loader import Loader
 
 from main import RockberryMain
 from music.manager import MediaManager
-from kivy.loader import Loader
-
-import logging
 
 
 logger = logging.getLogger(__name__)

@@ -48,7 +48,7 @@ def scheduled(_function_):
 
     def schedule_function(*args, **kwargs):
         Clock.schedule_once(lambda dt:
-                                do_function(*args, **kwargs))
+                            do_function(*args, **kwargs))
     return schedule_function
 
 

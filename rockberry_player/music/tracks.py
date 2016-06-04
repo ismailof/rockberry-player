@@ -46,9 +46,7 @@ class TrackBehavior(EventDispatcher):
 
     def set_reference(self):
         pass
-        #return MopidyRef(type='track',
-                         #name=self.title,
-                         #uri=self.uri)
+        #return MopidyRef(type='track', name=self.title, uri=self.uri)
 
     ref = AliasProperty(get_reference, set_reference, bind=['track'])
 

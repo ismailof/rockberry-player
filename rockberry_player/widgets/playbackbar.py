@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 from music.playback import PlaybackControl, PlaybackStateAware
 
 
-playback_controls= ['play_pause', 'stop', 'next', 'prev']
+playback_controls = ['play_pause', 'stop', 'next', 'prev']
 
 
 class PlaybackButton(PlaybackStateAware, Button):

@@ -107,9 +107,9 @@ class MediaManager(EventDispatcher):
                            get_data=lambda data: None)
 
         self.bind_method(self.current.set_tl_track, ['track_playback_started',
-                                                        'track_playback_paused',
-                                                        'track_playback_resumed',
-                                                        'track_playback_ended'])
+                                                     'track_playback_paused',
+                                                     'track_playback_resumed',
+                                                     'track_playback_ended'])
 
         self.bind_method(self.current.set_stream_title, 'stream_title_changed')
 
@@ -122,7 +122,6 @@ class MediaManager(EventDispatcher):
 
         self.bind_method(self.refresh_tracklist, 'tracklist_changed')
         self.bind_method(self.options.refresh, 'options_changed')
-
 
     def init_player_state(self):
 

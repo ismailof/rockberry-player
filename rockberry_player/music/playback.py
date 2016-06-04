@@ -71,7 +71,6 @@ class PlaybackControl(EventDispatcher):
         self.interface.stop()
 
 
-
 class PlaybackStateAware(EventDispatcher):
     playback_state = PlaybackControl.playback_state
     baseparm = ObjectProperty('')

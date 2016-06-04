@@ -19,8 +19,8 @@ class TrackInfoLabel(TrackBehavior, ReferenceLabel):
 
         parts = self.title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
         parts = [MarkupText(item,
-                            size=self.font_size if index > 0 \
-                                else int(self.font_size * 1.3),
+                            size=self.font_size if index > 0
+                                 else int(self.font_size * 1.3),
                             color='#ffffff',
                             b=True)
                  for index, item in enumerate(parts)]
@@ -50,8 +50,8 @@ class TrackInfoLabel(TrackBehavior, ReferenceLabel):
 
         parts = album.get('name').replace('(', '~(').replace('[', '~[').split('~')
         parts = [MarkupText(item,
-                            size=self.font_size if index == 0 \
-                                else self.font_size-2)
+                            size=self.font_size if index == 0
+                                 else self.font_size - 2)
                  for index, item in enumerate(parts)]
 
         return MarkupText(''.join(parts),
