@@ -3,15 +3,10 @@ import logging
 
 from kivy.event import EventDispatcher
 from kivy.clock import Clock
-from kivy.properties import ListProperty, ObjectProperty
-
-from kivy.uix.listview import ListView
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
+from kivy.properties import ListProperty, ObjectProperty, StringProperty,\
+    DictProperty
 
 from mopidy_json_client import MopidyClient
-from mopidy_json_client.formatting import format_nice
 
 from utils import scheduled, delayed, assign_property
 
@@ -20,8 +15,17 @@ from music.images import AlbumCoverRetriever
 from music.playback import PlaybackControl
 from music.options import OptionsControl
 from music.mixer import MixerControl
+from music.refs import RefUtils, RefBehavior
 
+# TEMPORAL
 from widgets.error_popup import ErrorPopup
+
+# For browsing popup (TEMPORAL)
+from kivy.uix.listview import ListView
+from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
+from mopidy_json_client.formatting import format_nice
 
 
 from debug import debug_function
@@ -49,6 +53,10 @@ class MediaManager(EventDispatcher):
 
     tracklist = ListProperty([])
 
+    browse_item = ObjectProperty(RefBehavior(), rebind=True)
+    browse_list = ListProperty([])
+
+
     def bind_method(self, method, events):
         if type(events) != list:
             events = [events]
@@ -72,6 +80,7 @@ class MediaManager(EventDispatcher):
         if connection_state:
             self.set_interfaces()
             self.init_player_state()
+            self.browse(None)
 
     def set_interfaces(self):
         PlaybackControl.interface = self.mopidy.playback
@@ -83,6 +92,7 @@ class MediaManager(EventDispatcher):
         self.prev._refresh_function = self.mopidy.tracklist.previous_track
         self.eot._refresh_function = self.mopidy.tracklist.eot_track
 
+    # TODO: move to main.py
     def on_mopidy_error(self, error):
         popup = ErrorPopup(error=error)
         Clock.schedule_once(popup.open)
@@ -92,7 +102,8 @@ class MediaManager(EventDispatcher):
         self.bind_method(self.mixer.update_volume, 'volume_changed')
         self.bind_method(self.mixer.update_mute, 'mute_changed')
 
-        self.bind_property(self.state, 'playback_state', 'playback_state_changed', field='new_state')
+        self.bind_property(self.state, 'playback_state', 'playback_state_changed',
+                           field='new_state')
 
         self.bind_method(self.state.update_time_position, ['seeked',
                                                            'track_playback_paused',
@@ -101,17 +112,14 @@ class MediaManager(EventDispatcher):
         self.bind_method(self.state.reset_time_position, ['track_playback_started',
                                                           'track_playback_ended'])
 
-        self.bind_property(self.current, 'stream_title',
-                           ['track_playback_started',
-                            'track_playback_ended'],
-                           get_data=lambda data: None)
-
         self.bind_method(self.current.set_tl_track, ['track_playback_started',
                                                      'track_playback_paused',
                                                      'track_playback_resumed',
                                                      'track_playback_ended'])
 
         self.bind_method(self.current.set_stream_title, 'stream_title_changed')
+        self.bind_method(self.current.reset_stream_title, ['track_playback_started',
+                                                           'track_playback_ended'])
 
         self.current.bind(track=self.refresh_context_info)
         self.state.bind(on_next=self.current.refresh,
@@ -151,6 +159,38 @@ class MediaManager(EventDispatcher):
 
     def seek_position(self, time_position, *args):
         self.mopidy.playback.seek(time_position)
+
+    # BROWSE FUNCTIONS. TODO: Move to a propper place
+
+    @scheduled
+    def browse(self, reference):
+        self.browse_item.ref = RefUtils.make_reference(reference)
+        self.browse_list = self.mopidy.library.browse(uri=self.browse_item.uri, timeout=20)
+
+    @scheduled
+    def play_uris(self, uris):
+        tltracks = self.mopidy.tracklist.add(uris=uris, timeout=20)
+        try:
+            tlid_first = tltracks[0]['tlid']
+            self.mopidy.playback.play(tlid=tlid_first)
+        except:
+            pass
+
+    @scheduled
+    def add_to_tracklist(self, refs=None, uris=None, tunning=False):
+        if refs:
+            uris = [RefUtils.get_uri(ref) for ref in refs]
+        if not uris:
+            return
+
+        if tunning:
+            self.mopidy.tracklist.clear()
+
+        self.mopidy.tracklist.add(uris=uris, timeout=20)
+
+        if tunning:
+            self.mopidy.playback.play()
+
 
     # Mini test function -> Shows current tracks reported by browse(uri)
     def lookup_item(self, item):

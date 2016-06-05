@@ -1,5 +1,5 @@
 from kivy.uix.label import Label
-from utils import MopidyRef
+from music.refs import RefUtils
 
 
 class ReferenceLabel(Label):
@@ -12,7 +12,7 @@ class ReferenceLabel(Label):
 
     def new_ref(self, item):
         refid = len(self.references)
-        self.references.append(MopidyRef(item))
+        self.references.append(RefUtils.make_reference(item))
         return refid
 
     def clear_refs(self):

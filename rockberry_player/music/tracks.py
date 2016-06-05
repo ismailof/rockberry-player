@@ -5,7 +5,8 @@ import re
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
-from utils import scheduled, MopidyRef
+from utils import scheduled
+from music.refs import RefUtils
 
 
 class TrackBehavior(EventDispatcher):
@@ -24,10 +25,10 @@ class TrackBehavior(EventDispatcher):
         return TrackUtils.artists_text(self.track)
 
     def get_uri(self):
-        return TrackUtils.get_uri(self.track)
+        return RefUtils.get_uri(self.track)
 
     def get_media(self):
-        return TrackUtils.get_source_from_uri(self.uri)
+        return RefUtils.get_media_from_uri(self.uri)
 
     def get_duration(self):
         return self.track.length \
@@ -42,11 +43,10 @@ class TrackBehavior(EventDispatcher):
     duration = AliasProperty(get_duration, None, bind=['track'])
 
     def get_reference(self):
-        return MopidyRef(self.track)
+        return RefUtils.make_reference(self.track)
 
     def set_reference(self):
         pass
-        #return MopidyRef(type='track', name=self.title, uri=self.uri)
 
     ref = AliasProperty(get_reference, set_reference, bind=['track'])
 
@@ -68,6 +68,11 @@ class TrackControl(TrackBehavior):
     def set_stream_title(self, title, *args, **kwargs):
         self.stream_title = title
 
+    @scheduled
+    def reset_stream_title(self, *args, **kwargs):
+        self.stream_title = None
+
+    @scheduled
     def refresh(self, *args, **kwargs):
         if self._refresh_function:
             self._refresh_function(
@@ -91,15 +96,6 @@ class TrackUtils(object):
     def album_text(track):
         return track.get('album', {}).get('name', '') \
             if track else ''
-
-    @staticmethod
-    def get_uri(track):
-        return track.get('uri', '') \
-            if track else ''
-
-    @staticmethod
-    def get_source_from_uri(uri):
-        return uri.split(':')[0].split('+')[0] if uri else ''
 
     @staticmethod
     def words_in_track(track):

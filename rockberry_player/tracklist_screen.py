@@ -67,6 +67,7 @@ Builder.load_string("""
 
             PlaybackArea:
                 size_hint_x: 0.4
+                item: app.mm.current
 
             TrackListView:
                 id: tlview

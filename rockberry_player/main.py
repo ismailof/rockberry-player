@@ -9,11 +9,9 @@ from functools import partial
 
 from playback_screen import PlaybackScreen
 from tracklist_screen import TrackListScreen
+from browse_screen import BrowseScreen
 from widgets.backgroundimage import BackgroundImage
 from widgets.simpleclock import DigitalClock
-
-
-from widgets.playbackarea import PlaybackArea
 
 
 class RockberryMain(FloatLayout):
@@ -98,10 +96,8 @@ Builder.load_string("""
                 #TestWidget:
                     #manager: screenmanager
 
-            Screen:
+            BrowseScreen:
                 name: 'browse'
-                PlaybackArea:
-                    size_hint_x: 0.3
 
             #Screen:
                 #name: 'settings'

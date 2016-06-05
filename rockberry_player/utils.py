@@ -3,22 +3,6 @@ from functools import wraps
 from kivy.clock import Clock
 
 
-def MopidyRef(item):
-
-    if not item:
-        return None
-
-    if '__model__' not in item:
-        print 'item %r is not a Mopidy Model' % item
-
-    #assert '__model__' in item, 'item %r is not a Mopidy Model' % item
-
-    return {'__model__': 'Ref',
-            'type': item.get('__model__'),
-            'name': item.get('name'),
-            'uri': item.get('uri')}
-
-
 def MarkupText(text, **fmt_options):
 
     def add_markup_tag(text='', tag='', value=False):
