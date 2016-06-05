@@ -12,6 +12,7 @@ from tracklist_screen import TrackListScreen
 from browse_screen import BrowseScreen
 from widgets.backgroundimage import BackgroundImage
 from widgets.simpleclock import DigitalClock
+from widgets.error_popup import ErrorPopup
 
 
 class RockberryMain(FloatLayout):
@@ -33,6 +34,10 @@ class RockberryMain(FloatLayout):
 
     def do_screenshot(self, *args):
         Window.screenshot(name='rockberry_%(counter)04d.png')
+
+    def show_error(self, error, *args):
+        popup = ErrorPopup(error=error)
+        Clock.schedule_once(popup.open)
 
 
 Builder.load_string("""

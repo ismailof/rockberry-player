@@ -91,7 +91,7 @@ Builder.load_string("""
                 track: app.mm.current.track
                 stream_title: app.mm.current.stream_title
                 font_size: 23
-                on_item_press: app.mm.lookup_item(args[1])
+                on_item_press: app.mm.browse(args[1])
                 padding_x: 20
 
 
@@ -111,7 +111,7 @@ Builder.load_string("""
                 Label:
                     markup: True
                     text: '[ref=0]' + app.mm.prev.title + '[/ref]'
-                    on_ref_press: app.mm.lookup_item(app.mm.prev.ref)
+                    on_ref_press: app.mm.browse(app.mm.prev.ref)
                     halign: 'left'
                     valign: 'top'
                     text_size: self.size
@@ -121,7 +121,7 @@ Builder.load_string("""
                 Label:
                     markup: True
                     text: '[ref=0]' + app.mm.next.title + '[/ref]'
-                    on_ref_press: app.mm.lookup_item(app.mm.next.ref)
+                    on_ref_press: app.mm.browse(app.mm.next.ref)
                     halign: 'right'
                     valign: 'top'
                     text_size: self.size

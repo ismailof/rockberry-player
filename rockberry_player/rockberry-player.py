@@ -21,12 +21,11 @@ class RockberryPlayerApp(App):
         super(RockberryPlayerApp, self).__init__(**kwargs)
         self.IMG_FOLDER = self.directory + '/images/'
         self.mm = MediaManager()
+        self.main = RockberryMain()
 
     def build(self):
-        main_widget = RockberryMain()
-        main_widget.switch_to(screen='playback')
-
-        return main_widget
+        self.main.switch_to(screen='playback')
+        return self.main
 
 
 if __name__ == '__main__':

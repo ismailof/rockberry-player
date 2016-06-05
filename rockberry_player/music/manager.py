@@ -6,6 +6,8 @@ from kivy.clock import Clock
 from kivy.properties import ListProperty, ObjectProperty, StringProperty,\
     DictProperty
 
+from kivy.app import App
+
 from mopidy_json_client import MopidyClient
 
 from utils import scheduled, delayed, assign_property
@@ -17,19 +19,7 @@ from music.options import OptionsControl
 from music.mixer import MixerControl
 from music.refs import RefUtils, RefBehavior
 
-# TEMPORAL
-from widgets.error_popup import ErrorPopup
-
-# For browsing popup (TEMPORAL)
-from kivy.uix.listview import ListView
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
-from mopidy_json_client.formatting import format_nice
-
-
 from debug import debug_function
-
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +60,7 @@ class MediaManager(EventDispatcher):
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
 
+        self.app = App.get_running_app()
         self.mopidy = MopidyClient(server_addr=MOPIDY_SERVER,
                                    error_handler=self.on_mopidy_error)
 
@@ -80,7 +71,6 @@ class MediaManager(EventDispatcher):
         if connection_state:
             self.set_interfaces()
             self.init_player_state()
-            self.browse(None)
 
     def set_interfaces(self):
         PlaybackControl.interface = self.mopidy.playback
@@ -94,8 +84,7 @@ class MediaManager(EventDispatcher):
 
     # TODO: move to main.py
     def on_mopidy_error(self, error):
-        popup = ErrorPopup(error=error)
-        Clock.schedule_once(popup.open)
+        self.app.main.show_error(error=error)
 
     def bind_events(self, *args):
 
@@ -147,6 +136,9 @@ class MediaManager(EventDispatcher):
 
         self.refresh_tracklist()
 
+        self.browse_item.ref = RefUtils.make_reference(None)
+        self.browse_list = self.mopidy.library.browse(uri=None, timeout=20) or []
+
     def refresh_context_info(self, *args):
         self.next.refresh()
         self.prev.refresh()
@@ -166,6 +158,7 @@ class MediaManager(EventDispatcher):
     def browse(self, reference):
         self.browse_item.ref = RefUtils.make_reference(reference)
         self.browse_list = self.mopidy.library.browse(uri=self.browse_item.uri, timeout=20)
+        self.app.main.switch_to(screen='browse')
 
     @scheduled
     def play_uris(self, uris):
@@ -190,32 +183,3 @@ class MediaManager(EventDispatcher):
 
         if tunning:
             self.mopidy.playback.play()
-
-
-    # Mini test function -> Shows current tracks reported by browse(uri)
-    def lookup_item(self, item):
-
-        if not item or not item.get('uri'):
-            return
-
-        uri = item['uri']
-        logger.debug('Browsing on URI: %s', uri)
-
-        info = self.mopidy.library.browse(uri=uri, timeout=40)
-        info_tracks = format_nice(info, format='browse').split('\n')
-
-        title = '[%s] %s  (%d items)' % (item['type'], item['name'], len(info_tracks))
-
-        lv = ListView(item_strings=info_tracks, halign='left')
-        btn = Button(text='Close', size_hint_y=None, height=50)
-        cnt = BoxLayout(orientation='vertical')
-        cnt.add_widget(lv)
-        cnt.add_widget(btn)
-
-        popup = Popup(title=title,
-                      content=cnt,
-                      size_hint=(0.8, 0.8),
-                      title_size=22,)
-
-        btn.bind(on_press=popup.dismiss)
-        popup.open()
