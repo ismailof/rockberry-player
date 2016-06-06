@@ -45,9 +45,11 @@ Builder.load_string("""
 
         Label:
             text: root.item.title if root.item else ''
+            multiline: 2
             halign: 'center'
+            valign: 'top'
             text_size: self.size
-            font_size: 17
+            font_size: 20
             bold: True
 
         #SimpleTrackInfo:

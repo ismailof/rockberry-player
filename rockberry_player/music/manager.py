@@ -152,13 +152,16 @@ class MediaManager(EventDispatcher):
     def seek_position(self, time_position, *args):
         self.mopidy.playback.seek(time_position)
 
-    # BROWSE FUNCTIONS. TODO: Move to a propper place
-
-    @scheduled
-    def browse(self, reference):
+    # BROWSE FUNCTIONS. TODO: Move to a proper place
+        
+    def browse(self, reference):        
+        @scheduled
+        def browse_result(result, *args):
+            self.browse_list = result
+            self.app.main.switch_to(screen='browse')
+        
         self.browse_item.ref = RefUtils.make_reference(reference)
-        self.browse_list = self.mopidy.library.browse(uri=self.browse_item.uri, timeout=20)
-        self.app.main.switch_to(screen='browse')
+        self.mopidy.library.browse(uri=self.browse_item.uri, on_result=browse_result)        
 
     @scheduled
     def play_uris(self, uris):
@@ -166,6 +169,7 @@ class MediaManager(EventDispatcher):
         try:
             tlid_first = tltracks[0]['tlid']
             self.mopidy.playback.play(tlid=tlid_first)
+            self.app.main.switch_to(screen='playback')
         except:
             pass
 
@@ -183,3 +187,4 @@ class MediaManager(EventDispatcher):
 
         if tunning:
             self.mopidy.playback.play()
+            self.app.main.switch_to(screen='playback')
