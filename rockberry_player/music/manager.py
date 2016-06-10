@@ -44,8 +44,6 @@ class MediaManager(EventDispatcher):
     
     queue = ObjectProperty(QueueControl(), rebind=True)
 
-    #tracklist = ListProperty([])
-
     browse_item = ObjectProperty(RefBehavior(), rebind=True)
     browse_list = ListProperty([])
 
@@ -142,14 +140,7 @@ class MediaManager(EventDispatcher):
         self.prev.refresh()
         self.eot.refresh()
 
-    #@scheduled
-    #def refresh_tracklist(self):
-        #self.mopidy.tracklist.get_tl_tracks(
-            #on_result=assign_property(self, 'tracklist'))
-
-    #def seek_position(self, time_position, *args):
-        #self.mopidy.playback.seek(time_position)
-
+ 
     # BROWSE FUNCTIONS. TODO: Move to a proper place
 
     def browse(self, reference):

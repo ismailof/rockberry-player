@@ -3,7 +3,6 @@ from kivy.event import EventDispatcher
 from kivy.properties import ListProperty, NumericProperty
 
 from utils import scheduled
-from debug import debug_function
 
 
 class QueueControl(EventDispatcher):
@@ -28,6 +27,5 @@ class QueueControl(EventDispatcher):
     def update_tracklist(self, tracklist, *args):
         self.tracklist = tracklist
 
-    #@debug_function
     def shuffle(self, *args):                
         self.interface.shuffle(start=self.queue_point)
