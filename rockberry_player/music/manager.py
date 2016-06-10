@@ -17,6 +17,7 @@ from music.images import AlbumCoverRetriever
 from music.playback import PlaybackControl
 from music.options import OptionsControl
 from music.mixer import MixerControl
+from music.queue import QueueControl
 from music.refs import RefUtils, RefBehavior
 
 from debug import debug_function
@@ -40,8 +41,10 @@ class MediaManager(EventDispatcher):
 
     mixer = ObjectProperty(MixerControl(), rebind=True)
     options = ObjectProperty(OptionsControl(), rebind=True)
+    
+    queue = ObjectProperty(QueueControl(), rebind=True)
 
-    tracklist = ListProperty([])
+    #tracklist = ListProperty([])
 
     browse_item = ObjectProperty(RefBehavior(), rebind=True)
     browse_list = ListProperty([])
@@ -77,14 +80,12 @@ class MediaManager(EventDispatcher):
         MixerControl.interface = self.mopidy.mixer
         OptionsControl.interface = self.mopidy.tracklist
         AlbumCoverRetriever.interface = self.mopidy.library
+        QueueControl.interface = self.mopidy.tracklist
+        
         self.current._refresh_function = self.mopidy.playback.get_current_tl_track
         self.next._refresh_function = self.mopidy.tracklist.next_track
         self.prev._refresh_function = self.mopidy.tracklist.previous_track
         self.eot._refresh_function = self.mopidy.tracklist.eot_track
-
-    # TODO: move to main.py
-    def on_mopidy_error(self, error):
-        self.app.main.show_error(error=error)
 
     def bind_events(self, *args):
 
@@ -117,51 +118,48 @@ class MediaManager(EventDispatcher):
         self.bind_method(self.refresh_context_info, ['options_changed',
                                                      'tracklist_changed'])
 
-        self.bind_method(self.refresh_tracklist, 'tracklist_changed')
+        self.bind_method(self.queue.refresh, 'tracklist_changed')
         self.bind_method(self.options.refresh, 'options_changed')
 
     def init_player_state(self):
-
-        self.mixer.refresh()
-        self.current.refresh()
-        self.next.refresh()
-        self.prev.refresh()
-
-        self.mopidy.playback.get_state(
-            on_result=self.state.set_playback_state)
-        self.mopidy.playback.get_time_position(
-            on_result=self.state.update_time_position)
-
-        self.options.refresh()
-
-        self.refresh_tracklist()
+        for controller in [self.state,
+                           self.mixer,
+                           self.current,
+                           self.next,
+                           self.prev,
+                           self.options,
+                           self.queue]:
+            controller.refresh()
 
         self.browse_item.ref = RefUtils.make_reference(None)
         self.browse_list = self.mopidy.library.browse(uri=None, timeout=20) or []
+
+    def on_mopidy_error(self, error):
+        self.app.main.show_error(error=error)
 
     def refresh_context_info(self, *args):
         self.next.refresh()
         self.prev.refresh()
         self.eot.refresh()
 
-    @scheduled
-    def refresh_tracklist(self):
-        self.mopidy.tracklist.get_tl_tracks(
-            on_result=assign_property(self, 'tracklist'))
+    #@scheduled
+    #def refresh_tracklist(self):
+        #self.mopidy.tracklist.get_tl_tracks(
+            #on_result=assign_property(self, 'tracklist'))
 
-    def seek_position(self, time_position, *args):
-        self.mopidy.playback.seek(time_position)
+    #def seek_position(self, time_position, *args):
+        #self.mopidy.playback.seek(time_position)
 
     # BROWSE FUNCTIONS. TODO: Move to a proper place
-        
-    def browse(self, reference):        
+
+    def browse(self, reference):
         @scheduled
         def browse_result(result, *args):
             self.browse_list = result
             self.app.main.switch_to(screen='browse')
-        
+
         self.browse_item.ref = RefUtils.make_reference(reference)
-        self.mopidy.library.browse(uri=self.browse_item.uri, on_result=browse_result)        
+        self.mopidy.library.browse(uri=self.browse_item.uri, on_result=browse_result)
 
     @scheduled
     def play_uris(self, uris):
@@ -183,7 +181,7 @@ class MediaManager(EventDispatcher):
         if tunning:
             self.mopidy.tracklist.clear()
 
-        self.mopidy.tracklist.add(uris=uris, timeout=20)
+        self.mopidy.tracklist.add(uris=uris)
 
         if tunning:
             self.mopidy.playback.play()

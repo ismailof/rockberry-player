@@ -93,7 +93,7 @@ Builder.load_string("""
 
             TrackListScreen:
                 name: 'tracklist'
-                tracklist: app.mm.tracklist
+                tracklist: app.mm.queue.tracklist
                 tlid: app.mm.current.tlid
 
             #Screen:

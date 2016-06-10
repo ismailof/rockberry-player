@@ -29,6 +29,7 @@ Builder.load_string("""
         orientation: 'vertical'
 
         RelativeLayout:
+        
             AlbumCover:
                 id: cover
                 uri: root.item.uri if root.item else ''
@@ -45,7 +46,7 @@ Builder.load_string("""
 
         Label:
             text: root.item.title if root.item else ''
-            multiline: 2
+            size_hint_y: 0.4
             halign: 'center'
             valign: 'top'
             text_size: self.size

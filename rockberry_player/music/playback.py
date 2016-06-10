@@ -40,6 +40,10 @@ class PlaybackControl(EventDispatcher):
             Clock.schedule_interval(self.tick_position, self.update_interval)
         else:
             Clock.unschedule(self.tick_position)
+            
+    def refresh(self, *args):
+        self.interface.get_state(on_result=self.set_playback_state)
+        self.interface.get_time_position(on_result=self.update_time_position)
 
     @scheduled
     def set_playback_state(self, state):
@@ -52,6 +56,9 @@ class PlaybackControl(EventDispatcher):
     @scheduled
     def reset_time_position(self, *args, **kwargs):
         self.time_position = 0
+
+    def seek(self, time_position, *args):
+        self.interface.seek(time_position)
 
     def on_play_pause(self):
         if self.playback_state == 'playing':

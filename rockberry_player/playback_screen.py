@@ -37,6 +37,21 @@ Builder.load_string("""
         background_checkbox_down: 'atlas://images/options/repeat_on'
         background_checkbox_normal: 'atlas://images/options/repeat_off'
 
+<VolumeBar@BoxLayout>:
+    spacing: 5
+    
+    CheckBox:
+        id: chk_mute
+        active: app.mm.mixer.mute
+        on_active: app.mm.mixer.set_mute(args[1])
+        background_checkbox_down: default_atlas + 'audio-volume-muted'
+        background_checkbox_normal: default_atlas + 'audio-volume-high'
+        size_hint_x: 0.2
+
+    SeekSlider:
+        range: (0, 100)
+        value: app.mm.mixer.volume
+        on_seek: app.mm.mixer.set_volume(args[1])
 
 <PlaybackScreen>:
     BoxLayout:
@@ -68,24 +83,10 @@ Builder.load_string("""
             orientation: 'vertical'
             spacing: 10
 
-            BoxLayout:
-                id: volume_control
+            VolumeBar:
                 size_hint: (0.6, 0.1)
                 pos_hint: {'right': 1}
                 opacity: 0.4
-
-                CheckBox:
-                    id: chk_mute
-                    active: app.mm.mixer.mute
-                    on_active: app.mm.mixer.set_mute(args[1])
-                    background_checkbox_down: default_atlas + 'audio-volume-muted'
-                    background_checkbox_normal: default_atlas + 'audio-volume-high'
-                    size_hint_x: 0.2
-
-                SeekSlider:
-                    range: (0, 100)
-                    value: app.mm.mixer.volume
-                    on_seek: app.mm.mixer.set_volume(args[1])
 
             TrackInfoLabel:
                 track: app.mm.current.track
@@ -94,14 +95,13 @@ Builder.load_string("""
                 on_item_press: app.mm.browse(args[1])
                 padding_x: 20
 
-
             PlaybackSlider:
                 size_hint: (1.02, 0.12)
                 pos_hint: {'right': 1}
                 position: app.mm.state.time_position
                 duration: app.mm.current.duration
                 resolution: app.mm.state.resolution
-                on_seek: app.mm.seek_position(args[1])
+                on_seek: app.mm.playback.seek(args[1])
 
             BoxLayout:
                 size_hint: (1.02, 0.1)
@@ -131,6 +131,11 @@ Builder.load_string("""
             BoxLayout:
                 size_hint_y:0.25
                 spacing: 20
+
+                Button: 
+                    size_hint_x: 0.2
+                    text: 'MIX'
+                    on_press: app.mm.queue.shuffle()
 
                 OptionsBar:
                     size_hint_x: 0.25
