@@ -1,5 +1,7 @@
+import time
+
 from kivy.lang import Builder
-from kivy.core.window import Window
+#from kivy.core.window import Window
 from kivy.clock import Clock
 
 from kivy.uix.floatlayout import FloatLayout
@@ -33,7 +35,9 @@ class RockberryMain(FloatLayout):
             self.ids['screenmanager'].current = screen
 
     def do_screenshot(self, *args):
-        Window.screenshot(name='rockberry_%(counter)04d.png')
+        shotname = '/home/pi/rockberry-player/screenshots/rockberry_%y%m%d_%H%M%S.png'
+        self.export_to_png(time.strftime(shotname))
+        #Window.screenshot(name='rockberry_%(counter)04d.png')
 
     def show_error(self, error, *args):
         popup = ErrorPopup(error=error)

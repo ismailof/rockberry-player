@@ -101,7 +101,7 @@ Builder.load_string("""
                 position: app.mm.state.time_position
                 duration: app.mm.current.duration
                 resolution: app.mm.state.resolution
-                on_seek: app.mm.playback.seek(args[1])
+                on_seek: app.mm.state.seek(args[1])
 
             BoxLayout:
                 size_hint: (1.02, 0.1)
