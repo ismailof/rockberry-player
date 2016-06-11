@@ -29,7 +29,7 @@ Builder.load_string("""
         orientation: 'vertical'
 
         RelativeLayout:
-        
+
             AlbumCover:
                 id: cover
                 uri: root.item.uri if root.item else ''

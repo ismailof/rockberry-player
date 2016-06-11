@@ -18,7 +18,7 @@ class QueueControl(EventDispatcher):
 
     def refresh(self, *args):
         self.trigger_refresh()
-        
+
     def _delayed_refresh(self, *args):
         if self.interface:
             self.interface.get_tl_tracks(on_result=self.update_tracklist)
@@ -27,5 +27,5 @@ class QueueControl(EventDispatcher):
     def update_tracklist(self, tracklist, *args):
         self.tracklist = tracklist
 
-    def shuffle(self, *args):                
+    def shuffle(self, *args):
         self.interface.shuffle(start=self.queue_point)

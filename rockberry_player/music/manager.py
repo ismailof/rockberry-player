@@ -41,7 +41,7 @@ class MediaManager(EventDispatcher):
 
     mixer = ObjectProperty(MixerControl(), rebind=True)
     options = ObjectProperty(OptionsControl(), rebind=True)
-    
+
     queue = ObjectProperty(QueueControl(), rebind=True)
 
     browse_item = ObjectProperty(RefBehavior(), rebind=True)
@@ -79,7 +79,7 @@ class MediaManager(EventDispatcher):
         OptionsControl.interface = self.mopidy.tracklist
         AlbumCoverRetriever.interface = self.mopidy.library
         QueueControl.interface = self.mopidy.tracklist
-        
+
         self.current._refresh_function = self.mopidy.playback.get_current_tl_track
         self.next._refresh_function = self.mopidy.tracklist.next_track
         self.prev._refresh_function = self.mopidy.tracklist.previous_track
@@ -140,7 +140,7 @@ class MediaManager(EventDispatcher):
         self.prev.refresh()
         self.eot.refresh()
 
- 
+
     # BROWSE FUNCTIONS. TODO: Move to a proper place
 
     def browse(self, reference):

@@ -39,7 +39,7 @@ Builder.load_string("""
 
 <VolumeBar@BoxLayout>:
     spacing: 5
-    
+
     CheckBox:
         id: chk_mute
         active: app.mm.mixer.mute
@@ -132,7 +132,7 @@ Builder.load_string("""
                 size_hint_y:0.25
                 spacing: 20
 
-                Button: 
+                Button:
                     size_hint_x: 0.2
                     text: 'MIX'
                     on_press: app.mm.queue.shuffle()
