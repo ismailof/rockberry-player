@@ -30,7 +30,7 @@ Builder.load_string("""
             spacing: 5
 
             Button:
-                text: 'Start'
+                text: 'Home'
                 on_press: app.mm.browse(None)
             Button:
                 text: 'Refresh'

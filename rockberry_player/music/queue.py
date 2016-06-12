@@ -29,3 +29,6 @@ class QueueControl(EventDispatcher):
 
     def shuffle(self, *args):
         self.interface.shuffle(start=self.queue_point)
+        
+    #def index(self, tlid=None, *args):
+        

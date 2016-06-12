@@ -6,10 +6,10 @@ from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
 from utils import scheduled
-from music.refs import RefUtils
+from music.refs import RefUtils, RefBehavior
 
 
-class TrackBehavior(EventDispatcher):
+class TrackBehavior(RefBehavior):
 
     track = DictProperty(rebind=True)
     tlid = NumericProperty(0)
@@ -24,12 +24,6 @@ class TrackBehavior(EventDispatcher):
     def get_artists(self):
         return TrackUtils.artists_text(self.track)
 
-    def get_uri(self):
-        return RefUtils.get_uri(self.track)
-
-    def get_media(self):
-        return RefUtils.get_media_from_uri(self.uri)
-
     def get_duration(self):
         return self.track.length \
             if self.track and 'length' in self.track \
@@ -38,18 +32,11 @@ class TrackBehavior(EventDispatcher):
     title = AliasProperty(get_title, None, bind=['track', 'stream_title'])
     album = AliasProperty(get_album, None, bind=['track'])
     artists = AliasProperty(get_artists, None, bind=['track'])
-    uri = AliasProperty(get_uri, None, bind=['track'])
-    media = AliasProperty(get_media, None, bind=['uri'])
     duration = AliasProperty(get_duration, None, bind=['track'])
 
-    def get_reference(self):
-        return RefUtils.make_reference(self.track)
-
-    def set_reference(self):
-        pass
-
-    ref = AliasProperty(get_reference, set_reference, bind=['track'])
-
+    def on_track(self, *args):
+        self.ref = RefUtils.make_reference(self.track)
+    
 
 class TrackControl(TrackBehavior):
 
@@ -72,7 +59,6 @@ class TrackControl(TrackBehavior):
     def reset_stream_title(self, *args, **kwargs):
         self.stream_title = None
 
-    @scheduled
     def refresh(self, *args, **kwargs):
         if self._refresh_function:
             self._refresh_function(
