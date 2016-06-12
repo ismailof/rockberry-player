@@ -2,10 +2,10 @@ from kivy.lang import Builder
 from kivy.properties import VariableListProperty, OptionProperty
 from kivy.uix.boxlayout import BoxLayout
 
-from music.tracks import TrackBehavior
+from music.tracks import TrackItem
 
 
-class SimpleTrackInfo(TrackBehavior, BoxLayout):
+class SimpleTrackInfo(TrackItem, BoxLayout):
     align = OptionProperty('left', options=['left', 'center', 'right', 'justify'])
     font_size = VariableListProperty([20, 15], length=2)
 

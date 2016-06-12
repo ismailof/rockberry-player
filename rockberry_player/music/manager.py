@@ -12,13 +12,13 @@ from mopidy_json_client import MopidyClient
 
 from utils import scheduled, delayed, assign_property
 
-from music.tracks import TrackBehavior, TrackControl
+from music.tracks import TrackItem, TrackControl
 from music.images import AlbumCoverRetriever
 from music.playback import PlaybackControl
 from music.options import OptionsControl
 from music.mixer import MixerControl
 from music.queue import QueueControl
-from music.refs import RefUtils, RefBehavior
+from music.refs import RefUtils, RefItem
 
 from debug import debug_function
 
@@ -44,7 +44,7 @@ class MediaManager(EventDispatcher):
 
     queue = ObjectProperty(QueueControl(), rebind=True)
 
-    browse_item = ObjectProperty(RefBehavior(), rebind=True)
+    browse_item = ObjectProperty(RefItem(), rebind=True)
     browse_list = ListProperty([])
 
 

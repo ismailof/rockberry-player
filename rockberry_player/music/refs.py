@@ -57,7 +57,7 @@ class RefUtils(object):
             return uri_header
 
 
-class RefBehavior(EventDispatcher):
+class RefItem(EventDispatcher):
 
     ref = DictProperty(rebind=True)
 

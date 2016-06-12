@@ -6,10 +6,10 @@ from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
 from utils import scheduled
-from music.refs import RefUtils, RefBehavior
+from music.refs import RefUtils, RefItem
 
 
-class TrackBehavior(RefBehavior):
+class TrackItem(RefItem):
 
     track = DictProperty(rebind=True)
     tlid = NumericProperty(0)
@@ -38,7 +38,7 @@ class TrackBehavior(RefBehavior):
         self.ref = RefUtils.make_reference(self.track)
     
 
-class TrackControl(TrackBehavior):
+class TrackControl(TrackItem):
 
     _refresh_function = None
 

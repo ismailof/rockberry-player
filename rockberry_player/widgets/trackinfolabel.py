@@ -4,12 +4,12 @@ from kivy.lang import Builder
 from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.label import Label
 
-from music.tracks import TrackBehavior
+from music.tracks import TrackItem
 from widgets.referencelabel import ReferenceLabel
 from utils import MarkupText
 
 
-class TrackInfoLabel(TrackBehavior, ReferenceLabel):
+class TrackInfoLabel(TrackItem, ReferenceLabel):
 
     #font_size = NumericProperty(25)
 

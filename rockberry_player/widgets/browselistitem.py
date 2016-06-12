@@ -3,12 +3,12 @@ from kivy.uix.boxlayout import BoxLayout
 
 from kivy.properties import AliasProperty
 
-from music.refs import RefBehavior
+from music.refs import RefItem
 from widgets.albumcover import AlbumCover
 from widgets.mediaicon import MediaIcon
 
 
-class BrowseListItem(RefBehavior, BoxLayout):
+class BrowseListItem(RefItem, BoxLayout):
 
     def get_ref_action(self, *args):
         return 'play' if self.reftype == 'track' else 'browse'
