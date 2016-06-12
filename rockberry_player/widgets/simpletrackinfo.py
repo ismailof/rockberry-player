@@ -23,25 +23,20 @@ Builder.load_string("""
     BoxLayout:
         orientation:'vertical'
         spacing: 2
-        #size_hint_y: None
-        #height: sum([children.height + 2 for children in self.children])
         pos_hint: {'top': 1}
 
         NiceLabel:
-            #id: lbl_title
             text: root.title
             bold: True
             halign: root.align
             font_size: root.font_size[0]
 
         NiceLabel:
-            #id: lbl_artists
             text: root.artists
             halign: root.align
             font_size: root.font_size[1]
 
         NiceLabel:
-            #id: lbl_album
             text: root.album
             halign: root.align
             font_size: root.font_size[1]

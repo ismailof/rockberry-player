@@ -10,7 +10,7 @@ from kivy.app import App
 
 from mopidy_json_client import MopidyClient
 
-from utils import scheduled, delayed, assign_property
+from utils import scheduled, assign_property
 
 from music.tracks import TrackItem, TrackControl
 from music.images import AlbumCoverRetriever

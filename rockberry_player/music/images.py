@@ -21,6 +21,7 @@ class AlbumCoverRetriever(EventDispatcher):
     def request_image(self, uri, callback):
         if not uri or uri in self._image_cache:
             Clock.schedule_once(callback)
+            return
 
         self._requested_uris.add(uri)
 

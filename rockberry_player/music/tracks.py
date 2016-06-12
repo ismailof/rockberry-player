@@ -36,7 +36,7 @@ class TrackItem(RefItem):
 
     def on_track(self, *args):
         self.ref = RefUtils.make_reference(self.track)
-    
+
 
 class TrackControl(TrackItem):
 
