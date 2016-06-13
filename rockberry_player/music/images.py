@@ -3,7 +3,7 @@ from kivy.clock import Clock
 from kivy.cache import Cache
 from kivy.properties import StringProperty, DictProperty
 from functools import partial
-from utils import scheduled, delayed
+from utils import scheduled, triggered
 
 
 # TODO: Use MOPIDY_SERVER from Main App or MediaManager
@@ -32,7 +32,7 @@ class AlbumCoverRetriever(EventDispatcher):
         self._get_server_images()
 
     @classmethod
-    @delayed(0.5)
+    @triggered(0.5)
     def _get_server_images(self, *args):
         if self.interface and self._requested_uris:
             self.interface.get_images(uris=list(self._requested_uris),

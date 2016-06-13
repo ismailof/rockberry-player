@@ -36,7 +36,7 @@ def scheduled(_function_):
     return schedule_function
 
 
-class delayed(object):
+class triggered(object):
 
     def __init__(self, timeout):
         self._trigger = Clock.create_trigger(self.cb_function, timeout)

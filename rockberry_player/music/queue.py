@@ -2,7 +2,7 @@ from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import ListProperty, NumericProperty
 
-from utils import scheduled
+from utils import scheduled, triggered
 
 
 class QueueControl(EventDispatcher):
@@ -14,12 +14,12 @@ class QueueControl(EventDispatcher):
 
     def __init__(self, **kwargs):
         super(QueueControl, self).__init__(**kwargs)
-        self.trigger_refresh = Clock.create_trigger(self._delayed_refresh, timeout=1)
+        self.trigger_refresh = Clock.create_trigger(self._triggered_refresh, timeout=1)
 
     def refresh(self, *args):
         self.trigger_refresh()
 
-    def _delayed_refresh(self, *args):
+    def _triggered_refresh(self, *args):
         if self.interface:
             self.interface.get_tl_tracks(on_result=self.update_tracklist)
 
