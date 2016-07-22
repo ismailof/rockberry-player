@@ -7,7 +7,6 @@ from music.images import AlbumCoverRetriever
 
 class BackgroundImage(EffectWidget):
     uri = StringProperty(None, allownone=True)
-    #source = StringProperty()
     default = StringProperty()
     tint = ListProperty([1, 1, 1, 1])
     blur_size = NumericProperty(64)
@@ -18,8 +17,6 @@ Builder.load_string("""
 #:import HBlur kivy.uix.effectwidget.HorizontalBlurEffect
 #:import VBlur kivy.uix.effectwidget.VerticalBlurEffect
 #:import Window kivy.core.window.Window
-
-#:set window_size (800, 480)
 
 <BackgroundImage>
     effects: (HBlur(size=10), VBlur(size=10), HBlur(size=self.blur_size), VBlur(size=self.blur_size))

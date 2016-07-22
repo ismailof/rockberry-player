@@ -1,7 +1,6 @@
 import time
 
 from kivy.lang import Builder
-#from kivy.core.window import Window
 from kivy.clock import Clock
 
 from kivy.uix.floatlayout import FloatLayout
@@ -9,9 +8,7 @@ from kivy.uix.togglebutton import ToggleButton
 
 from functools import partial
 
-from playback_screen import PlaybackScreen
-from tracklist_screen import TrackListScreen
-from browse_screen import BrowseScreen
+from screens import PlaybackScreen, TracklistScreen, BrowseScreen
 from widgets.backgroundimage import BackgroundImage
 from widgets.simpleclock import DigitalClock
 from widgets.error_popup import ErrorPopup
@@ -37,7 +34,6 @@ class RockberryMain(FloatLayout):
     def do_screenshot(self, *args):
         shotname = '/home/pi/rockberry-player/screenshots/rockberry_%y%m%d_%H%M%S.png'
         self.export_to_png(time.strftime(shotname))
-        #Window.screenshot(name='rockberry_%(counter)04d.png')
 
     def show_error(self, error, *args):
         popup = ErrorPopup(error=error)
@@ -95,7 +91,7 @@ Builder.load_string("""
                 size_hint: (0.95, 0.95)
                 pos_hint: {'center': (0.5, 0.5)}
 
-            TrackListScreen:
+            TracklistScreen:
                 name: 'tracklist'
                 tracklist: app.mm.queue.tracklist
                 tlid: app.mm.current.tlid
