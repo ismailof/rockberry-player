@@ -1,4 +1,3 @@
-__author__ = 'Ismailof <isma.af@gmail.com>'
-__version__ = '0.2.0'
+from .manager import MediaManager
 
-__all__ = []
+__all__ = ('MediaManager')

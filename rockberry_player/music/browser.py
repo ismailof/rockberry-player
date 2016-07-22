@@ -2,7 +2,7 @@ from kivy.event import EventDispatcher
 from kivy.properties import ObjectProperty, ListProperty
 
 from base import MediaController
-from music.refs import RefUtils, RefItem
+from refs import RefUtils, RefItem
 
 from utils import scheduled
 from debug import debug_function

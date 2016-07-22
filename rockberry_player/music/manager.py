@@ -12,14 +12,15 @@ from mopidy_json_client import MopidyClient
 
 from utils import scheduled, assign_property
 
-from music.tracks import TrackItem, TrackControl
-from music.images import AlbumCoverRetriever
-from music.playback import PlaybackControl
-from music.options import OptionsControl
-from music.mixer import MixerControl
-from music.queue import QueueControl
-from music.browser import BrowserControl
-from music.refs import RefUtils, RefItem
+from base import MediaController
+from refs import RefUtils, RefItem
+from tracks import TrackItem, TrackControl
+from images import AlbumCoverRetriever
+from playback import PlaybackControl
+from options import OptionsControl
+from mixer import MixerControl
+from queue import QueueControl
+from browser import BrowserControl
 
 from debug import debug_function
 
@@ -61,7 +62,8 @@ class MediaManager(EventDispatcher):
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
 
-        self.app = App.get_running_app()   
+        self.app = App.get_running_app()
+        MediaController.app = self.app
 
         self.mopidy = MopidyClient(server_addr=MOPIDY_SERVER,
                                    error_handler=self.on_mopidy_error)

@@ -6,7 +6,7 @@ from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
 from utils import scheduled
-from music.refs import RefUtils, RefItem
+from refs import RefUtils, RefItem
 
 
 class TrackItem(RefItem):
