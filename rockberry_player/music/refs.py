@@ -59,7 +59,15 @@ class RefUtils(object):
 
 class RefItem(EventDispatcher):
 
-    ref = DictProperty(rebind=True)
+    ref = DictProperty(RefUtils.RefNone, rebind=True)
+
+    def __init__(self, uri=None, ref=None, **kwargs):
+        super(RefItem, self).__init__(**kwargs)
+
+        if uri:
+            ref = RefUtils.make_reference(uri)            
+        if ref:
+            self.ref = ref        
 
     def get_title(self):
         return RefUtils.get_title(self.ref)

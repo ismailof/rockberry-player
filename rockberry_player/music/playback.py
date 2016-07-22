@@ -4,14 +4,15 @@ from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty, OptionProperty, \
     AliasProperty, ObjectProperty, DictProperty
 
+from base import MediaController
+
 from utils import scheduled
 from debug import debug_function
 
 
-class PlaybackControl(EventDispatcher):
+class PlaybackControl(MediaController):
 
-    _statelist = ['stopped', 'playing', 'paused']
-    interface = ObjectProperty(basetype=callable)
+    _statelist = ['stopped', 'playing', 'paused']    
 
     playback_state = OptionProperty(_statelist[0],
                                     options=_statelist,

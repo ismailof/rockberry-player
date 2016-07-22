@@ -2,10 +2,10 @@ from kivy.event import EventDispatcher
 from kivy.properties import BooleanProperty
 from utils import scheduled
 
+from base import MediaController
 
-class OptionsControl(EventDispatcher):
 
-    interface = None
+class OptionsControl(MediaController):
 
     random = BooleanProperty(False)
     single = BooleanProperty(False)

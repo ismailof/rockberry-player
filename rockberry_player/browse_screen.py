@@ -31,10 +31,10 @@ Builder.load_string("""
 
             Button:
                 text: 'Home'
-                on_press: app.mm.browse(None)
+                on_press: app.mm.browser.browse(None)
             Button:
                 text: 'Refresh'
-                on_press: app.mm.browse(app.mm.browse_item.ref)
+                on_press: app.mm.browser.browse(app.mm.browse_item.ref)
             Button:
                 text: 'Tune'
                 on_press: app.mm.add_to_tracklist(refs=app.mm.browse_list, tunning=True)
@@ -47,8 +47,8 @@ Builder.load_string("""
 
             PlaybackArea:
                 size_hint_x: 0.4
-                item: app.mm.browse_item
+                item: app.mm.browser.browse_item
 
             BrowseListView:
-                reflist: app.mm.browse_list
+                reflist: app.mm.browser.browse_list
 """)

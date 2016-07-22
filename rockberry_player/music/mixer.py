@@ -2,10 +2,10 @@ from kivy.event import EventDispatcher
 from kivy.properties import BoundedNumericProperty, BooleanProperty
 from utils import scheduled
 
+from base import MediaController
 
-class MixerControl(EventDispatcher):
 
-    interface = None
+class MixerControl(MediaController):
 
     volume = BoundedNumericProperty(50, min=0, max=100)
     mute = BooleanProperty(False)

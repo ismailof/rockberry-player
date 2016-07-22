@@ -63,5 +63,5 @@ Builder.load_string("""
         size_hint_x: 0.2
         opacity: 0.7
         text: root.action
-        on_press: app.mm.play_uris([root.uri]) if root.action == 'play' else app.mm.browse(root.ref)
+        on_press: app.mm.play_uris([root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
 """)

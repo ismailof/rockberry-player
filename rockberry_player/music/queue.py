@@ -2,12 +2,12 @@ from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import ListProperty, NumericProperty
 
+from base import MediaController
+
 from utils import scheduled, triggered
 
 
-class QueueControl(EventDispatcher):
-
-    interface = None
+class QueueControl(MediaController):
 
     tracklist = ListProperty()
     queue_point = NumericProperty(0)

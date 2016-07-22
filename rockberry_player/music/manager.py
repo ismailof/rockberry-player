@@ -18,6 +18,7 @@ from music.playback import PlaybackControl
 from music.options import OptionsControl
 from music.mixer import MixerControl
 from music.queue import QueueControl
+from music.browser import BrowserControl
 from music.refs import RefUtils, RefItem
 
 from debug import debug_function
@@ -44,8 +45,7 @@ class MediaManager(EventDispatcher):
 
     queue = ObjectProperty(QueueControl(), rebind=True)
 
-    browse_item = ObjectProperty(RefItem(), rebind=True)
-    browse_list = ListProperty([])
+    browser = ObjectProperty(BrowserControl(), rebind=True)    
 
 
     def bind_method(self, method, events):
@@ -61,7 +61,8 @@ class MediaManager(EventDispatcher):
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
 
-        self.app = App.get_running_app()
+        self.app = App.get_running_app()   
+
         self.mopidy = MopidyClient(server_addr=MOPIDY_SERVER,
                                    error_handler=self.on_mopidy_error)
 
@@ -79,6 +80,7 @@ class MediaManager(EventDispatcher):
         OptionsControl.interface = self.mopidy.tracklist
         AlbumCoverRetriever.interface = self.mopidy.library
         QueueControl.interface = self.mopidy.tracklist
+        BrowserControl.interface = self.mopidy.library
 
         self.current._refresh_function = self.mopidy.playback.get_current_tl_track
         self.next._refresh_function = self.mopidy.tracklist.next_track
@@ -126,11 +128,9 @@ class MediaManager(EventDispatcher):
                            self.next,
                            self.prev,
                            self.options,
-                           self.queue]:
+                           self.queue,
+                           self.browser]:
             controller.refresh()
-
-        self.browse_item.ref = RefUtils.make_reference(None)
-        self.browse_list = self.mopidy.library.browse(uri=None, timeout=20) or []
 
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
@@ -142,15 +142,6 @@ class MediaManager(EventDispatcher):
 
 
     # BROWSE FUNCTIONS. TODO: Move to a proper place
-
-    def browse(self, reference):
-        @scheduled
-        def browse_result(result, *args):
-            self.browse_list = result
-            self.app.main.switch_to(screen='browse')
-
-        self.browse_item.ref = RefUtils.make_reference(reference)
-        self.mopidy.library.browse(uri=self.browse_item.uri, on_result=browse_result)
 
     @scheduled
     def play_uris(self, uris):

@@ -5,14 +5,15 @@ from kivy.properties import StringProperty, DictProperty
 from functools import partial
 from utils import scheduled, triggered
 
+from base import MediaController
+
 
 # TODO: Use MOPIDY_SERVER from Main App or MediaManager
 MOPIDY_SERVER = 'localhost:6680'
 
 
-class AlbumCoverRetriever(EventDispatcher):
+class AlbumCoverRetriever(MediaController):
 
-    interface = None
     _image_cache = {}
     _requested_uris = set()
     _update_callbacks = {}
