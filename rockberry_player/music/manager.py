@@ -26,9 +26,6 @@ from debug import debug_function
 
 logger = logging.getLogger(__name__)
 
-# TODO: Configurable Property
-MOPIDY_SERVER = 'localhost:6680'
-
 
 class MediaManager(EventDispatcher):
 
@@ -65,7 +62,7 @@ class MediaManager(EventDispatcher):
         self.app = App.get_running_app()
         MediaController.app = self.app
 
-        self.mopidy = MopidyClient(server_addr=MOPIDY_SERVER,
+        self.mopidy = MopidyClient(server_addr=self.app.MOPIDY_SERVER,
                                    error_handler=self.on_mopidy_error)
 
         self.bind_events()

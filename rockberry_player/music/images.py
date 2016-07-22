@@ -8,10 +8,6 @@ from utils import scheduled, triggered
 from base import MediaController
 
 
-# TODO: Use MOPIDY_SERVER from Main App or MediaManager
-MOPIDY_SERVER = 'localhost:6680'
-
-
 class AlbumCoverRetriever(MediaController):
 
     _image_cache = {}
@@ -77,6 +73,6 @@ class AlbumCoverRetriever(MediaController):
 
         # Local images. Add server path
         if '://' not in image_url:
-            image_url = 'http://' + MOPIDY_SERVER + image_url
+            image_url = 'http://' + self.app.MOPIDY_SERVER + image_url
 
         return image_url
