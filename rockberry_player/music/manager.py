@@ -81,10 +81,10 @@ class MediaManager(EventDispatcher):
         QueueControl.interface = self.mopidy.tracklist
         BrowserControl.interface = self.mopidy.library
 
-        self.current._refresh_function = self.mopidy.playback.get_current_tl_track
-        self.next._refresh_function = self.mopidy.tracklist.next_track
-        self.prev._refresh_function = self.mopidy.tracklist.previous_track
-        self.eot._refresh_function = self.mopidy.tracklist.eot_track
+        self.current.set_refresh_method(self.mopidy.playback.get_current_tl_track)
+        self.next.set_refresh_method(self.mopidy.tracklist.next_track)
+        self.prev.set_refresh_method(self.mopidy.tracklist.previous_track)
+        self.eot.set_refresh_method(self.mopidy.tracklist.eot_track)
 
     def bind_events(self, *args):
 
@@ -165,5 +165,5 @@ class MediaManager(EventDispatcher):
         self.mopidy.tracklist.add(uris=uris)
 
         if tunning:
-            self.mopidy.playback.play()
+            self.app.mm.mopidy.playback.play()
             self.app.main.switch_to(screen='playback')
