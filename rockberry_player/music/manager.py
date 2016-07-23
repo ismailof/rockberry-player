@@ -13,7 +13,7 @@ from mopidy_json_client import MopidyClient
 from utils import scheduled, assign_property
 
 from base import MediaController
-from refs import RefUtils, RefItem
+from refs import RefUtils
 from tracks import TrackItem, TrackControl
 from images import AlbumCoverRetriever
 from playback import PlaybackControl

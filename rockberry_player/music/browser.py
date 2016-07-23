@@ -21,6 +21,7 @@ class BrowserControl (MediaController):
 
         self.interface.browse(uri=self.browse_item.uri, on_result=set_browse_list)
 
+    @scheduled
     def browse(self, reference):        
         self.browse_item.ref = RefUtils.make_reference(reference)
         self.refresh()

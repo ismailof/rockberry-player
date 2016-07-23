@@ -19,4 +19,4 @@ class BrowseListView(ListView):
         self.adapter.data = self.reflist
 
     def my_args_converter(self, row_index, item):
-        return {'ref': item}
+        return {'item': item}
