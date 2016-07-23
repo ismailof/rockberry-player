@@ -17,7 +17,7 @@ class BrowserControl (MediaController):
         @scheduled
         def set_browse_list(result, *args):
             self.browse_list = result
-            #self.app.main.switch_to(screen='browse')
+            self.app.main.switch_to(screen='browse')
 
         self.interface.browse(uri=self.browse_item.uri, on_result=set_browse_list)
 

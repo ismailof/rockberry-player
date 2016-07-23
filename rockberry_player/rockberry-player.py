@@ -4,7 +4,6 @@ import logging
 kivy.require('1.9.2')
 
 from kivy.app import App
-from kivy.loader import Loader
 
 from screens import RockberryMainScreen
 from music import MediaManager
