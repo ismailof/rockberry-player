@@ -71,7 +71,7 @@ class TrackItem(RefItem):
     duration = AliasProperty(get_duration, None, bind=['track'])
 
     def on_track(self, *args):
-        self.ref = RefUtils.make_reference(self.track)
+        self.ref = RefUtils.make_reference(item=self.track)
 
 
 class TrackControl(TrackItem):
