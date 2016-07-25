@@ -51,7 +51,7 @@ Builder.load_string("""
             media: root.media
 
     SimpleTrackInfo:
-        track: root.track
+        item: root.item
 
     Image:
         size_hint_x: 0.15

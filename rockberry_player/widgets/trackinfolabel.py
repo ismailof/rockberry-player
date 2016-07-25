@@ -14,7 +14,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
     #font_size = NumericProperty(25)
 
     def format_title(self):
-        if not self.track:
+        if not self.item:
             return MarkupText('<Nothing playing>', size=27, color='#80f0f0')
 
         parts = self.title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
@@ -26,13 +26,13 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                  for index, item in enumerate(parts)]
 
         return MarkupText('\n'.join(parts),
-                          ref=self.new_ref(self.track))
+                          ref=self.new_ref(self.item))
 
     def format_artists(self):
-        if not self.track or 'artists' not in self.track:
+        if not self.item or 'artists' not in self.item:
             return ''
 
-        artists = self.track['artists']
+        artists = self.item['artists']
         artists_list = [MarkupText(artist.get('name'),
                                    size=max(self.font_size - len(artists) // 2, 10),
                                    color='#d0d0d0',
@@ -43,10 +43,10 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         return ' \xb7 '.join(artists_list)
 
     def format_album(self):
-        if not self.track or 'album' not in self.track:
+        if not self.item or 'album' not in self.item:
             return ''
 
-        album = self.track['album']
+        album = self.item['album']
 
         parts = album.get('name').replace('(', '~(').replace('[', '~[').split('~')
         parts = [MarkupText(item,
@@ -63,7 +63,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
 
     def __init__(self, **kwargs):
         super(TrackInfoLabel, self).__init__(**kwargs)
-        self.bind(track=self.update_text, stream_title=self.update_text)
+        self.bind(item=self.update_text, stream_title=self.update_text)
 
     def update_text(self, *args):
         self.clear_refs()

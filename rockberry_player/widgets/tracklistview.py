@@ -37,6 +37,6 @@ class TrackListView(ListView):
 
     def my_args_converter(self, row_index, item):
         track_items = {'tlid': item['tlid'],
-                       'track': item['track'],
+                       'item': item['track'],
                        'current': row_index == self.current_id}
         return track_items

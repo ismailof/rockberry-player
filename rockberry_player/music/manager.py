@@ -110,7 +110,7 @@ class MediaManager(EventDispatcher):
         self.bind_method(self.current.reset_stream_title, ['track_playback_started',
                                                            'track_playback_ended'])
 
-        self.current.bind(track=self.refresh_context_info)
+        self.current.bind(item=self.refresh_context_info)
         self.state.bind(on_next=self.current.refresh,
                         on_prev=self.current.refresh)
 

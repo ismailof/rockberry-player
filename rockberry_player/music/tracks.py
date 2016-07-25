@@ -47,31 +47,27 @@ class TrackUtils(object):
 
 class TrackItem(RefItem):
 
-    track = DictProperty(rebind=True)
     tlid = NumericProperty(0)
     stream_title = StringProperty(None, allownone=True)
 
     def get_title(self):
-        return TrackUtils.title_text(self.track, self.stream_title)
+        return TrackUtils.title_text(self.item, self.stream_title)
 
     def get_album(self):
-        return TrackUtils.album_text(self.track)
+        return TrackUtils.album_text(self.item)
 
     def get_artists(self):
-        return TrackUtils.artists_text(self.track)
+        return TrackUtils.artists_text(self.item)
 
     def get_duration(self):
-        return self.track.length \
-            if self.track and 'length' in self.track \
+        return self.item.length \
+            if self.item and 'length' in self.item \
                 else None
 
-    title = AliasProperty(get_title, None, bind=['track', 'stream_title'])
-    album = AliasProperty(get_album, None, bind=['track'])
-    artists = AliasProperty(get_artists, None, bind=['track'])
-    duration = AliasProperty(get_duration, None, bind=['track'])
-
-    def on_track(self, *args):
-        self.ref = RefUtils.make_reference(item=self.track)
+    title = AliasProperty(get_title, None, bind=['item', 'stream_title'])
+    album = AliasProperty(get_album, None, bind=['item'])
+    artists = AliasProperty(get_artists, None, bind=['item'])
+    duration = AliasProperty(get_duration, None, bind=['item'])
 
 
 class TrackControl(TrackItem):
@@ -81,11 +77,11 @@ class TrackControl(TrackItem):
     @scheduled
     def set_tl_track(self, tl_track=None, *args, **kwargs):
         self.tlid = tl_track.get('tlid') if tl_track else 0
-        self.track = tl_track.get('track') if tl_track else {}
+        self.item = tl_track.get('track') if tl_track else {}
 
     @scheduled
     def set_track(self, track=None, *args, **kwargs):
-        self.track = track if track else {}
+        self.item = track if track else {}
 
     @scheduled
     def set_stream_title(self, title, *args, **kwargs):
