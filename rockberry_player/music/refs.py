@@ -56,6 +56,16 @@ class RefUtils(object):
         else:
             return uri_header
 
+    @staticmethod
+    def get_type_image(reftype):
+        def_imgs = {None: 'transparent.png',
+                    'directory': 'browse_folder.png',
+                    'playlist': 'browse_pl.png',
+                    'track': 'default_track.png',
+                    'album': 'default_album.png',
+                    'artist': 'browse_artist.png'}
+        return def_imgs.get(reftype , def_imgs[None])
+
 
 class RefItem(EventDispatcher):
 
@@ -81,7 +91,12 @@ class RefItem(EventDispatcher):
     def get_media(self):
         return RefUtils.get_media_from_uri(self.uri)
 
+    def get_defaultimg(self):
+        return RefUtils.get_type_image(self.reftype)
+
+
     title = AliasProperty(get_title, None, bind=['ref'])
     reftype = AliasProperty(get_reftype, None, bind=['ref'])
     uri = AliasProperty(get_uri, None, bind=['ref'])
     media = AliasProperty(get_media, None, bind=['uri'])
+    defaultimg = AliasProperty(get_defaultimg, None, bind=['reftype'])

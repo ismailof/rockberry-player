@@ -3,11 +3,11 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 
 from widgets.mediaicon import MediaIcon
+from music.refs import RefItem
 
-
-class PlaybackArea(BoxLayout):
-
-    item = ObjectProperty(None, rebind=True)
+class PlaybackArea(RefItem, BoxLayout):
+    pass
+    #item = ObjectProperty(None, rebind=True)
 
 
 Builder.load_string("""
@@ -32,7 +32,8 @@ Builder.load_string("""
 
             AlbumCover:
                 id: cover
-                uri: root.item.uri if root.item else ''
+                uri: root.uri
+                default: app.IMG_FOLDER + root.defaultimg
                 border_width: 2
                 background: (0.3, 0.3, 0.3, 0.5)
                 size_hint_x: 0.9
@@ -42,10 +43,10 @@ Builder.load_string("""
                 size: (32, 32)
                 right: cover.border_rectangle[0] + cover.border_rectangle[2] - 2
                 y: cover.border_rectangle[1] + 2
-                media: root.item.media if root.item else ''
+                media: root.media
 
         Label:
-            text: root.item.title if root.item else ''
+            text: root.title
             size_hint_y: 0.4
             halign: 'center'
             valign: 'top'

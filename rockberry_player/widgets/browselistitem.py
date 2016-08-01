@@ -13,17 +13,7 @@ class BrowseListItem(RefItem, BoxLayout):
     def get_ref_action(self, *args):
         return 'play' if self.reftype == 'track' else 'browse'
 
-    def get_default_image(self, *args):
-        def_imgs = {None: 'transparent.png',
-                    'directory': 'browse_folder.png',
-                    'playlist': 'browse_pl.png',
-                    'track': 'default_track.png',
-                    'album': 'default_album.png',
-                    'artist': 'browse_artist.png'}
-        return def_imgs.get(self.reftype , def_imgs[None])
-
     action = AliasProperty(get_ref_action, None, bind=['reftype'])
-    defaultimg = AliasProperty(get_default_image, None, bind=['reftype'])
 
 
 Builder.load_string("""

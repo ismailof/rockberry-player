@@ -11,6 +11,7 @@ from base import MediaController
 class AlbumCoverRetriever(MediaController):
 
     _image_cache = {}
+    
     _requested_uris = set()
     _update_callbacks = {}
 
@@ -51,7 +52,9 @@ class AlbumCoverRetriever(MediaController):
                 return 1.0
             return max(a, b) / float(min(a, b))
 
-        if not uri or uri not in self._image_cache:
+        if not uri:
+            return self.app.IMG_FOLDER + 'neon_R.jpg'
+        elif uri not in self._image_cache:
             return ''
 
         imagelist = self._image_cache[uri]
