@@ -39,6 +39,9 @@ Builder.load_string("""
                 text: 'Refresh'
                 on_press: app.mm.browser.refresh()
             Button:
+                text: 'Playlists'
+                on_press: app.mm.browser.browse_playlists()
+            Button:
                 text: 'Tune'
                 on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list, tunning=True)
             Button:

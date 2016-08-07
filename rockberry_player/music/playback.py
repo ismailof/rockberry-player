@@ -12,11 +12,11 @@ from debug import debug_function
 
 class PlaybackControl(MediaController):
 
-    _statelist = ['stopped', 'playing', 'paused']    
+    StateList = ['stopped', 'playing', 'paused']    
 
-    playback_state = OptionProperty(_statelist[0],
-                                    options=_statelist,
-                                    errorvalue=_statelist[0])
+    playback_state = OptionProperty(StateList[0],
+                                    options=StateList,
+                                    errorvalue=StateList[0])
 
     playing = AliasProperty(lambda self: self.playback_state == 'playing',
                             None,
@@ -82,7 +82,7 @@ class PlaybackControl(MediaController):
 class PlaybackStateAware(EventDispatcher):
     playback_state = PlaybackControl.playback_state
     baseparm = ObjectProperty('')
-    parmlist = DictProperty({_state: '' for _state in PlaybackControl._statelist})
+    parmlist = DictProperty({state: '' for state in PlaybackControl.StateList})
     stateparm = ObjectProperty('')
 
     def __init__(self, **kwargs):
@@ -90,7 +90,7 @@ class PlaybackStateAware(EventDispatcher):
         App.get_running_app().mm.state.bind(playback_state=self.update_state)
 
     def on_baseparm(self, *args):
-        self.parmlist = {state: self.baseparm for state in PlaybackControl._statelist}
+        self.parmlist = {state: self.baseparm for state in PlaybackControl.StateList}
         self.on_playback_state()
 
     def update_state(self, instance, playback_state):

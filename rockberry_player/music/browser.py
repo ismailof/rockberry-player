@@ -10,22 +10,29 @@ from debug import debug_function
 
 class BrowserControl (MediaController):
     
+    if_playlists = None
+    
     browse_list = ListProperty([])
     browse_tree = ListProperty([RefUtils.RefNone])
 
     browse_ref = AliasProperty(lambda self: self.browse_tree[-1], None, bind=['browse_tree'])
 
-    def refresh(self, *args):
-        @scheduled
-        def set_browse_list(result, *args):
-            self.browse_list = result
-
-        self.interface.browse(uri=self.browse_ref['uri'], 
-                              on_result=set_browse_list)
+    @scheduled
+    def set_browse_list(self, result, *args):
+        self.browse_list = result
 
     def on_browse_ref(self, *args):        
         self.refresh()
 
+    def refresh(self, *args):
+        # TEMPORAL WORKAROUND FOR GETTING PLAYLISTS
+        if self.browse_ref['uri'] == 'playlists:':
+            self.if_playlists.as_list(on_result=self.set_browse_list)
+        else:
+            self.interface.browse(uri=self.browse_ref['uri'], 
+                                  on_result=self.set_browse_list)
+            
+        
     @scheduled
     def browse(self, item):
         self.browse_tree.append(RefUtils.make_reference(item))
@@ -39,3 +46,6 @@ class BrowserControl (MediaController):
     def home(self):
         self.browse_tree = [RefUtils.RefNone]        
         
+
+    def browse_playlists(self):
+        self.browse_tree.append(RefUtils.RefPlaylists)

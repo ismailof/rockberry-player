@@ -60,7 +60,7 @@ Builder.load_string("""
 
     BackgroundImage:
         id: background
-        default: app.IMG_FOLDER + 'bg2.jpg'
+        default: app.IMG_FOLDER + 'bg1.jpg'
         uri: app.mm.current.uri
         tint: (0.6, 0.6, 0.6, 1)
         outbounds: 0.1

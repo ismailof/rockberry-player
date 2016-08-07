@@ -21,10 +21,10 @@ class QueueControl(MediaController):
 
     def _triggered_refresh(self, *args):
         if self.interface:
-            self.interface.get_tl_tracks(on_result=self.update_tracklist)
+            self.interface.get_tl_tracks(on_result=self.set_tracklist)
 
     @scheduled
-    def update_tracklist(self, tracklist, *args):
+    def set_tracklist(self, tracklist, *args):
         self.tracklist = tracklist
 
     def shuffle(self, *args):

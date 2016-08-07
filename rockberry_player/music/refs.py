@@ -13,6 +13,11 @@ class RefUtils(object):
                'name': '',
                'uri': None}
 
+    RefPlaylists = {'__model__': 'Ref',
+                    'type': 'directory',
+                    'name': 'Playlists',
+                    'uri': 'playlists:'}
+
     @staticmethod
     def make_reference(item):
         if not item:

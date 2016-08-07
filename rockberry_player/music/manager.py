@@ -80,6 +80,7 @@ class MediaManager(EventDispatcher):
         AlbumCoverRetriever.interface = self.mopidy.library
         QueueControl.interface = self.mopidy.tracklist
         BrowserControl.interface = self.mopidy.library
+        BrowserControl.if_playlists = self.mopidy.playlists
 
         self.current.set_refresh_method(self.mopidy.playback.get_current_tl_track)
         self.next.set_refresh_method(self.mopidy.tracklist.next_track)
@@ -129,7 +130,7 @@ class MediaManager(EventDispatcher):
                            self.options,
                            self.queue,
                            self.browser]:
-            controller.refresh()
+            controller.refresh()                   
 
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
@@ -153,7 +154,7 @@ class MediaManager(EventDispatcher):
             pass
 
     @scheduled
-    def add_to_tracklist(self, refs=None, uris=None, tunning=False):
+    def add_to_tracklist(self, refs=None, uris=None, tunning=False, mixing=False):
         if refs:
             uris = [RefUtils.get_uri(ref) for ref in refs]
         if not uris:
@@ -163,6 +164,9 @@ class MediaManager(EventDispatcher):
             self.mopidy.tracklist.clear()
 
         self.mopidy.tracklist.add(uris=uris)
+        
+        if mixing:
+            self.mopidy.tracklist.suffle()
 
         if tunning:
             self.app.mm.mopidy.playback.play()
