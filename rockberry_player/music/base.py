@@ -8,10 +8,9 @@ class MediaController(EventDispatcher):
     interface = None
     mopidy = None
 
-    #def __init__(self, **kwargs):
-        #super(MediaController, self).__init__(**kwargs)
-        #self.app = App.get_running_app()
-        #print self, self.app
+    @classmethod
+    def set_interface(cls, interface):
+        cls.interface = interface
 
     def refresh(self, *args):
         pass

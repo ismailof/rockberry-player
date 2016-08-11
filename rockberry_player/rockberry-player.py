@@ -19,6 +19,9 @@ class RockberryPlayerApp(App):
     def build(self):
         self.IMG_FOLDER = self.directory + '/images/'
         self.MOPIDY_SERVER = 'localhost:6680'
+        self.LOGFILE = self.directory + '/../rockberry-player.log'
+
+        logger.addHandler(logging.FileHandler(self.LOGFILE))
 
         self.mm = MediaManager()
         self.main = RockberryMainScreen()

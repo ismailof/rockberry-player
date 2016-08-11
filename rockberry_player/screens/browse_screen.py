@@ -42,8 +42,8 @@ Builder.load_string("""
                 text: 'Playlists'
                 on_press: app.mm.browser.browse_playlists()
             Button:
-                text: 'Tune'
-                on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list, tunning=True)
+                text: 'Mix'
+                on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list, tunning=True, mixing=True)
             Button:
                 text: 'Add'
                 on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list)

@@ -5,6 +5,7 @@ import re
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
+from base import MediaController
 from utils import scheduled
 from refs import RefUtils, RefItem
 
@@ -70,7 +71,7 @@ class TrackItem(RefItem):
     duration = AliasProperty(get_duration, None, bind=['item'])
 
 
-class TrackControl(TrackItem):
+class TrackControl(TrackItem, MediaController):
 
     _refresh_method = None
 
@@ -98,4 +99,8 @@ class TrackControl(TrackItem):
         if self._refresh_method:
             self._refresh_method(
                 on_result=self.set_tl_track)
+
+    def refresh_stream_title(self, *args, **kwargs):
+        self.mopidy.playback.get_stream_title(
+            on_result=self.set_stream_title)
 

@@ -1,8 +1,13 @@
+import logging
+
 from kivy.clock import Clock
 from kivy.properties import StringProperty, DictProperty
 
 from utils import triggered
 from base import MediaController
+
+
+logger = logging.getLogger(__name__)
 
 
 class MediaCache(MediaController):
@@ -16,10 +21,11 @@ class MediaCache(MediaController):
         if not items:
             return
 
-            self._cache.update(items)
-            for uri in items.keys():
-                for callback in self._update_callbacks.pop(uri, []):
-                    Clock.schedule_once(callback)
+        logger.debug('%s_update_cache: %r' % (self.__name__, items))
+        self._cache.update(items)
+        for uri in items.keys():
+            for callback in self._update_callbacks.pop(uri, []):
+                Clock.schedule_once(callback)
 
     @classmethod
     def request_item(self, uri, callback):
@@ -48,6 +54,8 @@ class MediaCache(MediaController):
     def server_request(self, *args, **kwargs):
         if self.interface:
             return self.interface(*args, **kwargs)
+        else:
+            logger.warning('%s_server_request. No interface set' % (self.__name__))
 
 
 class ImageCache(MediaCache):

@@ -77,14 +77,15 @@ class MediaManager(EventDispatcher):
             self.init_player_state()
 
     def set_interfaces(self):
+
         MediaController.mopidy = self.mopidy
 
-        PlaybackControl.interface = self.mopidy.playback
-        MixerControl.interface = self.mopidy.mixer
-        OptionsControl.interface = self.mopidy.tracklist
-        ImageCache.interface = self.mopidy.library.get_images
-        QueueControl.interface = self.mopidy.tracklist
-        BrowserControl.interface = self.mopidy
+        PlaybackControl.set_interface(self.mopidy.playback)
+        MixerControl.set_interface(self.mopidy.mixer)
+        OptionsControl.set_interface(self.mopidy.tracklist)
+        ImageCache.set_interface(self.mopidy.library.get_images)
+        QueueControl.set_interface(self.mopidy.tracklist)
+        BrowserControl.set_interface(self.mopidy)
 
         self.current.set_refresh_method(self.mopidy.playback.get_current_tl_track)
         self.next.set_refresh_method(self.mopidy.tracklist.next_track)
@@ -111,9 +112,9 @@ class MediaManager(EventDispatcher):
                                                      'track_playback_resumed',
                                                      'track_playback_ended'])
 
+        self.bind_method(self.current.refresh_stream_title, 'track_playback_started')
         self.bind_method(self.current.set_stream_title, 'stream_title_changed')
-        self.bind_method(self.current.reset_stream_title, ['track_playback_started',
-                                                           'track_playback_ended'])
+        self.bind_method(self.current.reset_stream_title, 'track_playback_ended')
 
         self.current.bind(item=self.refresh_context_info)
         self.state.bind(on_next=self.current.refresh,
@@ -149,7 +150,9 @@ class MediaManager(EventDispatcher):
 
     @scheduled
     def play_uris(self, uris):
-        tltracks = self.mopidy.tracklist.add(uris=uris, timeout=20)
+        tl_index = self.mopidy.tracklist.index(timeout=5)
+        tltracks = self.mopidy.tracklist.add(uris=uris, timeout=20,
+                                             at_position=tl_index)
         try:
             tlid_first = tltracks[0]['tlid']
             self.mopidy.playback.play(tlid=tlid_first)
