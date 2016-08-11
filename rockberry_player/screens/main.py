@@ -83,6 +83,11 @@ Builder.load_string("""
                 opacity: 0.6
                 text: 'shot'
                 on_press: root.do_screenshot()
+                
+            CheckBox:                
+                size_hint_x: None
+                width: 40
+                active: app.mm.connected
 
             DigitalClock:
                 size_hint_x: 0.3

@@ -22,8 +22,8 @@ class RockberryPlayerApp(App):
 
         self.mm = MediaManager()
         self.main = RockberryMainScreen()
-        
-        self.main.switch_to('playback' if self.mm.current else 'browse')        
+
+        self.main.switch_to('playback' if self.mm.current else 'browse')
 
         return self.main
 

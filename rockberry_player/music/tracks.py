@@ -93,7 +93,7 @@ class TrackControl(TrackItem):
 
     def set_refresh_method(self, function):
         self._refresh_method = function
-        
+
     def refresh(self, *args, **kwargs):
         if self._refresh_method:
             self._refresh_method(

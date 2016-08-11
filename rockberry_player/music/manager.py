@@ -3,8 +3,7 @@ import logging
 
 from kivy.event import EventDispatcher
 from kivy.clock import Clock
-from kivy.properties import ListProperty, ObjectProperty, StringProperty,\
-    DictProperty
+from kivy.properties import ObjectProperty, BooleanProperty
 
 from kivy.app import App
 
@@ -15,7 +14,7 @@ from utils import scheduled, assign_property
 from base import MediaController
 from refs import RefUtils
 from tracks import TrackItem, TrackControl
-from images import AlbumCoverRetriever
+from images import ImageCache
 from playback import PlaybackControl
 from options import OptionsControl
 from mixer import MixerControl
@@ -28,6 +27,8 @@ logger = logging.getLogger(__name__)
 
 
 class MediaManager(EventDispatcher):
+
+    connected = BooleanProperty(False)
 
     current = ObjectProperty(TrackControl(), rebind=True)
     prev = ObjectProperty(TrackControl(), rebind=True)
@@ -43,7 +44,7 @@ class MediaManager(EventDispatcher):
 
     queue = ObjectProperty(QueueControl(), rebind=True)
 
-    browser = ObjectProperty(BrowserControl(), rebind=True)    
+    browser = ObjectProperty(BrowserControl(), rebind=True)
 
 
     def bind_method(self, method, events):
@@ -63,24 +64,27 @@ class MediaManager(EventDispatcher):
         MediaController.app = self.app
 
         self.mopidy = MopidyClient(server_addr=self.app.MOPIDY_SERVER,
-                                   error_handler=self.on_mopidy_error)
+                                   error_handler=self.on_mopidy_error,
+                                   connection_handler=self.on_connection)
 
         self.bind_events()
-        self.on_connect(connection_state=True)
 
-    def on_connect(self, connection_state, *args):
-        if connection_state:
+    @scheduled
+    def on_connection(self, connection_state, *args):
+        self.connected = connection_state
+        if self.connected:
             self.set_interfaces()
             self.init_player_state()
 
     def set_interfaces(self):
+        MediaController.mopidy = self.mopidy
+
         PlaybackControl.interface = self.mopidy.playback
         MixerControl.interface = self.mopidy.mixer
         OptionsControl.interface = self.mopidy.tracklist
-        AlbumCoverRetriever.interface = self.mopidy.library
+        ImageCache.interface = self.mopidy.library.get_images
         QueueControl.interface = self.mopidy.tracklist
-        BrowserControl.interface = self.mopidy.library
-        BrowserControl.if_playlists = self.mopidy.playlists
+        BrowserControl.interface = self.mopidy
 
         self.current.set_refresh_method(self.mopidy.playback.get_current_tl_track)
         self.next.set_refresh_method(self.mopidy.tracklist.next_track)
@@ -130,7 +134,7 @@ class MediaManager(EventDispatcher):
                            self.options,
                            self.queue,
                            self.browser]:
-            controller.refresh()                   
+            controller.refresh()
 
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
@@ -164,7 +168,7 @@ class MediaManager(EventDispatcher):
             self.mopidy.tracklist.clear()
 
         self.mopidy.tracklist.add(uris=uris)
-        
+
         if mixing:
             self.mopidy.tracklist.suffle()
 

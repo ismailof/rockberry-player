@@ -6,6 +6,7 @@ class MediaController(EventDispatcher):
 
     app = None
     interface = None
+    mopidy = None
 
     #def __init__(self, **kwargs):
         #super(MediaController, self).__init__(**kwargs)

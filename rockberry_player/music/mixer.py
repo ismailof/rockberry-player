@@ -11,6 +11,9 @@ class MixerControl(MediaController):
     mute = BooleanProperty(False)
 
     def refresh(self, *args, **kwargs):
+        if not self.interface:
+            self.interface = self.mopidy.mixer
+
         self.interface.get_volume(on_result=self.update_volume)
         self.interface.get_mute(on_result=self.update_mute)
 

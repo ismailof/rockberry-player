@@ -1,23 +1,29 @@
-from kivy.event import EventDispatcher
 from kivy.clock import Clock
-from kivy.cache import Cache
 from kivy.properties import StringProperty, DictProperty
-from functools import partial
-from utils import scheduled, triggered
 
+from utils import triggered
 from base import MediaController
 
 
-class AlbumCoverRetriever(MediaController):
+class MediaCache(MediaController):
 
-    _image_cache = {}
-    
+    _cache = {}
     _requested_uris = set()
     _update_callbacks = {}
 
     @classmethod
-    def request_image(self, uri, callback):
-        if not uri or uri in self._image_cache:
+    def _update_cache(self, items):
+        if not items:
+            return
+
+            self._cache.update(items)
+            for uri in items.keys():
+                for callback in self._update_callbacks.pop(uri, []):
+                    Clock.schedule_once(callback)
+
+    @classmethod
+    def request_item(self, uri, callback):
+        if not uri or uri in self._cache:
             Clock.schedule_once(callback)
             return
 
@@ -27,23 +33,24 @@ class AlbumCoverRetriever(MediaController):
             self._update_callbacks[uri] = set()
         self._update_callbacks[uri].add(callback)
 
-        self._get_server_images()
+        self._get_server_items()
 
     @classmethod
     @triggered(0.5)
-    def _get_server_images(self, *args):
-        if self.interface and self._requested_uris:
-            self.interface.get_images(uris=list(self._requested_uris),
-                                      on_result=self._update_cache)
+    def _get_server_items(self, *args):
+        if self.mopidy and self._requested_uris:
+            self.server_request(
+                uris=list(self._requested_uris),
+                on_result=self._update_cache)
             self._requested_uris.clear()
 
     @classmethod
-    def _update_cache(self, images):
-        if images:
-            self._image_cache.update(images)
-            for uri in images.keys():
-                for callback in self._update_callbacks.pop(uri, []):
-                    Clock.schedule_once(callback)
+    def server_request(self, *args, **kwargs):
+        if self.interface:
+            return self.interface(*args, **kwargs)
+
+
+class ImageCache(MediaCache):
 
     @classmethod
     def select_image(self, uri, size=None):
@@ -54,10 +61,10 @@ class AlbumCoverRetriever(MediaController):
 
         if not uri:
             return self.app.IMG_FOLDER + 'neon_R.jpg'
-        elif uri not in self._image_cache:
+        elif uri not in self._cache:
             return ''
 
-        imagelist = self._image_cache[uri]
+        imagelist = self._cache[uri]
 
         if not imagelist:
             return ''

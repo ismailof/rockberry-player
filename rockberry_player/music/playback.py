@@ -12,7 +12,7 @@ from debug import debug_function
 
 class PlaybackControl(MediaController):
 
-    StateList = ['stopped', 'playing', 'paused']    
+    StateList = ['stopped', 'playing', 'paused']
 
     playback_state = OptionProperty(StateList[0],
                                     options=StateList,

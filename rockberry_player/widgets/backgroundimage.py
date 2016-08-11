@@ -2,8 +2,6 @@ from kivy.lang import Builder
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 from kivy.uix.effectwidget import EffectWidget
 
-from music.images import AlbumCoverRetriever
-
 
 class BackgroundImage(EffectWidget):
     uri = StringProperty(None, allownone=True)

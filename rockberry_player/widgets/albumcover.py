@@ -3,7 +3,7 @@ from kivy.properties import NumericProperty, StringProperty,\
     ListProperty, AliasProperty
 from kivy.uix.image import AsyncImage
 
-from music.images import AlbumCoverRetriever
+from music.images import ImageCache
 
 
 class AlbumCover(AsyncImage):
@@ -22,14 +22,14 @@ class AlbumCover(AsyncImage):
     border_rectangle = AliasProperty(get_border_rectangle, None, bind=['center', 'size', 'image_ratio'])
 
     def update_image(self, *args):
-        new_source = AlbumCoverRetriever.select_image(uri=self.uri,
-                                                      size=self.size)
+        new_source = ImageCache.select_image(uri=self.uri,
+                                             size=self.size)
 
         if self.source != new_source:
             self.source = new_source
 
     def on_uri(self, *args):
-        AlbumCoverRetriever.request_image(self.uri, self.update_image)
+        ImageCache.request_item(self.uri, self.update_image)
 
     def on_size(self, *args):
         self.update_image()

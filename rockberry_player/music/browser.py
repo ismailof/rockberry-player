@@ -9,9 +9,7 @@ from debug import debug_function
 
 
 class BrowserControl (MediaController):
-    
-    if_playlists = None
-    
+
     browse_list = ListProperty([])
     browse_tree = ListProperty([RefUtils.RefNone])
 
@@ -21,31 +19,31 @@ class BrowserControl (MediaController):
     def set_browse_list(self, result, *args):
         self.browse_list = result
 
-    def on_browse_ref(self, *args):        
+    def on_browse_ref(self, *args):
         self.refresh()
 
     def refresh(self, *args):
         # TEMPORAL WORKAROUND FOR GETTING PLAYLISTS
         if self.browse_ref['uri'] == 'playlists:':
-            self.if_playlists.as_list(on_result=self.set_browse_list)
+            self.mopidy.playlists.as_list(on_result=self.set_browse_list)
         else:
-            self.interface.browse(uri=self.browse_ref['uri'], 
-                                  on_result=self.set_browse_list)
-            
-        
+            self.mopidy.library.browse(uri=self.browse_ref['uri'],
+                                          on_result=self.set_browse_list)
+
+
     @scheduled
     def browse(self, item):
         self.browse_tree.append(RefUtils.make_reference(item))
-            
+
     @scheduled
     def back(self):
         if len(self.browse_tree) > 1:
-            self.browse_tree.pop()        
+            self.browse_tree.pop()
 
     @scheduled
     def home(self):
-        self.browse_tree = [RefUtils.RefNone]        
-        
+        self.browse_tree = [RefUtils.RefNone]
+
 
     def browse_playlists(self):
         self.browse_tree.append(RefUtils.RefPlaylists)
