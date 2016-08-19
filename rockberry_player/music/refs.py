@@ -99,7 +99,6 @@ class RefItem(EventDispatcher):
     def get_defaultimg(self):
         return RefUtils.get_type_image(self.reftype)
 
-
     title = AliasProperty(get_title, None, bind=['ref'])
     reftype = AliasProperty(get_reftype, None, bind=['ref'])
     uri = AliasProperty(get_uri, None, bind=['ref'])

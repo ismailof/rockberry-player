@@ -4,9 +4,8 @@ from kivy.properties import StringProperty, NumericProperty, VariableListPropert
 
 
 class MediaIcon(Image):
-    media = StringProperty(None, allownone=True)
-    #icon_size = NumericProperty(32)
-    #size = VariableListProperty(32, length=2)
+    atlas = StringProperty(None)
+    item = StringProperty(None, allownone=True)
 
 
 Builder.load_string("""
@@ -16,6 +15,6 @@ Builder.load_string("""
     mipmap: True
     size: (32, 32)
     size_hint: (None, None)
-    source: 'atlas://{}media/{}'.format(app.IMG_FOLDER, root.media or 'null')
+    source: 'atlas://{}{}/{}'.format(app.IMG_FOLDER, root.atlas, root.item or 'null')
 
 """)

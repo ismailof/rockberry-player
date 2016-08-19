@@ -1,11 +1,9 @@
+from kivy.lang import Builder
+from kivy.uix.recycleview import RecycleView
 from kivy.properties import ListProperty, NumericProperty, AliasProperty
-from kivy.uix.listview import ListView
-from kivy.adapters.simplelistadapter import SimpleListAdapter
-
-from widgets.tracklistitem import TrackListItem
 
 
-class TrackListView(ListView):
+class TrackListView(RecycleView):
 
     tracklist = ListProperty()
     tlid = NumericProperty()
@@ -19,24 +17,31 @@ class TrackListView(ListView):
 
     current_id = AliasProperty(find_current_index, None, bind=['tracklist', 'tlid'])
 
-    def __init__(self, **kwargs):
-        super(TrackListView, self).__init__(**kwargs)
-        self.adapter = SimpleListAdapter(data=[],
-                                         args_converter=self.my_args_converter,
-                                         cls=TrackListItem)
-
     def on_tracklist(self, *args):
-        self.adapter.data = self.tracklist
+        self.data = [{'item': tl_track['track'],
+                      'tlid': tl_track['tlid'],
+                      'current': False
+                     } for tl_track in self.tracklist]
 
-    def on_current_id(self, *args):
-        try:
-            if len(self.tracklist) > 5:
-                self.scroll_to(max(self.current_id - 1, 0))
-        except:
-            pass
+    #def on_current_id(self, *args):
+        #try:
+            #if len(self.tracklist) > 5:
+                #self.scroll_to(max(self.current_id - 1, 0))
+            #else:
+                #self.scroll_to(0)
+        #except:
+            #pass
 
-    def my_args_converter(self, row_index, item):
-        track_items = {'tlid': item['tlid'],
-                       'item': item['track'],
-                       'current': row_index == self.current_id}
-        return track_items
+
+Builder.load_string("""
+#:import TrackListItem widgets.tracklistitem.TrackListItem
+
+<TrackListView>:
+    viewclass: 'TrackListItem'
+    RecycleBoxLayout:
+        default_size: None, dp(70)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+""")
