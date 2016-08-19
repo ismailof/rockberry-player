@@ -49,7 +49,7 @@ Builder.load_string("""
             atlas: 'media'
             item: root.media
             size: (22, 22)
-            right: cover.right            
+            right: cover.right
 
     SimpleTrackInfo:
         item: root.item

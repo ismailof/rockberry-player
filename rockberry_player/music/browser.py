@@ -16,8 +16,8 @@ class BrowserControl (MediaController):
     browse_ref = AliasProperty(lambda self: self.browse_tree[-1], None, bind=['browse_tree'])
 
     @scheduled
-    def set_browse_list(self, result, *args):
-        self.browse_list = result
+    def set_browse_list(self, reflist, *args):
+        self.browse_list = [{'ref': ref} for ref in reflist]
 
     def on_browse_ref(self, *args):
         self.refresh()
@@ -28,7 +28,7 @@ class BrowserControl (MediaController):
             self.mopidy.playlists.as_list(on_result=self.set_browse_list)
         else:
             self.mopidy.library.browse(uri=self.browse_ref['uri'],
-                                          on_result=self.set_browse_list)
+                                       on_result=self.set_browse_list)
 
 
     @scheduled

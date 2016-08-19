@@ -44,7 +44,7 @@ Builder.load_string("""
                 item: root.media
                 size: (32, 32)
                 right: cover.border_rectangle[0] + cover.border_rectangle[2] - 2
-                y: cover.border_rectangle[1] + 2                
+                y: cover.border_rectangle[1] + 2
 
         Label:
             text: root.title
