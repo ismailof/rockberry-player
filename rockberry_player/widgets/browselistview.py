@@ -4,12 +4,12 @@ from kivy.uix.recycleview import RecycleView
 
 
 class BrowseListView(RecycleView):
-    
+
     reflist = ListProperty()
-    
+
     def on_reflist(self, *args):
         self.data = [{'ref': ref} for ref in self.reflist]
-    
+
 
 
 Builder.load_string("""

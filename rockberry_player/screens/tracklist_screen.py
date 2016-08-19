@@ -43,7 +43,7 @@ class TracklistScreen(Screen):
         self.trigger_filter()
 
     def do_filter(self, *args):
-        self.ids['tlview'].scroll_to(0)
+        #self.ids['tlview'].scroll_to(0)
         self.filtered_tracklist = self.filter_tracklist()
 
 
