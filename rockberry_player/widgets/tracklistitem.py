@@ -46,9 +46,10 @@ Builder.load_string("""
             uri: root.uri
 
         MediaIcon:
+            atlas: 'media'
+            item: root.media
             size: (22, 22)
-            right: cover.right
-            media: root.media
+            right: cover.right            
 
     SimpleTrackInfo:
         item: root.item
