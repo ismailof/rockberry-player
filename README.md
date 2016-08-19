@@ -15,6 +15,7 @@ Screenshots
 ![Radio](screenshots/playback_radio.png)
 ![Tracklist Screen](screenshots/tracklist_screen.png)
 ![Browse Screen](screenshots/browse_screen.png)
+![Connection Screen](screenshots/server_connected.png)
 
 Changelog
 ---------
