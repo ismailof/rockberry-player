@@ -2,11 +2,14 @@ from kivy.lang import Builder
 from kivy.properties import ListProperty
 from kivy.uix.recycleview import RecycleView
 
-from widgets.browselistitem import BrowseListItem
-
 
 class BrowseListView(RecycleView):
-    pass
+    
+    reflist = ListProperty()
+    
+    def on_reflist(self, *args):
+        self.data = [{'ref': ref} for ref in self.reflist]
+    
 
 
 Builder.load_string("""

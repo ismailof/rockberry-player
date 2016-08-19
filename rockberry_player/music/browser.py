@@ -17,7 +17,7 @@ class BrowserControl (MediaController):
 
     @scheduled
     def set_browse_list(self, reflist, *args):
-        self.browse_list = [{'ref': ref} for ref in reflist]
+        self.browse_list = reflist
 
     def on_browse_ref(self, *args):
         self.refresh()

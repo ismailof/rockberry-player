@@ -56,5 +56,5 @@ Builder.load_string("""
                 ref: app.mm.browser.browse_ref
 
             BrowseListView:
-                data: app.mm.browser.browse_list
+                reflist: app.mm.browser.browse_list
 """)
