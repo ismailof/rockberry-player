@@ -9,7 +9,7 @@ class BrowseListView(RecycleView):
 
     def on_reflist(self, *args):
         self.data = [{'ref': ref} for ref in self.reflist]
-
+        self.scroll_y = 1
 
 
 Builder.load_string("""
