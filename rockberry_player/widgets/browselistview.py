@@ -17,6 +17,9 @@ Builder.load_string("""
 
 <BrowseListView>:
     viewclass: 'BrowseListItem'
+    bar_width: 20
+    bar_margin: 2
+    scroll_type: ['bars', 'content']
     RecycleBoxLayout:
         default_size: None, dp(56)
         default_size_hint: 1, None

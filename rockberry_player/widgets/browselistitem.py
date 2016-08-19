@@ -55,4 +55,8 @@ Builder.load_string("""
         opacity: 0.7
         text: root.action
         on_press: app.mm.play_uris([root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
+
+    Widget:
+        size_hint_x: None
+        width: 22
 """)

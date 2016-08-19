@@ -38,6 +38,9 @@ Builder.load_string("""
 
 <TrackListView>:
     viewclass: 'TrackListItem'
+    bar_width: 20
+    bar_margin: 2
+    scroll_type: ['bars', 'content']
     RecycleBoxLayout:
         default_size: None, dp(70)
         default_size_hint: 1, None

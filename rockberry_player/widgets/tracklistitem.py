@@ -20,6 +20,8 @@ Builder.load_string("""
     padding: 5
     spacing: 10
 
+    current: root.tlid and root.tlid == app.mm.current.tlid
+
     #canvas:
         #Color:
             #rgba: (0, 0.9, 0.9, 0.5) if root.current else (0,0,0,0)
@@ -70,4 +72,8 @@ Builder.load_string("""
         opacity: 0.7
         text: 'del'
         on_press: app.mm.mopidy.tracklist.remove(criteria={'tlid':[root.tlid]})
+
+    Widget:
+        size_hint_x: None
+        width: 22
 """)
