@@ -1,4 +1,5 @@
 from kivy.uix.label import Label
+from kivy.logger import Logger
 from music.refs import RefUtils
 
 
@@ -21,9 +22,10 @@ class ReferenceLabel(Label):
     def on_ref_press(self, refid):
         try:
             self.dispatch('on_item_press', self.references[int(refid)])
-        except:
-            # TODO: log something
-            pass
+        except Exception as ex:
+            Logger.exception('Exception dispatching on_item_press(%s)\n%r' %
+                             (self.references[int(refid)], ex)
+                            )
 
     def on_item_press(self, *args):
         pass

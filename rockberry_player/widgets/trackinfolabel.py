@@ -11,8 +11,6 @@ from utils import MarkupText
 
 class TrackInfoLabel(TrackItem, ReferenceLabel):
 
-    #font_size = NumericProperty(25)
-
     def format_title(self):
         if not self.item:
             return MarkupText('<Nothing playing>', size=27, color='#80f0f0')
@@ -67,15 +65,14 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
 
     def update_text(self, *args):
         self.clear_refs()
-        self.full_text = '\n'.join([self.format_title(),
-                                    self.format_artists(),
-                                    self.format_album()])
+        self.text = '\n'.join([self.format_title(),
+                               self.format_artists(),
+                               self.format_album()])
 
 
 Builder.load_string("""
 
 <TrackInfoLabel>
-    text: root.full_text
     markup: True
     halign: 'center'
     valign: 'middle'

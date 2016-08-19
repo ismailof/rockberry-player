@@ -21,7 +21,7 @@ Builder.load_string("""
 <BrowseListItem>
     size_hint_y: None
     height: 70
-    padding: 5
+    padding: 2
     spacing: 10
 
     RelativeLayout:
