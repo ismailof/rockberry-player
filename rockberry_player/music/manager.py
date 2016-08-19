@@ -72,9 +72,26 @@ class MediaManager(EventDispatcher):
     @scheduled
     def on_connection(self, connection_state, *args):
         self.connected = connection_state
+
         if self.connected:
             self.set_interfaces()
             self.init_player_state()
+
+        self.choose_window()
+
+    def choose_window(self, *args):
+        if not self.connected:
+            screen = 'server'
+        #elif self.state.playing:
+            #screen = 'playback'
+        #elif self.queue.tracklist:
+            #screen = 'tracklist'
+        #else:
+            #screen = 'browse'
+        else:
+            screen = 'playback'
+
+        self.app.main.switch_to(screen=screen)
 
     def set_interfaces(self):
 

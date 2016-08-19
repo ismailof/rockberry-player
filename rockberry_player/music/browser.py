@@ -34,6 +34,7 @@ class BrowserControl (MediaController):
     @scheduled
     def browse(self, item):
         self.browse_tree.append(RefUtils.make_reference(item))
+        #self.app.main.switch_to(screen='browse')
 
     @scheduled
     def back(self):
@@ -43,7 +44,6 @@ class BrowserControl (MediaController):
     @scheduled
     def home(self):
         self.browse_tree = [RefUtils.RefNone]
-
 
     def browse_playlists(self):
         self.browse_tree.append(RefUtils.RefPlaylists)

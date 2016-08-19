@@ -27,10 +27,11 @@ class RockberryMainScreen(FloatLayout):
     # To be removed in a more polished interface
     def init_screenbar(self, *args):
         for screen in self.ids['screenmanager'].screen_names:
-            sc_button = ToggleButton(text=screen,
-                                     group='sm',
-                                     on_press=partial(self.switch_to, screen=screen),
-                                     )
+            sc_button = ToggleButton(
+                text=screen,
+                group='sm',
+                on_press=partial(self.switch_to, screen=screen),
+            )
 
             self.ids['buttonbar'].add_widget(sc_button)
 
@@ -102,7 +103,6 @@ Builder.load_string("""
 
             PlaybackScreen:
                 name: 'playback'
-                #id: playback
                 size_hint: (0.95, 0.95)
                 pos_hint: {'center': (0.5, 0.5)}
 
@@ -111,17 +111,18 @@ Builder.load_string("""
                 tracklist: app.mm.queue.tracklist
                 tlid: app.mm.current.tlid
 
-            #Screen:
-                #name: 'test'
-                #TestWidget:
-                    #manager: screenmanager
-
             BrowseScreen:
                 name: 'browse'
 
-            #Screen:
-                #name: 'settings'
-                #Settings:
-                    #opacity: 0.8
+            Screen:
+                name: 'server'
+                BoxLayout:
+                    Label:
+                        text: 'Mopidy Server is [b]%s[/b]' % ('Connected' if app.mm.connected else 'Disconnected')
+                        markup: True
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+                        font_size: 40
 
 """)
