@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
-import logging
 
+from kivy.app import App
 from kivy.event import EventDispatcher
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty, BooleanProperty
-
-from kivy.app import App
+from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
 
@@ -23,7 +22,6 @@ from browser import BrowserControl
 
 from debug import debug_function
 
-logger = logging.getLogger(__name__)
 
 
 class MediaManager(EventDispatcher):
@@ -63,9 +61,11 @@ class MediaManager(EventDispatcher):
         self.app = App.get_running_app()
         MediaController.app = self.app
 
-        self.mopidy = MopidyClient(server_addr=self.app.MOPIDY_SERVER,
-                                   error_handler=self.on_mopidy_error,
-                                   connection_handler=self.on_connection)
+        self.mopidy = MopidyClient(
+            ws_url = 'ws://' + self.app.MOPIDY_SERVER + '/mopidy/ws',
+            error_handler=self.on_mopidy_error,
+            connection_handler=self.on_connection
+        )
 
         self.bind_events()
 
@@ -173,7 +173,7 @@ class MediaManager(EventDispatcher):
         self.mopidy.tracklist.add(uris=uris)
 
         if mixing:
-            self.mopidy.tracklist.suffle()
+            self.mopidy.tracklist.shuffle()
 
         if tunning:
             self.app.mm.mopidy.playback.play()
