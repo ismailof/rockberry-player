@@ -23,15 +23,14 @@ class TrackListView(RecycleView):
                       'current': False
                      } for tl_track in self.tracklist]
 
-    #def on_current_id(self, *args):
-        #try:
-            #if len(self.tracklist) > 5:
-                #self.scroll_to(max(self.current_id - 1, 0))
-            #else:
-                #self.scroll_to(0)
-        #except:
-            #pass
+    def on_current_id(self, *args):
+        self.scroll_to_index(self.current_id)
 
+    def scroll_to_index(self, index):        
+        relative_pos = index / float(len(self.tracklist) -1)
+        self.scroll_y = 1 - relative_pos
+        
+        
 
 Builder.load_string("""
 #:import TrackListItem widgets.tracklistitem.TrackListItem
@@ -48,3 +47,4 @@ Builder.load_string("""
         height: self.minimum_height
         orientation: 'vertical'
 """)
+

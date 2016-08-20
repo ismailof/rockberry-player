@@ -77,3 +77,4 @@ Builder.load_string("""
         size_hint_x: None
         width: 22
 """)
+
