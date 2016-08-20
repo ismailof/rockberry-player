@@ -27,7 +27,7 @@ class BrowserControl (MediaController):
         if self.browse_ref['uri'] == 'playlists:':
             self.mopidy.playlists.as_list(on_result=self.set_browse_list)
         else:
-            self.mopidy.library.browse(uri=self.browse_ref['uri'],
+            self.interface.browse(uri=self.browse_ref['uri'],
                                        on_result=self.set_browse_list)
 
 
@@ -37,12 +37,12 @@ class BrowserControl (MediaController):
         self.app.main.switch_to(screen='browse')
 
     @scheduled
-    def back(self):
+    def browse_back(self):
         if len(self.browse_tree) > 1:
             self.browse_tree.pop()
 
     @scheduled
-    def home(self):
+    def browse_home(self):
         self.browse_tree = [RefUtils.RefNone]
 
     def browse_playlists(self):

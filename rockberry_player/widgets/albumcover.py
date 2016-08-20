@@ -61,4 +61,5 @@ Builder.load_string("""
 
     default: app.IMG_FOLDER + 'default_track.png'
     allow_stretch: True
+
 """)

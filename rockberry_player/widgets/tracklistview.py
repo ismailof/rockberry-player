@@ -14,23 +14,29 @@ class TrackListView(RecycleView):
         for index, tl_track in enumerate(self.tracklist):
             if tl_track['tlid'] == self.tlid:
                 return index
+        return None
 
     current_id = AliasProperty(find_current_index, None, bind=['tracklist', 'tlid'])
 
     def on_tracklist(self, *args):
         self.data = [{'item': tl_track['track'],
                       'tlid': tl_track['tlid'],
-                      'current': False
+                      'current': tl_track['tlid'] == self.tlid
                      } for tl_track in self.tracklist]
 
     def on_current_id(self, *args):
-        self.scroll_to_index(self.current_id)
+        if self.current_id is None:
+            return
+        self.scroll_to_index(self.current_id - 1)
 
-    def scroll_to_index(self, index):        
-        relative_pos = index / float(len(self.tracklist) -1)
-        self.scroll_y = 1 - relative_pos
-        
-        
+    # Scrolls the view to position item 'index' at top
+    def scroll_to_index(self, index):
+        if not self.tracklist:
+            return
+        relative_pos = index / float(len(self.tracklist)
+                                     - self.height / 70.0)
+        self.scroll_y = min(1, max(0, 1 - relative_pos))
+
 
 Builder.load_string("""
 #:import TrackListItem widgets.tracklistitem.TrackListItem
@@ -47,4 +53,3 @@ Builder.load_string("""
         height: self.minimum_height
         orientation: 'vertical'
 """)
-

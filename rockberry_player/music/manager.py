@@ -50,7 +50,7 @@ class MediaManager(EventDispatcher):
             events = [events]
 
         for event in events:
-            self.mopidy.listener.bind(event, method)
+            self.mopidy.bind_event(event, method)
 
     def bind_property(self, instance, prop_name, events, **kwargs):
         self.bind_method(assign_property(instance, prop_name, **kwargs), events)
@@ -102,7 +102,7 @@ class MediaManager(EventDispatcher):
         OptionsControl.set_interface(self.mopidy.tracklist)
         ImageCache.set_interface(self.mopidy.library.get_images)
         QueueControl.set_interface(self.mopidy.tracklist)
-        BrowserControl.set_interface(self.mopidy)
+        BrowserControl.set_interface(self.mopidy.library)
 
         self.current.set_refresh_method(self.mopidy.playback.get_current_tl_track)
         self.next.set_refresh_method(self.mopidy.tracklist.next_track)
@@ -163,7 +163,7 @@ class MediaManager(EventDispatcher):
         self.eot.refresh()
 
 
-    # BROWSE FUNCTIONS. TODO: Move to a proper place
+    # ACTIONS FUNCTIONS. TODO: Move to a proper place
 
     @scheduled
     def play_uris(self, uris):

@@ -31,10 +31,10 @@ Builder.load_string("""
 
             Button:
                 text: 'Home'
-                on_press: app.mm.browser.home()
+                on_press: app.mm.browser.browse_home()
             Button:
                 text: 'Back'
-                on_press: app.mm.browser.back()
+                on_press: app.mm.browser.browse_back()
             Button:
                 text: 'Refresh'
                 on_press: app.mm.browser.refresh()
