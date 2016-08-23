@@ -167,10 +167,13 @@ class MediaManager(EventDispatcher):
 
     @scheduled
     def play_uris(self, uris):
-        tl_index = self.mopidy.tracklist.index(timeout=5)
-        tltracks = self.mopidy.tracklist.add(uris=uris, timeout=20,
-                                             at_position=tl_index)
         try:
+            tl_index = self.mopidy.tracklist.index(timeout=5)
+            tltracks = self.mopidy.tracklist.add(
+                uris=uris,
+                at_position=tl_index + 1,
+                timeout=20
+            )
             tlid_first = tltracks[0]['tlid']
             self.mopidy.playback.play(tlid=tlid_first)
             self.app.main.switch_to(screen='playback')

@@ -1,21 +1,21 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ObjectProperty
 
 from widgets.mediaicon import MediaIcon
 from music.refs import RefItem
 
+
 class PlaybackArea(RefItem, BoxLayout):
     pass
-    #item = ObjectProperty(None, rebind=True)
 
 
 Builder.load_string("""
-<PlaybackArea>
+
+<PlaybackArea>:
 
     orientation: 'vertical'
     padding: 15
-    spacing: 15
+    spacing: 10
 
     canvas.before:
         Color:
@@ -24,46 +24,31 @@ Builder.load_string("""
             pos: self.pos
             size: self.size
 
-    BoxLayout:
-        spacing:  10
-        orientation: 'vertical'
+    RelativeLayout:
 
-        RelativeLayout:
+        AlbumCover:
+            id: cover
+            uri: root.uri
+            default: app.IMG_FOLDER + root.defaultimg
+            border_width: 2
+            background: (0.3, 0.3, 0.3, 0.5)
+            size_hint_x: 0.9
+            pos_hint: {'center_x': 0.5}
 
-            AlbumCover:
-                id: cover
-                uri: root.uri
-                default: app.IMG_FOLDER + root.defaultimg
-                border_width: 2
-                background: (0.3, 0.3, 0.3, 0.5)
-                size_hint_x: 0.9
-                pos_hint: {'center_x': 0.5}
+        MediaIcon:
+            atlas: 'media'
+            item: root.media
+            size: (32, 32)
+            right: cover.border_rectangle[0] + cover.border_rectangle[2] - 2
+            y: cover.border_rectangle[1] + 2
 
-            MediaIcon:
-                atlas: 'media'
-                item: root.media
-                size: (32, 32)
-                right: cover.border_rectangle[0] + cover.border_rectangle[2] - 2
-                y: cover.border_rectangle[1] + 2
+    Label:
+        text: root.title
+        size_hint_y: 0.4
+        halign: 'center'
+        valign: 'top'
+        text_size: self.size
+        font_size: 20
+        bold: True
 
-        Label:
-            text: root.title
-            size_hint_y: 0.4
-            halign: 'center'
-            valign: 'top'
-            text_size: self.size
-            font_size: 20
-            bold: True
-
-        #SimpleTrackInfo:
-            #size_hint_y: 0.4
-            #align: 'center'
-            #font_size: (17, 16)
-            #track: app.mm.current.track
-
-
-        PlaybackBar:
-            opacity: 0.5
-            controls: ['play_pause', 'next']
-            size_hint_y: 0.4
 """)

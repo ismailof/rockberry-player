@@ -69,6 +69,17 @@ Builder.load_string("""
                 size_hint_x: 0.4
                 item: app.mm.current.item
 
+                Button:
+                    opacity: 0.5
+                    text: 'Clear'
+                    on_press: app.mm.queue.clear()
+                    size_hint_y: 0.3
+
+                PlaybackBar:
+                    opacity: 0.5
+                    controls: ['play_pause', 'next']
+                    size_hint_y: 0.3
+
             TrackListView:
                 id: tlview
                 tlid: root.tlid

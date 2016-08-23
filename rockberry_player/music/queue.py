@@ -30,4 +30,5 @@ class QueueControl(MediaController):
     def shuffle(self, *args):
         self.interface.shuffle(start=self.queue_point)
 
-    #def index(self, tlid=None, *args):
+    def clear(self, *args):
+        self.interface.clear()

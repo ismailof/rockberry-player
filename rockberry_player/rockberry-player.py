@@ -26,6 +26,8 @@ class RockberryPlayerApp(App):
         self.mm = MediaManager()
         self.main = RockberryMainScreen()
 
+        self.main.switch_to(screen='server')
+
         return self.main
 
 

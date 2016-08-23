@@ -17,9 +17,7 @@ class MediaCache(MediaController):
         if not items:
             return
 
-        Logger.debug('%s:_update_cache: %r' % (
-            self.__name__, items)
-        )
+        Logger.debug('%s:_update_cache: %r' % (self.__name__, items))
         self._cache.update(items)
         for uri in items.keys():
             for callback in self._update_callbacks.pop(uri, []):

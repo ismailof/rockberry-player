@@ -41,12 +41,6 @@ Builder.load_string("""
             Button:
                 text: 'Playlists'
                 on_press: app.mm.browser.browse_playlists()
-            Button:
-                text: 'Mix'
-                on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list, tunning=True, mixing=True)
-            Button:
-                text: 'Add'
-                on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list)
 
         BoxLayout:
             spacing: 5
@@ -54,6 +48,15 @@ Builder.load_string("""
             PlaybackArea:
                 size_hint_x: 0.4
                 ref: app.mm.browser.browse_ref
+
+                Button:
+                    text: 'Mix'
+                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list, tunning=True, mixing=True)
+                    size_hint_y: 0.3
+                Button:
+                    text: 'Add'
+                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list)
+                    size_hint_y: 0.3
 
             BrowseListView:
                 reflist: app.mm.browser.browse_list
