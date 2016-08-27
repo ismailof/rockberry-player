@@ -15,7 +15,7 @@ Builder.load_string("""
 
     orientation: 'vertical'
     padding: 15
-    spacing: 10
+    spacing: 5
 
     canvas.before:
         Color:

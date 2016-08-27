@@ -132,11 +132,6 @@ Builder.load_string("""
                 size_hint_y:0.25
                 spacing: 20
 
-                Button:
-                    size_hint_x: 0.2
-                    text: 'MIX'
-                    on_press: app.mm.queue.shuffle()
-
                 OptionsBar:
                     size_hint_x: 0.25
                     pos_hint: {'right': 1}

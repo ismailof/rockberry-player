@@ -69,11 +69,18 @@ Builder.load_string("""
                 size_hint_x: 0.4
                 item: app.mm.current.item
 
-                Button:
+                BoxLayout:
+                    spacing: 5
                     opacity: 0.5
-                    text: 'Clear'
-                    on_press: app.mm.queue.clear()
                     size_hint_y: 0.3
+
+                    Button:
+                        text: 'clear'
+                        on_press: app.mm.queue.clear()
+
+                    Button:
+                        text: 'MIX'
+                        on_press: app.mm.queue.shuffle()
 
                 PlaybackBar:
                     opacity: 0.5
