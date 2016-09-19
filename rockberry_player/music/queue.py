@@ -14,7 +14,7 @@ class QueueControl(MediaController):
 
     def __init__(self, **kwargs):
         super(QueueControl, self).__init__(**kwargs)
-        self.trigger_refresh = Clock.create_trigger(self._triggered_refresh, timeout=1)
+        self.trigger_refresh = Clock.create_trigger(self._triggered_refresh, timeout=2)
 
     def refresh(self, *args):
         self.trigger_refresh()

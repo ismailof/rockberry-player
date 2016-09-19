@@ -95,8 +95,3 @@ class TrackControl(TrackItem, MediaController):
         if self._refresh_method:
             self._refresh_method(
                 on_result=self.set_tl_track)
-
-    def refresh_stream_title(self, *args, **kwargs):
-        self.mopidy.playback.get_stream_title(
-            on_result=self.set_stream_title)
-

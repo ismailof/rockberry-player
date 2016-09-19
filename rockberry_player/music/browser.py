@@ -10,25 +10,26 @@ from debug import debug_function
 
 class BrowserControl (MediaController):
 
-    browse_list = ListProperty([])
+    reflist = ListProperty([])
     browse_tree = ListProperty([RefUtils.RefNone])
 
     browse_ref = AliasProperty(lambda self: self.browse_tree[-1], None, bind=['browse_tree'])
 
     @scheduled
-    def set_browse_list(self, reflist, *args):
-        self.browse_list = reflist
+    def set_reflist(self, reflist, *args):
+        self.reflist = reflist
 
     def on_browse_ref(self, *args):
         self.refresh()
 
     def refresh(self, *args):
+        self.reflist = []
         # TEMPORAL WORKAROUND FOR GETTING PLAYLISTS
         if self.browse_ref['uri'] == 'playlists:':
-            self.mopidy.playlists.as_list(on_result=self.set_browse_list)
+            self.mopidy.playlists.as_list(on_result=self.set_reflist)
         else:
             self.interface.browse(uri=self.browse_ref['uri'],
-                                       on_result=self.set_browse_list)
+                                       on_result=self.set_reflist)
 
 
     @scheduled

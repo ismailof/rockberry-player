@@ -77,19 +77,19 @@ class MediaManager(EventDispatcher):
             self.set_interfaces()
             self.init_player_state()
 
-        self.choose_window()
+        Clock.schedule_once(self.choose_window, 5)
 
-    def choose_window(self, *args):
+    def choose_window(self, *args, **kwargs):
         if not self.connected:
             screen = 'server'
-        #elif self.state.playing:
-            #screen = 'playback'
-        #elif self.queue.tracklist:
-            #screen = 'tracklist'
-        #else:
-            #screen = 'browse'
-        else:
+        elif self.state.playing:
             screen = 'playback'
+        elif self.queue.tracklist:
+            screen = 'tracklist'
+        else:
+            screen = 'browse'
+        #else:
+            #screen = 'playback'
 
         self.app.main.switch_to(screen=screen)
 
@@ -160,17 +160,19 @@ class MediaManager(EventDispatcher):
 
     # Track playback events
 
+    @scheduled
     def track_playback_started(self, tl_track):
         self.check_playback_end.cancel()
         self.state.update_time_position(0)
-        self.current.refresh_stream_title()
         self.current.set_tl_track(tl_track)
 
+    @scheduled
     def track_playback_ended(self, time_position, tl_track):
         self.state.update_time_position(0)
         self.current.set_stream_title(None)
         self.check_playback_end()
 
+    @scheduled
     def track_playback_paused_or_resumed(self, time_position, tl_track):
         self.state.update_time_position(time_position)
         self.current.set_tl_track(tl_track)
@@ -196,7 +198,8 @@ class MediaManager(EventDispatcher):
     @scheduled
     def add_to_tracklist(self, refs=None, uris=None, tunning=False, mixing=False):
         if refs:
-            uris = [RefUtils.get_uri(ref) for ref in refs]
+            uris = [RefUtils.get_uri(ref) for ref in refs
+                    if RefUtils.get_type(ref)=='track']
         if not uris:
             return
 

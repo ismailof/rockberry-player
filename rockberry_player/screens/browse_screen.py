@@ -51,13 +51,13 @@ Builder.load_string("""
 
                 Button:
                     text: 'Mix'
-                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list, tunning=True, mixing=True)
+                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tunning=True, mixing=True)
                     size_hint_y: 0.3
                 Button:
                     text: 'Add'
-                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.browse_list)
+                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.reflist)
                     size_hint_y: 0.3
 
             BrowseListView:
-                reflist: app.mm.browser.browse_list
+                reflist: app.mm.browser.reflist
 """)

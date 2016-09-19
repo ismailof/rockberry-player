@@ -12,8 +12,13 @@ from utils import MarkupText
 class TrackInfoLabel(TrackItem, ReferenceLabel):
 
     def format_title(self):
+
         if not self.item:
-            return MarkupText('<Nothing Playing>', size=27, color='#80f0f0')
+            return MarkupText('Browse Music ...',
+                              size=30,
+                              color='#80f0f0',
+                              b=True,
+                              ref=self.new_ref(None))
 
         parts = self.title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
         parts = [MarkupText(item,
@@ -62,6 +67,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
     def __init__(self, **kwargs):
         super(TrackInfoLabel, self).__init__(**kwargs)
         self.bind(item=self.update_text, stream_title=self.update_text)
+        self.update_text()
 
     def update_text(self, *args):
         self.clear_refs()
