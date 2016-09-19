@@ -16,7 +16,7 @@ class MediaController(EventDispatcher):
     def set_server(cls, mopidy):
         cls.mopidy = mopidy
 
-    def refresh(self, *args):
+    def refresh(self, *args, **kwargs):
         pass
 
     def bind_event(self, method, events):

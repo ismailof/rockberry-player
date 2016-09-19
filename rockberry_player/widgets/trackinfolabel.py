@@ -13,7 +13,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
 
     def format_title(self):
         if not self.item:
-            return MarkupText('<Nothing playing>', size=27, color='#80f0f0')
+            return MarkupText('<Nothing Playing>', size=27, color='#80f0f0')
 
         parts = self.title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
         parts = [MarkupText(item,

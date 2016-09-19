@@ -8,7 +8,7 @@ from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
 
-from utils import scheduled, assign_property
+from utils import scheduled, delayed, assign_property
 
 from base import MediaController
 from refs import RefUtils
@@ -117,31 +117,26 @@ class MediaManager(EventDispatcher):
         self.bind_property(self.state, 'playback_state', 'playback_state_changed',
                            field='new_state')
 
-        self.bind_method(self.state.update_time_position, ['seeked',
-                                                           'track_playback_paused',
-                                                           'track_playback_resumed'])
+        self.bind_method(self.state.update_time_position, 'seeked')
 
-        self.bind_method(self.state.reset_time_position, ['track_playback_started',
-                                                          'track_playback_ended'])
-
-        self.bind_method(self.current.set_tl_track, ['track_playback_started',
-                                                     'track_playback_paused',
-                                                     'track_playback_resumed',
-                                                     'track_playback_ended'])
-
-        self.bind_method(self.current.refresh_stream_title, 'track_playback_started')
-        self.bind_method(self.current.set_stream_title, 'stream_title_changed')
-        self.bind_method(self.current.reset_stream_title, 'track_playback_ended')
+        self.bind_method(self.track_playback_started, 'track_playback_started')
+        self.bind_method(self.track_playback_ended, 'track_playback_ended')
+        self.bind_method(self.track_playback_paused_or_resumed, ['track_playback_paused',
+                                                                 'track_playback_resumed'])
 
         self.current.bind(item=self.refresh_context_info)
         self.state.bind(on_next=self.current.refresh,
                         on_prev=self.current.refresh)
+
+        self.bind_method(self.current.set_stream_title, 'stream_title_changed')
 
         self.bind_method(self.refresh_context_info, ['options_changed',
                                                      'tracklist_changed'])
 
         self.bind_method(self.queue.refresh, 'tracklist_changed')
         self.bind_method(self.options.refresh, 'options_changed')
+
+        self.check_playback_end = Clock.create_trigger(self.current.refresh, 1)
 
     def init_player_state(self):
         for controller in [self.state,
@@ -158,9 +153,27 @@ class MediaManager(EventDispatcher):
         self.app.main.show_error(error=error)
 
     def refresh_context_info(self, *args):
-        self.next.refresh()
-        self.prev.refresh()
-        self.eot.refresh()
+        for trackitem in (self.next,
+                          self.prev,
+                          self.eot):
+            trackitem.refresh()
+
+    # Track playback events
+
+    def track_playback_started(self, tl_track):
+        self.check_playback_end.cancel()
+        self.state.update_time_position(0)
+        self.current.refresh_stream_title()
+        self.current.set_tl_track(tl_track)
+
+    def track_playback_ended(self, time_position, tl_track):
+        self.state.update_time_position(0)
+        self.current.set_stream_title(None)
+        self.check_playback_end()
+
+    def track_playback_paused_or_resumed(self, time_position, tl_track):
+        self.state.update_time_position(time_position)
+        self.current.set_tl_track(tl_track)
 
 
     # ACTIONS FUNCTIONS. TODO: Move to a proper place

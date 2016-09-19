@@ -88,10 +88,6 @@ class TrackControl(TrackItem, MediaController):
     def set_stream_title(self, title, *args, **kwargs):
         self.stream_title = title
 
-    @scheduled
-    def reset_stream_title(self, *args, **kwargs):
-        self.stream_title = None
-
     def set_refresh_method(self, function):
         self._refresh_method = function
 

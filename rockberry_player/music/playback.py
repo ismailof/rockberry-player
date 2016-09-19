@@ -50,15 +50,11 @@ class PlaybackControl(MediaController):
     def set_playback_state(self, state):
         self.playback_state = state
         if self.playback_state == 'stopped':
-            self.reset_time_position()
+            self.time_position = 0
 
     @scheduled
     def update_time_position(self, time_position, *args, **kwargs):
         self.time_position = time_position
-
-    @scheduled
-    def reset_time_position(self, *args, **kwargs):
-        self.time_position = 0
 
     def seek(self, time_position, *args):
         self.interface.seek(time_position)

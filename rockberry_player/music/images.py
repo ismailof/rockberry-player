@@ -2,7 +2,7 @@ from kivy.clock import Clock
 from kivy.properties import StringProperty, DictProperty
 from kivy.logger import Logger
 
-from utils import triggered
+from utils import delayed
 from base import MediaController
 
 
@@ -38,8 +38,8 @@ class MediaCache(MediaController):
         self._get_server_items()
 
     @classmethod
-    @triggered(0.5)
-    def _get_server_items(self, *args):
+    @delayed(0.5)
+    def _get_server_items(self):
         if self.mopidy and self._requested_uris:
             self.server_request(
                 uris=list(self._requested_uris),
