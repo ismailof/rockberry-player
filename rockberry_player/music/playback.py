@@ -61,7 +61,10 @@ class PlaybackControl(MediaController):
         self.time_position = 0
 
     def seek(self, time_position, *args):
-        self.interface.seek(time_position)
+        self.interface.seek(int(time_position))
+
+    def relative_seek(self, relative_position, *args):
+        self.seek(self.time_position + relative_position)
 
     def on_play_pause(self):
         if self.playback_state == 'playing':

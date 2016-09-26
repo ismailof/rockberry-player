@@ -45,18 +45,6 @@ class PlaybackBar(PlaybackControl, BoxLayout):
                 # TODO: Aprender de una vez a lanzar excepciones!
                 pass
 
-    #def on_play_pause(self):
-        #pass
-
-    #def on_stop(self):
-        #pass
-
-    #def on_prev(self):
-        #pass
-
-    #def on_next(self):
-        #pass
-
 
 Builder.load_string("""
 
@@ -66,8 +54,5 @@ Builder.load_string("""
 
 <PlaybackBar>
     playback_state: app.mm.state.playback_state
-    #on_play_pause: self.toggle_play_pause()
-    #on_stop: self.stop_track()
-    #on_prev: self.previous_track()
-    #on_next: self.next_track()
+
 """)
