@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
-from kivy.lang import Builder
 from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.label import Label
 
-from music.tracks import TrackItem
 from widgets.referencelabel import ReferenceLabel
+from music.tracks import TrackItem
 from utils import MarkupText
 
 
@@ -75,14 +74,3 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                                self.format_artists(),
                                self.format_album()])
 
-
-Builder.load_string("""
-
-<TrackInfoLabel>
-    markup: True
-    halign: 'center'
-    valign: 'middle'
-    split_str: ' '
-    text_size: self.size
-
-""")

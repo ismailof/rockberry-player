@@ -92,7 +92,6 @@ Builder.load_string("""
                 item: app.mm.current.item
                 stream_title: app.mm.current.stream_title
                 font_size: 23
-                on_item_press: app.mm.browser.browse(args[1])
                 padding_x: 20
 
             PlaybackSlider:
@@ -108,23 +107,17 @@ Builder.load_string("""
                 pos_hint: {'right': 1}
                 spacing: 5
 
-                Label:
-                    markup: True
-                    text: '[ref=0]' + app.mm.prev.title + '[/ref]'
-                    on_ref_press: app.mm.browser.browse(app.mm.prev.ref)
+                ReferenceLabel:
+                    item: app.mm.prev.item
                     halign: 'left'
                     valign: 'top'
-                    text_size: self.size
                     shorten: True
                     shorten_from: 'right'
 
-                Label:
-                    markup: True
-                    text: '[ref=0]' + app.mm.next.title + '[/ref]'
-                    on_ref_press: app.mm.browser.browse(app.mm.next.ref)
+                ReferenceLabel:
+                    item: app.mm.next.item
                     halign: 'right'
                     valign: 'top'
-                    text_size: self.size
                     shorten: True
                     shorten_from: 'right'
 

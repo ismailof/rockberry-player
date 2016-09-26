@@ -12,7 +12,6 @@ class BrowserControl (MediaController):
 
     reflist = ListProperty([])
     browse_tree = ListProperty([RefUtils.RefNone])
-
     browse_ref = AliasProperty(lambda self: self.browse_tree[-1], None, bind=['browse_tree'])
 
     @scheduled
