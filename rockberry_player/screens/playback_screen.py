@@ -94,33 +94,13 @@ Builder.load_string("""
                 font_size: 23
                 padding_x: 20
 
-            BoxLayout:
-                size_hint: (1.02, 0.09)
-                pos_hint: {'right': 1}
-                spacing: 5
-
-                Label:
-                    text: '[ref=-30000]-30s[/ref]'
-                    markup: True
-                    text_size: self.size
-                    halign: 'left'
-                    valign: 'bottom'
-                    on_ref_press: app.mm.state.relative_seek(int(args[1]))
-
-                Label:
-                    text: '[ref=+30000]+30s[/ref]'
-                    markup: True
-                    text_size: self.size
-                    halign: 'right'
-                    valign: 'bottom'
-                    on_ref_press: app.mm.state.relative_seek(int(args[1]))
-
             PlaybackSlider:
                 size_hint: (1.02, 0.12)
                 pos_hint: {'right': 1}
                 position: app.mm.state.time_position
                 duration: app.mm.current.duration
                 resolution: app.mm.state.resolution
+                shortcut_secs: (10, 30)
                 on_seek: app.mm.state.seek(args[1])
 
             BoxLayout:

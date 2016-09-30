@@ -1,11 +1,13 @@
 from kivy.lang import Builder
-from kivy.properties import StringProperty, NumericProperty, BooleanProperty, AliasProperty
-from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import StringProperty, NumericProperty, \
+    BooleanProperty, AliasProperty, VariableListProperty
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.label import Label
 
 from widgets.seekslider import SeekSlider
 
 
-class PlaybackSlider(BoxLayout):
+class PlaybackSlider(RelativeLayout):
 
     # Playback state data
     duration = NumericProperty(None, allownone=True)
@@ -16,10 +18,15 @@ class PlaybackSlider(BoxLayout):
     resolution = NumericProperty(0.001)
     # Text to display when no time is availabe
     default_text = StringProperty('--:--')
+    # Seconds on -Xs and +Xs controls
+    shortcut_secs = VariableListProperty(0, length=2)
 
-    available = AliasProperty(lambda self: self.position is not None and self.duration is not None,
-                              None,
-                              bind=['position', 'duration'])
+    available = AliasProperty(
+        lambda self: self.position is not None \
+            and self.duration is not None,
+        None,
+        bind=['position', 'duration']
+        )
 
     def __init__(self, **kwargs):
         super(PlaybackSlider, self).__init__(**kwargs)
@@ -34,37 +41,66 @@ class PlaybackSlider(BoxLayout):
                    'm': (time_secs // 60) % 60,
                    'h': time_secs // 3600}
 
-        time_format = '%(h)d:%(m)02d:%(s)02d' if time_st['h'] else '%(m)d:%(s)02d'
+        time_format = '%(h)d:%(m)02d:%(s)02d' if time_st['h'] \
+            else '%(m)d:%(s)02d'
+        
         return time_format % time_st
 
     def on_seek(self, value):
         pass
 
 
+class SecondsLabel(Label):
+    secs = NumericProperty(0)
+        
+
 Builder.load_string("""
 
+<SecondsLabel>:
+    markup: True
+    text: '[ref=%d]%+ds[/ref]' % (root.secs, root.secs)
+    size_hint: (None, None)
+    size: (60, 25)        
+    opacity: 1 if root.secs else 0
+    disabled: False if root.secs else 0
+
+        
 <PlaybackSlider>:
-    orientation: 'horizontal'
-    user_touch: slider.user_touch
-
-    Label:
-        text: root.format_time(slider.value if root.available else root.position)
+    
+    SecondsLabel:
+        secs: -root.shortcut_secs[0]
         halign: 'right'
-        size_hint_x: None
-        width: 25
+        pos: (slider.x, slider.top)
+        on_ref_press: root.dispatch('on_seek', int(root.position + int(args[1])/root.resolution))
 
-    SeekSlider:
-        id: slider
-        min: 0
-        max: root.duration if root.available else 2
-        cached_value: root.position if root.available else 1
-        disabled: not root.seekable if root.available else True
-        constraint: True
-        on_seek: root.dispatch('on_seek', int(args[1]))
-
-    Label:
-        text: root.format_time(root.duration)
+    SecondsLabel:
+        secs: root.shortcut_secs[1]
         halign: 'left'
-        size_hint_x: None
-        width: 25
+        pos: (slider.right - self.width, slider.top)
+        on_ref_press: root.dispatch('on_seek', int(root.position + int(args[1])/root.resolution))
+        
+    BoxLayout:
+        orientation: 'horizontal'
+        user_touch: slider.user_touch
+
+        Label:
+            text: root.format_time(slider.value if root.available else root.position)
+            halign: 'right'
+            size_hint_x: None
+            width: 25
+
+        SeekSlider:
+            id: slider
+            min: 0
+            max: root.duration if root.available else 2
+            cached_value: root.position if root.available else 1
+            disabled: not root.seekable if root.available else True
+            constraint: True
+            on_seek: root.dispatch('on_seek', int(args[1]))
+
+        Label:
+            text: root.format_time(root.duration)
+            halign: 'left'
+            size_hint_x: None
+            width: 25
 """)
