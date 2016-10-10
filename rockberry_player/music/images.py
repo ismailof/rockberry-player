@@ -41,20 +41,31 @@ class MediaCache(MediaController):
     @delayed(0.5)
     def _get_server_items(self):
         if self.mopidy and self._requested_uris:
-            self.server_request(
+            self._server_request(
                 uris=list(self._requested_uris),
                 on_result=self._update_cache)
             self._requested_uris.clear()
 
     @classmethod
-    def server_request(self, *args, **kwargs):
+    def _server_request(self, *args, **kwargs):
         if self.interface:
             return self.interface(*args, **kwargs)
         else:
             Logger.warning('%s_server_request. No interface set' % (self.__name__))
 
+    @classmethod
+    def remove_items(self, uris):
+        for uri in uris:
+            if uri in self._cache:
+                del self._cache[uri]
+
 
 class ImageCache(MediaCache):
+
+    _cache = {}
+    _requested_uris = set()
+    _update_callbacks = {}
+    interface = None
 
     @classmethod
     def select_image(self, uri, size=None):

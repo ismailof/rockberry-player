@@ -37,8 +37,11 @@ class RockberryMainScreen(FloatLayout):
 
     # Switch the view to the given screen
     def switch_to(self, instance=None, screen=None):
-        if self.ids['screenmanager'].has_screen(screen):
-            self.ids['screenmanager'].current = screen
+        if not self.ids['screenmanager'].has_screen(screen):
+            return
+
+        self.ids['screenmanager'].current = screen
+
 
     # Makes a new screenshot of the current view
     def do_screenshot(self, *args):

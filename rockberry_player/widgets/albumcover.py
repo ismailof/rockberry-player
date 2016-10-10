@@ -19,7 +19,9 @@ class AlbumCover(AsyncImage):
                 self.norm_image_size[0],
                 self.norm_image_size[1])
 
-    border_rectangle = AliasProperty(get_border_rectangle, None, bind=['center', 'size', 'image_ratio'])
+    border_rectangle = AliasProperty(get_border_rectangle,
+                                     None,
+                                     bind=['center', 'size', 'image_ratio'])
 
     def update_image(self, *args):
         new_source = ImageCache.select_image(uri=self.uri,
@@ -34,13 +36,17 @@ class AlbumCover(AsyncImage):
     def on_size(self, *args):
         self.update_image()
 
-    def on_source(self, instance, source):
+    def on_source(self, *args):
         if not self.source and self.default:
             self.source = self.default
 
     def on_default(self, instance, source):
         if not self.source and self.default:
             self.source = self.default
+
+    def refresh(self, *args):
+        ImageCache.remove_items(uris=[self.uri])
+        ImageCache.request_item(self.uri, self.update_image)
 
 
 Builder.load_string("""

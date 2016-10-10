@@ -51,30 +51,33 @@ class PlaybackSlider(RelativeLayout):
 
 
 class SecondsLabel(Label):
-    secs = NumericProperty(0)
+    secs = NumericProperty(10)
+    show = BooleanProperty(True)
         
 
 Builder.load_string("""
 
 <SecondsLabel>:
     markup: True
-    text: '[ref=%d]%+ds[/ref]' % (root.secs, root.secs)
+    text: '[ref=%d]%+ds[/ref]' % (self.secs, self.secs)
     size_hint: (None, None)
-    size: (60, 25)        
-    opacity: 1 if root.secs else 0
-    disabled: False if root.secs else 0
+    size: (60, 25)            
+    disabled: False if self.secs and self.show else True
+    opacity: 0 if self.disabled else 1
 
         
 <PlaybackSlider>:
     
     SecondsLabel:
         secs: -root.shortcut_secs[0]
+        show: root.seekable
         halign: 'right'
         pos: (slider.x, slider.top)
         on_ref_press: root.dispatch('on_seek', int(root.position + int(args[1])/root.resolution))
 
     SecondsLabel:
         secs: root.shortcut_secs[1]
+        show: root.seekable and root.available
         halign: 'left'
         pos: (slider.right - self.width, slider.top)
         on_ref_press: root.dispatch('on_seek', int(root.position + int(args[1])/root.resolution))
