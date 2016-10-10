@@ -43,7 +43,7 @@ class PlaybackSlider(RelativeLayout):
 
         time_format = '%(h)d:%(m)02d:%(s)02d' if time_st['h'] \
             else '%(m)d:%(s)02d'
-        
+
         return time_format % time_st
 
     def on_seek(self, value):
@@ -53,7 +53,7 @@ class PlaybackSlider(RelativeLayout):
 class SecondsLabel(Label):
     secs = NumericProperty(10)
     show = BooleanProperty(True)
-        
+
 
 Builder.load_string("""
 
@@ -61,16 +61,16 @@ Builder.load_string("""
     markup: True
     text: '[ref=%d]%+ds[/ref]' % (self.secs, self.secs)
     size_hint: (None, None)
-    size: (60, 25)            
+    size: (60, 25)
     disabled: False if self.secs and self.show else True
     opacity: 0 if self.disabled else 1
 
-        
+
 <PlaybackSlider>:
-    
+
     SecondsLabel:
         secs: -root.shortcut_secs[0]
-        show: root.seekable
+        show: root.seekable and root.available
         halign: 'right'
         pos: (slider.x, slider.top)
         on_ref_press: root.dispatch('on_seek', int(root.position + int(args[1])/root.resolution))
@@ -81,7 +81,7 @@ Builder.load_string("""
         halign: 'left'
         pos: (slider.right - self.width, slider.top)
         on_ref_press: root.dispatch('on_seek', int(root.position + int(args[1])/root.resolution))
-        
+
     BoxLayout:
         orientation: 'horizontal'
         user_touch: slider.user_touch

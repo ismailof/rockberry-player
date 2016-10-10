@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty, OptionProperty, \
-    AliasProperty, ObjectProperty, DictProperty
+    AliasProperty, ObjectProperty, DictProperty, StringProperty
 
 from base import MediaController
 
@@ -22,7 +22,9 @@ class PlaybackControl(MediaController):
                             None,
                             bind=['playback_state'])
 
-    time_position = NumericProperty(0, allowNone=True)
+    stream_title = StringProperty('')
+
+    time_position = NumericProperty(0)
     update_interval = NumericProperty(0.25)
     resolution = NumericProperty(0.001)
 
@@ -33,6 +35,11 @@ class PlaybackControl(MediaController):
         self.register_event_type('on_prev')
         super(PlaybackControl, self).__init__(**kwargs)
 
+    def refresh(self, *args):
+        self.interface.get_state(on_result=self.set_playback_state)
+        self.interface.get_time_position(on_result=self.update_time_position)
+        self.interface.get_stream_title(on_result=self.set_stream_title)
+
     def tick_position(self, dt=0, *args):
         self.time_position = self.time_position + dt / float(self.resolution)
 
@@ -42,10 +49,6 @@ class PlaybackControl(MediaController):
         else:
             Clock.unschedule(self.tick_position)
 
-    def refresh(self, *args):
-        self.interface.get_state(on_result=self.set_playback_state)
-        self.interface.get_time_position(on_result=self.update_time_position)
-
     @scheduled
     def set_playback_state(self, state):
         self.playback_state = state
@@ -53,8 +56,12 @@ class PlaybackControl(MediaController):
             self.reset_time_position()
 
     @scheduled
+    def set_stream_title(self, title, *args, **kwargs):
+        self.stream_title = title or ''
+
+    @scheduled
     def update_time_position(self, time_position, *args, **kwargs):
-        self.time_position = time_position
+        self.time_position = time_position or 0
 
     @scheduled
     def reset_time_position(self, *args, **kwargs):
@@ -62,9 +69,6 @@ class PlaybackControl(MediaController):
 
     def seek(self, time_position, *args):
         self.interface.seek(int(time_position))
-
-    def relative_seek(self, relative_position, *args):
-        self.seek(self.time_position + relative_position)
 
     def on_play_pause(self):
         if self.playback_state == 'playing':
@@ -83,6 +87,8 @@ class PlaybackControl(MediaController):
     def on_stop(self):
         self.interface.stop()
 
+
+# TODO: Remove this awful thing
 
 class PlaybackStateAware(EventDispatcher):
     playback_state = PlaybackControl.playback_state

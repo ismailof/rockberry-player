@@ -62,5 +62,5 @@ Builder.load_string("""
                 viewclass: 'BrowseListItem'
                 item_height: 56
                 reflist: app.mm.browser.reflist
-                
+
 """)

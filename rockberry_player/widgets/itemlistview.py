@@ -11,7 +11,7 @@ class ItemListView(RecycleView):
     def on_reflist(self, *args):
         self.data = [{'ref': ref} for ref in self.reflist]
         self.scroll_to_index(0)
-        
+
     # Scrolls the view to position item 'index' at top
     def scroll_to_index(self, index):
         if not self.data:
@@ -23,7 +23,7 @@ class ItemListView(RecycleView):
 
 Builder.load_string("""
 #:import BrowseListItem widgets.browselistitem.BrowseListItem
-            
+
 <ItemListView>:
     viewclass: 'BrowseListItem'
     bar_width: 20

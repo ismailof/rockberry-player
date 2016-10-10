@@ -51,7 +51,7 @@ class RefreshableCover(ButtonBehavior, AlbumCover):
     def refresh(self, *args):
         ImageCache.remove_items(uris=[self.uri])
         ImageCache.request_item(self.uri, self.update_image)
-    
+
     def on_pass(self, *args):
         self.refresh()
 

@@ -93,7 +93,7 @@ Builder.load_string("""
 
             TrackInfoLabel:
                 item: app.mm.current.item
-                stream_title: app.mm.current.stream_title
+                stream_title: app.mm.state.stream_title
                 font_size: 23
                 padding_x: 20
 

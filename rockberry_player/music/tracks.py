@@ -13,8 +13,8 @@ from refs import RefUtils, RefItem
 class TrackUtils(object):
 
     @staticmethod
-    def title_text(track, stream_title=None):
-        return stream_title or track.get('name', '') \
+    def title_text(track):
+        return track.get('name', '') \
             if track else ''
 
     @staticmethod
@@ -51,7 +51,7 @@ class TrackItem(RefItem):
     tlid = NumericProperty(0)
 
     def get_title(self):
-        return TrackUtils.title_text(self.item, self.stream_title)
+        return TrackUtils.title_text(self.item)
 
     def get_album(self):
         return TrackUtils.album_text(self.item)
@@ -64,7 +64,7 @@ class TrackItem(RefItem):
             if self.item and 'length' in self.item \
                 else None
 
-    title = AliasProperty(get_title, None, bind=['item', 'stream_title'])
+    title = AliasProperty(get_title, None, bind=['item'])
     album = AliasProperty(get_album, None, bind=['item'])
     artists = AliasProperty(get_artists, None, bind=['item'])
     duration = AliasProperty(get_duration, None, bind=['item'])
@@ -82,10 +82,6 @@ class TrackControl(TrackItem, MediaController):
     @scheduled
     def set_track(self, track=None, *args, **kwargs):
         self.item = track if track else {}
-
-    @scheduled
-    def set_stream_title(self, title, *args, **kwargs):
-        self.stream_title = title
 
     def set_refresh_method(self, function):
         self._refresh_method = function

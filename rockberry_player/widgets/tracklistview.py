@@ -36,5 +36,5 @@ Builder.load_string("""
 <TrackListView>:
     viewclass: 'TrackListItem'
     item_height: dp(70)
-    
+
 """)

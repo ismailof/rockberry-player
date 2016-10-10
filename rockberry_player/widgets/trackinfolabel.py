@@ -10,6 +10,9 @@ from utils import MarkupText
 
 class TrackInfoLabel(TrackItem, ReferenceLabel):
 
+    full_text = StringProperty('')
+    stream_title = StringProperty('')
+
     def format_title(self):
 
         if not self.item:
@@ -19,7 +22,8 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                               b=True,
                               ref=self.new_ref(None))
 
-        parts = self.title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
+        title = self.stream_title or self.title
+        parts = title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
         parts = [MarkupText(item,
                             size=self.font_size if index > 0
                                  else int(self.font_size * 1.3),
@@ -60,8 +64,6 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                           color='#e7e7e7',
                           ref=self.new_ref(album),
                           )
-
-    full_text = StringProperty('')
 
     def __init__(self, **kwargs):
         super(TrackInfoLabel, self).__init__(**kwargs)
