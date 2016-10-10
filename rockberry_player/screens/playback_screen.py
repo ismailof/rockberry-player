@@ -1,10 +1,9 @@
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from kivy.uix.behaviors.button import ButtonBehavior
 
 from widgets.playback_slider import PlaybackSlider
 from widgets.playbackbar import PlaybackBar
-from widgets.albumcover import AlbumCover
+from widgets.albumcover import RefreshableCover
 from widgets.deviceimage import DeviceImage
 from widgets.trackinfolabel import TrackInfoLabel
 
@@ -13,14 +12,10 @@ class PlaybackScreen(Screen):
     pass
 
 
-#class ClickableCover(ButtonBehavior, AlbumCover):
-    #pass
-
 
 Builder.load_string("""
 #:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
 
-<ClickableCover@ButtonBehavior+AlbumCover>
 
 <OptionsBar@BoxLayout>:
     spacing: 5
@@ -68,7 +63,7 @@ Builder.load_string("""
             id: albumzone
             size_hint: (0.54, 1)
 
-            ClickableCover:
+            RefreshableCover:
                 id: cover
                 uri: app.mm.current.uri
                 default: app.IMG_FOLDER + 'default_album.png'

@@ -1,6 +1,7 @@
 from kivy.lang import Builder
 from kivy.properties import NumericProperty, StringProperty,\
     ListProperty, AliasProperty
+from kivy.uix.behaviors.button import ButtonBehavior
 from kivy.uix.image import AsyncImage
 
 from music.images import ImageCache
@@ -44,9 +45,15 @@ class AlbumCover(AsyncImage):
         if not self.source and self.default:
             self.source = self.default
 
+
+class RefreshableCover(ButtonBehavior, AlbumCover):
+
     def refresh(self, *args):
         ImageCache.remove_items(uris=[self.uri])
         ImageCache.request_item(self.uri, self.update_image)
+    
+    def on_pass(self, *args):
+        self.refresh()
 
 
 Builder.load_string("""
