@@ -1,9 +1,10 @@
 from kivy.lang import Builder
-from kivy.uix.recycleview import RecycleView
 from kivy.properties import ListProperty, NumericProperty, AliasProperty
 
+from widgets.browselistview import BrowseListView
 
-class TrackListView(RecycleView):
+
+class TrackListView(BrowseListView):
 
     tracklist = ListProperty()
     tlid = NumericProperty()
@@ -25,17 +26,8 @@ class TrackListView(RecycleView):
                      } for tl_track in self.tracklist]
 
     def on_current_id(self, *args):
-        if self.current_id is None:
-            return
-        self.scroll_to_index(self.current_id - 1)
-
-    # Scrolls the view to position item 'index' at top
-    def scroll_to_index(self, index):
-        if not self.tracklist:
-            return
-        relative_pos = index / float(len(self.tracklist)
-                                     - self.height / 70.0)
-        self.scroll_y = min(1, max(0, 1 - relative_pos))
+        if self.current_id is not None:
+            self.scroll_to_index(self.current_id - 1)
 
 
 Builder.load_string("""
@@ -43,13 +35,6 @@ Builder.load_string("""
 
 <TrackListView>:
     viewclass: 'TrackListItem'
-    bar_width: 20
-    bar_margin: 2
-    scroll_type: ['bars', 'content']
-    RecycleBoxLayout:
-        default_size: None, dp(70)
-        default_size_hint: 1, None
-        size_hint_y: None
-        height: self.minimum_height
-        orientation: 'vertical'
+    item_height: dp(70)
+    
 """)
