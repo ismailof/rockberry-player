@@ -5,7 +5,7 @@ from kivy.properties import AliasProperty
 
 from music.refs import RefItem
 from widgets.albumcover import AlbumCover
-from widgets.mediaicon import MediaIcon
+from widgets.atlasicon import AtlasIcon
 
 
 class BrowseListItem(RefItem, BoxLayout):
@@ -36,7 +36,7 @@ Builder.load_string("""
             mipmap: True
             uri: root.uri
 
-        MediaIcon:
+        AtlasIcon:
             atlas: 'media'
             item: root.media
             size: (22, 22)

@@ -3,7 +3,7 @@ from kivy.properties import ListProperty, NumericProperty
 from kivy.uix.recycleview import RecycleView
 
 
-class BrowseListView(RecycleView):
+class ItemListView(RecycleView):
 
     reflist = ListProperty()
     item_height = NumericProperty(56)
@@ -24,7 +24,7 @@ class BrowseListView(RecycleView):
 Builder.load_string("""
 #:import BrowseListItem widgets.browselistitem.BrowseListItem
             
-<BrowseListView>:
+<ItemListView>:
     viewclass: 'BrowseListItem'
     bar_width: 20
     bar_margin: 2

@@ -4,7 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from music.tracks import TrackItem
 from widgets.albumcover import AlbumCover
-from widgets.mediaicon import MediaIcon
+from widgets.atlasicon import AtlasIcon
 from widgets.simpletrackinfo import SimpleTrackInfo
 
 
@@ -47,7 +47,7 @@ Builder.load_string("""
             mipmap: True
             uri: root.uri
 
-        MediaIcon:
+        AtlasIcon:
             atlas: 'media'
             item: root.media
             size: (22, 22)

@@ -1,7 +1,7 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
-from widgets.mediaicon import MediaIcon
+from widgets.atlasicon import AtlasIcon
 from music.refs import RefItem
 
 
@@ -35,7 +35,7 @@ Builder.load_string("""
             size_hint_x: 0.9
             pos_hint: {'center_x': 0.5}
 
-        MediaIcon:
+        AtlasIcon:
             atlas: 'media'
             item: root.media
             size: (32, 32)

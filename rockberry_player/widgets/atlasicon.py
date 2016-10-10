@@ -3,14 +3,14 @@ from kivy.uix.image import Image
 from kivy.properties import StringProperty, NumericProperty, VariableListProperty
 
 
-class MediaIcon(Image):
+class AtlasIcon(Image):
     atlas = StringProperty(None)
     item = StringProperty(None, allownone=True)
 
 
 Builder.load_string("""
 
-<MediaIcon>
+<AtlasIcon>
     allowstretch: True
     mipmap: True
     size: (32, 32)

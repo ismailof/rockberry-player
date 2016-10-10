@@ -1,10 +1,10 @@
 from kivy.lang import Builder
 from kivy.properties import ListProperty, NumericProperty, AliasProperty
 
-from widgets.browselistview import BrowseListView
+from widgets.itemlistview import ItemListView
 
 
-class TrackListView(BrowseListView):
+class TrackListView(ItemListView):
 
     tracklist = ListProperty()
     tlid = NumericProperty()
