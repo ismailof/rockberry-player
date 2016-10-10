@@ -149,6 +149,11 @@ class MediaManager(EventDispatcher):
                            self.browser]:
             controller.refresh()
 
+        # Stream title update (better than overset TrackControl)
+        self.mopidy.playback.get_stream_title(
+            on_result=self.current.set_stream_title)
+            
+
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
 

@@ -49,7 +49,6 @@ class TrackUtils(object):
 class TrackItem(RefItem):
 
     tlid = NumericProperty(0)
-    stream_title = StringProperty(None, allownone=True)
 
     def get_title(self):
         return TrackUtils.title_text(self.item, self.stream_title)
