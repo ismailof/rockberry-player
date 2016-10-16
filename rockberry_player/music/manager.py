@@ -63,6 +63,7 @@ class MediaManager(EventDispatcher):
 
         self.mopidy = MopidyClient(
             ws_url = 'ws://' + self.app.MOPIDY_SERVER + '/mopidy/ws',
+            version='2.0.1',
             error_handler=self.on_mopidy_error,
             connection_handler=self.on_connection
         )
