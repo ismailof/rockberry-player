@@ -5,40 +5,34 @@ if __name__ == '__main__':
 
 from kivy.base import runTouchApp
 from kivy.lang import Builder
-from kivy.uix.widget import Widget
+
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.image import AsyncImage
-from kivy.properties import ListProperty, NumericProperty
+from kivy.uix.label import Label
+from rockberry_player.widgets import HoldButtonBehavior
 
-from tracklist_screen import TrackListScreen
 
-import json
+class HoldLabel(HoldButtonBehavior, Label):
+    pass
+
+
+class TestWidget(BoxLayout):
+    pass
+
 
 Builder.load_string("""
 
 <TestWidget>:
     orientation: 'vertical'
-    AsyncImage:
-        source: '/home/pi/bunbury.mp3'
-    AsyncImage:
-        source: '/home/pi/bunbury.jpg'
-    AsyncImage:
-        source: '/home/pi/nada.jpg'
+    HoldLabel:
+        holdtime: 2000
+        on_press: etiqueta.text = 'on_press'
+        on_release: etiqueta.text = 'on_release'
+        on_hold: etiqueta.text = 'on_hold'
+        on_click: etiqueta.text = 'on_click'
+    Label:
+        id: etiqueta
 """)
 
-
-class TestWidget(BoxLayout):
-    pass
-#    tracklist = ListProperty()
-#    tlid = NumericProperty(10399)
-
-#    def __init__(self, **kwargs):
-#        super(TestWidget, self).__init__(**kwargs)
-#
-#        with open('results/result_tracklist.json') as json_file:
-#            tracklist = json.load(json_file)
-#
-#        self.tracklist = tracklist
 
 
 if __name__ == '__main__':

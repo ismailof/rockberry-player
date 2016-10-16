@@ -26,7 +26,7 @@ Builder.load_string("""
 
     RelativeLayout:
 
-        AlbumCover:
+        RefreshableCover:
             id: cover
             uri: root.uri
             default: app.IMG_FOLDER + root.defaultimg

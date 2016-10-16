@@ -72,7 +72,7 @@ Builder.load_string("""
                 size_hint: (None, None)
                 height: albumzone.width * 0.87
                 width: self.height * self.image_ratio
-                on_press: self.refresh()
+                on_click: app.mm.browser.browse(app.mm.current.item.get('album'))
 
             DeviceImage:
                 id: device_image

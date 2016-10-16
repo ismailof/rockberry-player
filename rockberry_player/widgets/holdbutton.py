@@ -37,12 +37,11 @@ class HoldButtonBehavior(ButtonBehavior):
             self.dispatch('on_click')
 
         self.pressed = False
-
         super(HoldButtonBehavior, self).on_release(*args, **kwargs)
 
     def dispatch_hold(self):
         self.pressed = False
-        self.dispatch('on_hold')   
+        self.dispatch('on_hold')
 
     def on_hold(self, *args, **kwargs):
         pass
