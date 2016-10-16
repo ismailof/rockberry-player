@@ -188,7 +188,7 @@ class MediaManager(EventDispatcher):
     @scheduled
     def play_uris(self, uris):
         try:
-            tl_index = self.mopidy.tracklist.index(timeout=5)
+            tl_index = self.mopidy.tracklist.index(timeout=5) or 0
             tltracks = self.mopidy.tracklist.add(
                 uris=uris,
                 at_position=tl_index + 1,
