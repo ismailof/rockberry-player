@@ -42,13 +42,14 @@ Builder.load_string("""
             size: (22, 22)
             right: cover.right
 
-    Label:
+    ReferenceLabel:
         text: root.title
+        item: root.ref
         halign: 'left'
         valign: 'top'
         text_size: self.size
         font_size: 20
-        bold: True
+        bold: (root.reftype != 'track')
 
     Button:
         size_hint_x: 0.2
