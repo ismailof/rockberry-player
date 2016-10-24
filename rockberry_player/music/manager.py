@@ -202,7 +202,10 @@ class MediaManager(EventDispatcher):
             pass
 
     @scheduled
-    def add_to_tracklist(self, refs=None, uris=None, tunning=False, mixing=False):
+    def add_to_tracklist(self, refs=None, uris=None,
+                         tunning=False,
+                         mixing=False,
+                         selected_id=0):
         if refs:
             uris = [RefUtils.get_uri(ref) for ref in refs
                     if RefUtils.get_type(ref)=='track']
@@ -212,11 +215,12 @@ class MediaManager(EventDispatcher):
         if tunning:
             self.mopidy.tracklist.clear()
 
-        self.mopidy.tracklist.add(uris=uris)
+        tl_tracks = self.mopidy.tracklist.add(uris=uris)
+        selected_tlid = tl_tracks[selected_id].tlid if tl_tracks else None
 
         if mixing:
             self.mopidy.tracklist.shuffle()
 
         if tunning:
-            self.app.mm.mopidy.playback.play()
+            self.app.mm.mopidy.playback.play(tlid=selected_tlid)
             self.app.main.switch_to(screen='playback')

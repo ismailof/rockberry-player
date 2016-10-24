@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import AliasProperty
 
 from music.refs import RefItem
+from widgets.holdbutton import HoldButton
 from widgets.albumcover import AlbumCover
 from widgets.atlasicon import AtlasIcon
 
@@ -51,11 +52,12 @@ Builder.load_string("""
         font_size: 20
         bold: (root.reftype != 'track')
 
-    Button:
+    HoldButton:
         size_hint_x: 0.2
         opacity: 0.7
         text: root.action
         on_press: app.mm.play_uris([root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
+        on_hold: app.mm.play_uris([app.mm.browser.reflist]) if root.action == 'play' else app.mm.browser.browse(root.ref)
 
     Widget:
         size_hint_x: None

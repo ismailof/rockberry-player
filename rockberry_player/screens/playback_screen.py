@@ -44,7 +44,8 @@ Builder.load_string("""
 
     CheckBox:
         id: chk_mute
-        active: app.mm.mixer.mute
+        active: app.mm.mixer.mute or False
+        disabled: app.mm.mixer.disabled
         on_active: app.mm.mixer.set_mute(args[1])
         background_checkbox_down: default_atlas + 'audio-volume-muted'
         background_checkbox_normal: default_atlas + 'audio-volume-high'
@@ -52,7 +53,8 @@ Builder.load_string("""
 
     SeekSlider:
         range: (0, 100)
-        value: app.mm.mixer.volume
+        value: app.mm.mixer.volume or 0
+        disabled: app.mm.mixer.disabled
         on_seek: app.mm.mixer.set_volume(args[1])
 
 <PlaybackScreen>:
