@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 
 class HoldButtonBehavior(ButtonBehavior):
 
-    holdsecs = NumericProperty(1)
+    hold_secs = NumericProperty(1)
     pressed = BooleanProperty(False)
     _hold_timer = None
 
@@ -21,8 +21,8 @@ class HoldButtonBehavior(ButtonBehavior):
 
         self.pressed = True
 
-        if self.holdsecs:
-            self._hold_timer = Timer(self.holdsecs,
+        if self.hold_secs:
+            self._hold_timer = Timer(self.hold_secs,
                                      self.dispatch_hold)
             self._hold_timer.start()
 

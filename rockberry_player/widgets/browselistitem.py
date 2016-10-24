@@ -1,7 +1,7 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
-from kivy.properties import AliasProperty
+from kivy.properties import AliasProperty, NumericProperty
 
 from music.refs import RefItem
 from widgets.holdbutton import HoldButton
@@ -10,6 +10,8 @@ from widgets.atlasicon import AtlasIcon
 
 
 class BrowseListItem(RefItem, BoxLayout):
+
+    index = NumericProperty()
 
     def get_ref_action(self, *args):
         return 'play' if self.reftype == 'track' else 'browse'
@@ -56,8 +58,9 @@ Builder.load_string("""
         size_hint_x: 0.2
         opacity: 0.7
         text: root.action
-        on_press: app.mm.play_uris([root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
-        on_hold: app.mm.play_uris([app.mm.browser.reflist]) if root.action == 'play' else app.mm.browser.browse(root.ref)
+        hold_secs: 1.5
+        on_click: app.mm.play_uris(uris=[root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
+        on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index, mixing=True) if root.action == 'play' else app.mm.browser.browse(root.ref)
 
     Widget:
         size_hint_x: None

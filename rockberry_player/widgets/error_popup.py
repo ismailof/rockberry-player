@@ -57,6 +57,7 @@ Builder.load_string("""
         valign: 'top'
         size_hint_y: None
         height: self.texture_size[1]
+        max_lines: 4
         text_size: (self.width, None)
 
     ScrollView:
@@ -93,6 +94,6 @@ Builder.load_string("""
     title_color: (1, 0.1, 0.1, 1)
     separator_color: (1, 0.1, 0.1, 1)
     size_hint: (0.7, None)
-    auto_dismiss: False
+    #auto_dismiss: False
 
 """)

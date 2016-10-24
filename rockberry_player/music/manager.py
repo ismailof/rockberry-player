@@ -184,15 +184,23 @@ class MediaManager(EventDispatcher):
         self.current.set_tl_track(tl_track)
 
 
-    # ACTIONS FUNCTIONS. TODO: Move to a proper place
+    # TODO: Move to a proper place (browser?/tracklist?)
+    # TODO: The two actions are quite the same. Join.
 
     @scheduled
-    def play_uris(self, uris):
+    def play_uris(self, uris=None, refs=None):
+
+        if refs:
+            uris = [RefUtils.get_uri(ref) for ref in refs
+                    if RefUtils.get_type(ref)=='track']
+        if not uris:
+            return
+
         try:
             tl_index = self.mopidy.tracklist.index(timeout=5) or 0
             tltracks = self.mopidy.tracklist.add(
                 uris=uris,
-                at_position=tl_index + 1,
+                at_position=tl_index,  # play just before current track
                 timeout=20
             )
             tlid_first = tltracks[0]['tlid']
@@ -202,25 +210,26 @@ class MediaManager(EventDispatcher):
             pass
 
     @scheduled
-    def add_to_tracklist(self, refs=None, uris=None,
-                         tunning=False,
-                         mixing=False,
-                         selected_id=0):
+    def add_to_tracklist(self,
+                         refs=None, uris=None,
+                         tune_id=None,
+                         mixing=False
+                         ):
         if refs:
             uris = [RefUtils.get_uri(ref) for ref in refs
                     if RefUtils.get_type(ref)=='track']
         if not uris:
             return
 
-        if tunning:
+        if tune_id is not None:
             self.mopidy.tracklist.clear()
+            uris.insert(0, uris.pop(tune_id))
 
-        tl_tracks = self.mopidy.tracklist.add(uris=uris)
-        selected_tlid = tl_tracks[selected_id].tlid if tl_tracks else None
+        added_tl_tracks = self.mopidy.tracklist.add(uris=uris)
 
         if mixing:
-            self.mopidy.tracklist.shuffle()
+            self.mopidy.tracklist.shuffle(start=1)
 
-        if tunning:
-            self.app.mm.mopidy.playback.play(tlid=selected_tlid)
+        if tune_id is not None:
+            self.app.mm.mopidy.playback.play()
             self.app.main.switch_to(screen='playback')

@@ -9,7 +9,9 @@ class ItemListView(RecycleView):
     item_height = NumericProperty(56)
 
     def on_reflist(self, *args):
-        self.data = [{'ref': ref} for ref in self.reflist]
+        self.data = [{'ref': ref,
+                      'index': index}
+                     for index, ref in enumerate(self.reflist)]
         self.scroll_to_index(0)
 
     # Scrolls the view to position item 'index' at top
