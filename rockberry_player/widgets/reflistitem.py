@@ -1,17 +1,19 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
-from kivy.properties import AliasProperty, NumericProperty
+from kivy.properties import AliasProperty, \
+    NumericProperty, BooleanProperty
 
 from music.refs import RefItem
-from widgets.holdbutton import HoldButton
+from widgets.holdbutton import HoldButton, HoldButtonBehavior
 from widgets.albumcover import AlbumCover
 from widgets.atlasicon import AtlasIcon
 
 
-class BrowseListItem(RefItem, BoxLayout):
+class RefListItem(RefItem, HoldButtonBehavior, BoxLayout):
 
     index = NumericProperty()
+    selected = BooleanProperty(False)
 
     def get_ref_action(self, *args):
         return 'play' if self.reftype == 'track' else 'browse'
@@ -21,11 +23,20 @@ class BrowseListItem(RefItem, BoxLayout):
 
 Builder.load_string("""
 
-<BrowseListItem>
+<RefListItem>
     size_hint_y: None
     height: 70
     padding: 2
     spacing: 10
+
+    on_press: self.selected = not self.selected
+
+    canvas.before:
+        Color:
+            rgba: (0.4, 0.2, 0.2, 0.5) if root.selected else (0,0,0,0)
+        Rectangle:
+            pos: self.pos
+            size: (self.width - 20, self.height)
 
     RelativeLayout:
         size_hint_x: None
@@ -63,6 +74,8 @@ Builder.load_string("""
         on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index, mixing=True) if root.action == 'play' else app.mm.browser.browse(root.ref)
 
     Widget:
+        id: slider_space
         size_hint_x: None
         width: 22
+
 """)

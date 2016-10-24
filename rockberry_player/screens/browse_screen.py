@@ -4,7 +4,7 @@ from kivy.properties import StringProperty, NumericProperty, ListProperty
 
 from widgets.inputbar import InputBar
 from widgets.playbackarea import PlaybackArea
-from widgets.itemlistview import ItemListView
+from widgets.reflistview import RefListView
 
 
 class BrowseScreen(Screen):
@@ -58,8 +58,8 @@ Builder.load_string("""
                     on_press: app.mm.add_to_tracklist(refs=app.mm.browser.reflist)
                     size_hint_y: 0.3
 
-            ItemListView:
-                viewclass: 'BrowseListItem'
+            RefListView:
+                viewclass: 'RefListItem'
                 item_height: 56
                 reflist: app.mm.browser.reflist
 

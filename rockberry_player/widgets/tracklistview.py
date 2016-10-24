@@ -1,10 +1,10 @@
 from kivy.lang import Builder
 from kivy.properties import ListProperty, NumericProperty, AliasProperty
 
-from widgets.itemlistview import ItemListView
+from widgets.reflistview import RefListView
 
 
-class TrackListView(ItemListView):
+class TrackListView(RefListView):
 
     tracklist = ListProperty()
     tlid = NumericProperty()
@@ -28,6 +28,9 @@ class TrackListView(ItemListView):
     def on_current_id(self, *args):
         if self.current_id is not None:
             self.scroll_to_index(self.current_id - 1)
+
+    def on_size(self, *args):
+        self.on_current_id()
 
 
 Builder.load_string("""

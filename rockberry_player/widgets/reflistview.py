@@ -3,14 +3,15 @@ from kivy.properties import ListProperty, NumericProperty
 from kivy.uix.recycleview import RecycleView
 
 
-class ItemListView(RecycleView):
+class RefListView(RecycleView):
 
     reflist = ListProperty()
     item_height = NumericProperty(56)
 
     def on_reflist(self, *args):
         self.data = [{'ref': ref,
-                      'index': index}
+                      'index': index,
+                      'selected': False}
                      for index, ref in enumerate(self.reflist)]
         self.scroll_to_index(0)
 
@@ -24,10 +25,10 @@ class ItemListView(RecycleView):
 
 
 Builder.load_string("""
-#:import BrowseListItem widgets.browselistitem.BrowseListItem
+#:import RefListItem widgets.reflistitem.RefListItem
 
-<ItemListView>:
-    viewclass: 'BrowseListItem'
+<RefListView>:
+    viewclass: 'RefListItem'
     bar_width: 20
     bar_margin: 2
     scroll_type: ['bars', 'content']

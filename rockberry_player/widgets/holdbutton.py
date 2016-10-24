@@ -13,9 +13,9 @@ class HoldButtonBehavior(ButtonBehavior):
     _hold_timer = None
 
     def __init__(self, *args, **kwargs):
-        super(HoldButtonBehavior, self).__init__(*args, **kwargs)
         self.register_event_type('on_hold')
         self.register_event_type('on_click')
+        super(HoldButtonBehavior, self).__init__(*args, **kwargs)
 
     def on_press(self, *args, **kwargs):
 
@@ -37,6 +37,7 @@ class HoldButtonBehavior(ButtonBehavior):
             self.dispatch('on_click')
 
         self.pressed = False
+
         super(HoldButtonBehavior, self).on_release(*args, **kwargs)
 
     def dispatch_hold(self):

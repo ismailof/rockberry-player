@@ -18,7 +18,7 @@ Builder.load_string("""
     size_hint_y: None
     height: 70
     padding: 5
-    spacing: 10
+    spacing: 5
 
     current: root.tlid and root.tlid == app.mm.current.tlid
 
@@ -34,7 +34,7 @@ Builder.load_string("""
             rgba: (0.4, 0.2, 0.2, 0.5) if root.current else (0,0,0,0)
         Rectangle:
             pos: self.pos
-            size: self.size
+            size: (self.width - 20, self.height)
 
     RelativeLayout:
         size_hint_x: None
@@ -53,6 +53,10 @@ Builder.load_string("""
             size: (22, 22)
             right: cover.right
 
+    Widget:
+        size_hint_x: 0
+        width: 1
+
     SimpleTrackInfo:
         item: root.item
 
@@ -61,19 +65,21 @@ Builder.load_string("""
         source: app.IMG_FOLDER + ('playing.zip' if root.current and app.mm.state.playing else 'transparent.png')
         anim_delay: 0.12
 
-    Button:
-        size_hint_x: 0.2
+    BoxLayout:
+        size_hint_x: 0.4
+        spacing: 2
         opacity: 0.7
-        text: 'play'
-        on_press: app.mm.mopidy.playback.play(tlid=root.tlid)
 
-    Button:
-        size_hint_x: 0.2
-        opacity: 0.7
-        text: 'del'
-        on_press: app.mm.mopidy.tracklist.remove(criteria={'tlid':[root.tlid]})
+        Button:
+            text: 'play'
+            on_press: app.mm.mopidy.playback.play(tlid=root.tlid)
+
+        Button:
+            text: 'del'
+            on_press: app.mm.mopidy.tracklist.remove(criteria={'tlid':[root.tlid]})
 
     Widget:
         size_hint_x: None
         width: 22
+
 """)
