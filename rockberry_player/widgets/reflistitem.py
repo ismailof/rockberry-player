@@ -36,7 +36,7 @@ Builder.load_string("""
             rgba: (0.4, 0.2, 0.2, 0.5) if root.selected else (0,0,0,0)
         Rectangle:
             pos: self.pos
-            size: (self.width - 20, self.height)
+            size: self.size
 
     RelativeLayout:
         size_hint_x: None
@@ -71,11 +71,6 @@ Builder.load_string("""
         text: root.action
         hold_secs: 1.5
         on_click: app.mm.play_uris(uris=[root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
-        on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index, mixing=True) if root.action == 'play' else app.mm.browser.browse(root.ref)
-
-    Widget:
-        id: slider_space
-        size_hint_x: None
-        width: 22
+        on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index) if root.action == 'play' else app.mm.browser.browse(root.ref)
 
 """)

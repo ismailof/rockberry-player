@@ -1,6 +1,7 @@
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
-from kivy.properties import ListProperty, NumericProperty
+from kivy.properties import ListProperty, NumericProperty, \
+    BooleanProperty
 
 from base import MediaController
 
@@ -11,6 +12,7 @@ class QueueControl(MediaController):
 
     tracklist = ListProperty()
     queue_point = NumericProperty(0)
+    shuffle_mode = BooleanProperty(False)
 
     def __init__(self, **kwargs):
         super(QueueControl, self).__init__(**kwargs)

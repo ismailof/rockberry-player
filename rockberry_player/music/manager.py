@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import random
 
 from kivy.app import App
 from kivy.event import EventDispatcher
@@ -21,7 +22,6 @@ from queue import QueueControl
 from browser import BrowserControl
 
 from debug import debug_function
-
 
 
 class MediaManager(EventDispatcher):
@@ -184,7 +184,7 @@ class MediaManager(EventDispatcher):
         self.current.set_tl_track(tl_track)
 
 
-    # TODO: Move to a proper place (browser?/tracklist?)
+    # TODO: Move to a proper place (queue)
     # TODO: The two actions are quite the same. Join.
 
     @scheduled
@@ -213,7 +213,6 @@ class MediaManager(EventDispatcher):
     def add_to_tracklist(self,
                          refs=None, uris=None,
                          tune_id=None,
-                         mixing=False
                          ):
         if refs:
             uris = [RefUtils.get_uri(ref) for ref in refs
@@ -221,14 +220,16 @@ class MediaManager(EventDispatcher):
         if not uris:
             return
 
+        # Select tune_id as first and shuffle if aplicable
+        first_uri = [uris.pop(tune_id)] if tune_id is not None else []
+        if self.queue.shuffle_mode:
+            random.shuffle(uris)
+        uris = first_uri + uris
+
         if tune_id is not None:
             self.mopidy.tracklist.clear()
-            uris.insert(0, uris.pop(tune_id))
 
-        added_tl_tracks = self.mopidy.tracklist.add(uris=uris)
-
-        if mixing:
-            self.mopidy.tracklist.shuffle(start=1)
+        self.mopidy.tracklist.add(uris=uris)
 
         if tune_id is not None:
             self.app.mm.mopidy.playback.play()

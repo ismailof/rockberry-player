@@ -1,6 +1,5 @@
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from kivy.properties import StringProperty, NumericProperty, ListProperty
 
 from widgets.inputbar import InputBar
 from widgets.playbackarea import PlaybackArea
@@ -49,10 +48,11 @@ Builder.load_string("""
                 size_hint_x: 0.4
                 ref: app.mm.browser.browse_ref
 
-                Button:
+                ToggleButton:
                     text: 'Mix'
-                    on_press: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=0, mixing=True)
                     size_hint_y: 0.3
+                    on_state: app.mm.queue.shuffle_mode = self.state == 'down'
+
                 Button:
                     text: 'Add'
                     on_press: app.mm.add_to_tracklist(refs=app.mm.browser.reflist)

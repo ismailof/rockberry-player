@@ -33,9 +33,11 @@ Builder.load_string("""
     bar_margin: 2
     scroll_type: ['bars', 'content']
     RecycleBoxLayout:
-        default_size: None, root.item_height
-        default_size_hint: 1, None
-        size_hint_y: None
-        height: self.minimum_height
         orientation: 'vertical'
+        size_hint: (None, None)
+        width: root.width - root.bar_width - root.bar_margin
+        height: self.minimum_height
+        default_size_hint: (None, None)
+        default_size: (self.width, root.item_height)
+
 """)

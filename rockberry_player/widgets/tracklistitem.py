@@ -34,7 +34,7 @@ Builder.load_string("""
             rgba: (0.4, 0.2, 0.2, 0.5) if root.current else (0,0,0,0)
         Rectangle:
             pos: self.pos
-            size: (self.width - 20, self.height)
+            size: self.size
 
     RelativeLayout:
         size_hint_x: None
@@ -77,9 +77,5 @@ Builder.load_string("""
         Button:
             text: 'del'
             on_press: app.mm.mopidy.tracklist.remove(criteria={'tlid':[root.tlid]})
-
-    Widget:
-        size_hint_x: None
-        width: 22
 
 """)
