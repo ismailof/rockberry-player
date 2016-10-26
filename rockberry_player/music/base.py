@@ -1,6 +1,8 @@
 from kivy.app import App
 from kivy.event import EventDispatcher
 
+from debug import debug_function
+
 
 class MediaController(EventDispatcher):
 
@@ -17,6 +19,9 @@ class MediaController(EventDispatcher):
         cls.mopidy = mopidy
 
     def refresh(self, *args, **kwargs):
+        pass
+
+    def reset(self, *args, **kwargs):
         pass
 
     def bind_event(self, method, events):

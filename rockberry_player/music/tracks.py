@@ -72,7 +72,8 @@ class TrackItem(RefItem):
 
 class TrackControl(TrackItem, MediaController):
 
-    _refresh_method = None
+    refresh_method = StringProperty('')
+    refresh_args = DictProperty({})
 
     @scheduled
     def set_tl_track(self, tl_track=None, *args, **kwargs):
@@ -83,10 +84,13 @@ class TrackControl(TrackItem, MediaController):
     def set_track(self, track=None, *args, **kwargs):
         self.item = track if track else {}
 
-    def set_refresh_method(self, function):
-        self._refresh_method = function
-
     def refresh(self, *args, **kwargs):
-        if self._refresh_method:
-            self._refresh_method(
-                on_result=self.set_tl_track)
+        if self.refresh_method:
+            self.mopidy.core.send(
+                self.refresh_method,
+                on_result=self.set_tl_track,
+                **self.refresh_args
+            )
+
+    def reset(self, *args):
+        self.set_tl_track(tl_track=None)

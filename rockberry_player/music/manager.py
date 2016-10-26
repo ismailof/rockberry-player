@@ -28,14 +28,27 @@ class MediaManager(EventDispatcher):
 
     connected = BooleanProperty(False)
 
-    current = ObjectProperty(TrackControl(), rebind=True)
-    prev = ObjectProperty(TrackControl(), rebind=True)
-    next = ObjectProperty(TrackControl(), rebind=True)
-    eot = ObjectProperty(TrackControl(), rebind=True)
+    current = ObjectProperty(
+        TrackControl(refresh_method='playback.get_current_tl_track',
+                     refresh_args={}),
+        rebind=True)
 
-    state = ObjectProperty(PlaybackControl(resolution=0.001,
-                                           update_interval=0.25),
-                           rebind=True)
+    prev = ObjectProperty(
+        TrackControl(refresh_method='tracklist.previous_track',
+                     refresh_args={'tl_track':None}),
+        rebind=True)
+    next = ObjectProperty(
+        TrackControl(refresh_method='tracklist.next_track',
+                     refresh_args={'tl_track':None}),
+        rebind=True)
+    eot = ObjectProperty(
+        TrackControl(refresh_method='tracklist.eot_track',
+                     refresh_args={'tl_track':None}),
+        rebind=True)
+
+    state = ObjectProperty(
+        PlaybackControl(resolution=0.001, update_interval=0.25),
+        rebind=True)
 
     mixer = ObjectProperty(MixerControl(), rebind=True)
     options = ObjectProperty(OptionsControl(), rebind=True)
@@ -65,9 +78,10 @@ class MediaManager(EventDispatcher):
             ws_url = 'ws://' + self.app.MOPIDY_SERVER + '/mopidy/ws',
             version='2.0.1',
             error_handler=self.on_mopidy_error,
-            connection_handler=self.on_connection
+            connection_handler=self.on_connection,
         )
 
+        # self.mopidy.debug_client(True)
         self.bind_events()
 
     @scheduled
@@ -77,26 +91,26 @@ class MediaManager(EventDispatcher):
         if self.connected:
             self.set_interfaces()
             self.init_player_state()
+        else:
+            self.reset_player_state()
 
         Clock.schedule_once(self.choose_window, 5)
 
     def choose_window(self, *args, **kwargs):
         if not self.connected:
             screen = 'server'
-        elif self.state.playing:
+        elif self.state.playback_state == 'playing':
             screen = 'playback'
         elif self.queue.tracklist:
             screen = 'tracklist'
         else:
             screen = 'browse'
-        #else:
-            #screen = 'playback'
 
         self.app.main.switch_to(screen=screen)
 
     def set_interfaces(self):
-
-        MediaController.mopidy = self.mopidy
+        # Set mopidy accesible to every MediaController subclass
+        MediaController.set_server(self.mopidy)
 
         PlaybackControl.set_interface(self.mopidy.playback)
         MixerControl.set_interface(self.mopidy.mixer)
@@ -104,11 +118,6 @@ class MediaManager(EventDispatcher):
         ImageCache.set_interface(self.mopidy.library.get_images)
         QueueControl.set_interface(self.mopidy.tracklist)
         BrowserControl.set_interface(self.mopidy.library)
-
-        self.current.set_refresh_method(self.mopidy.playback.get_current_tl_track)
-        self.next.set_refresh_method(self.mopidy.tracklist.next_track)
-        self.prev.set_refresh_method(self.mopidy.tracklist.previous_track)
-        self.eot.set_refresh_method(self.mopidy.tracklist.eot_track)
 
     def bind_events(self, *args):
 
@@ -118,7 +127,7 @@ class MediaManager(EventDispatcher):
         self.bind_property(self.state, 'playback_state', 'playback_state_changed',
                            field='new_state')
 
-        self.bind_method(self.state.update_time_position, 'seeked')
+        self.bind_method(self.state.set_time_position, 'seeked')
 
         self.bind_method(self.track_playback_started, 'track_playback_started')
         self.bind_method(self.track_playback_ended, 'track_playback_ended')
@@ -150,6 +159,17 @@ class MediaManager(EventDispatcher):
                            self.browser):
             controller.refresh()
 
+    def reset_player_state(self):
+        for controller in (self.state,
+                           self.mixer,
+                           self.current,
+                           self.next,
+                           self.prev,
+                           self.options,
+                           self.queue,
+                           self.browser):
+            controller.reset()
+
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
 
@@ -169,18 +189,18 @@ class MediaManager(EventDispatcher):
     @scheduled
     def track_playback_started(self, tl_track):
         self.check_playback_end.cancel()
-        self.state.update_time_position(0)
+        self.state.set_time_position(0)
         self.current.set_tl_track(tl_track)
 
     @scheduled
     def track_playback_ended(self, time_position, tl_track):
-        self.state.update_time_position(0)
+        self.state.set_time_position(0)
         self.state.set_stream_title(None)
         self.check_playback_end()
 
     @scheduled
     def track_playback_paused_or_resumed(self, time_position, tl_track):
-        self.state.update_time_position(time_position)
+        self.state.set_time_position(time_position)
         self.current.set_tl_track(tl_track)
 
 

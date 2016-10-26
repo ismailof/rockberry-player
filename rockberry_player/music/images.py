@@ -13,52 +13,55 @@ class MediaCache(MediaController):
     _update_callbacks = {}
 
     @classmethod
-    def _update_cache(self, items):
+    def _update_cache(cls, items):
         if not items:
             return
 
-        Logger.debug('%s:_update_cache: %r' % (self.__name__, items))
-        self._cache.update(items)
+        Logger.debug('%s:_update_cache: %r' % (cls.__name__, items))
+        cls._cache.update(items)
         for uri in items.keys():
-            for callback in self._update_callbacks.pop(uri, []):
+            for callback in cls._update_callbacks.pop(uri, []):
                 Clock.schedule_once(callback)
 
     @classmethod
-    def request_item(self, uri, callback):
-        if not uri or uri in self._cache:
+    def request_item(cls, uri, callback):
+        if not uri or uri in cls._cache:
             Clock.schedule_once(callback)
             return
 
-        self._requested_uris.add(uri)
+        cls._requested_uris.add(uri)
 
-        if uri not in self._update_callbacks:
-            self._update_callbacks[uri] = set()
-        self._update_callbacks[uri].add(callback)
+        if uri not in cls._update_callbacks:
+            cls._update_callbacks[uri] = set()
+        cls._update_callbacks[uri].add(callback)
 
-        self._get_server_items()
+        cls._get_server_items()
 
     @classmethod
     @delayed(0.5)
-    def _get_server_items(self):
-        if self.mopidy and self._requested_uris:
-            self._server_request(
-                uris=list(self._requested_uris),
-                on_result=self._update_cache)
-            self._requested_uris.clear()
+    def _get_server_items(cls):
+        if cls.mopidy and cls._requested_uris:
+            cls._server_request(
+                uris=list(cls._requested_uris),
+                on_result=cls._update_cache)
+            cls._requested_uris.clear()
 
     @classmethod
-    def _server_request(self, *args, **kwargs):
-        if self.interface:
-            return self.interface(*args, **kwargs)
+    def _server_request(cls, *args, **kwargs):
+        if cls.interface:
+            return cls.interface(*args, **kwargs)
         else:
-            Logger.warning('%s_server_request. No interface set' % (self.__name__))
+            Logger.warning('%s_server_request. No interface set' % (cls.__name__))
 
     @classmethod
-    def remove_items(self, uris):
+    def remove_items(cls, uris):
         for uri in uris:
-            if uri in self._cache:
-                del self._cache[uri]
+            if uri in cls._cache:
+                del cls._cache[uri]
 
+    @classmethod
+    def clear_cache(cls):
+        cls._cache = {}
 
 class ImageCache(MediaCache):
 
@@ -68,18 +71,18 @@ class ImageCache(MediaCache):
     interface = None
 
     @classmethod
-    def select_image(self, uri, size=None):
+    def select_image(cls, uri, size=None):
         def compare(a, b):
             if a == 0 or b == 0:
                 return 1.0
             return max(a, b) / float(min(a, b))
 
         if not uri:
-            return self.app.IMG_FOLDER + 'neon_R.jpg'
-        elif uri not in self._cache:
+            return cls.app.IMG_FOLDER + 'neon_R.jpg'
+        elif uri not in cls._cache:
             return ''
 
-        imagelist = self._cache[uri]
+        imagelist = cls._cache[uri]
 
         if not imagelist:
             return ''
@@ -98,6 +101,6 @@ class ImageCache(MediaCache):
 
         # Local images. Add server path
         if '://' not in image_url:
-            image_url = 'http://' + self.app.MOPIDY_SERVER + image_url
+            image_url = 'http://' + cls.app.MOPIDY_SERVER + image_url
 
         return image_url

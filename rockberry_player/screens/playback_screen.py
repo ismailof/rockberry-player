@@ -81,7 +81,7 @@ Builder.load_string("""
                 size_hint_x: 1.2
                 pos_hint: {'right': 1.1, 'center_y': 0.26}
                 media: app.mm.current.media
-                playing: app.mm.state.playing
+                playing: app.mm.state.playback_state == 'playing'
 
 
         BoxLayout:
