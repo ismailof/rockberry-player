@@ -4,6 +4,7 @@ from kivy.uix.screenmanager import Screen
 from widgets.inputbar import InputBar
 from widgets.playbackarea import PlaybackArea
 from widgets.reflistview import RefListView
+from widgets.holdbutton import HoldButton
 
 
 class BrowseScreen(Screen):
@@ -34,9 +35,10 @@ Builder.load_string("""
             Button:
                 text: 'Back'
                 on_press: app.mm.browser.browse_back()
-            Button:
+            HoldButton:
                 text: 'Refresh'
-                on_press: app.mm.browser.refresh()
+                on_click: app.mm.browser.refresh()
+                on_hold: app.mm.browser.server_refresh()
             Button:
                 text: 'Playlists'
                 on_press: app.mm.browser.browse_playlists()

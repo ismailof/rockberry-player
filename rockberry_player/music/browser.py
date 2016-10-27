@@ -27,9 +27,15 @@ class BrowserControl (MediaController):
         if self.browse_ref['uri'] == 'playlists:':
             self.mopidy.playlists.as_list(on_result=self.set_reflist)
         else:
-            self.interface.browse(uri=self.browse_ref['uri'],
+            self.mopidy.library.browse(uri=self.browse_ref['uri'],
                                        on_result=self.set_reflist)
 
+    def server_refresh(self, *args):
+        if self.browse_ref['uri'] == 'playlists:':
+            self.mopidy.playlists.refresh()
+        else:
+            self.mopidy.library.refresh(uri=self.browse_ref['uri'])
+        self.refresh()
 
     @scheduled
     def browse(self, item):
