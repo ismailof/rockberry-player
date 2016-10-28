@@ -73,7 +73,7 @@ Builder.load_string("""
                 pos_hint: {'center_x': 0.5, 'y': 0.36}
                 size_hint: (None, None)
                 height: albumzone.width * 0.87
-                width: self.height * self.image_ratio
+                width: self.height * min(self.image_ratio, 1.3)
                 on_click: app.mm.browser.browse(app.mm.current.item.get('album'))
 
             DeviceImage:
