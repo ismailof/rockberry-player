@@ -32,7 +32,7 @@ class AlbumCover(AsyncImage):
             self.source = new_source
 
     def on_uri(self, *args):
-        self.source = self.default        
+        self.source = self.default
         ImageCache.request_item(self.uri, self.update_image)
 
     def on_size(self, *args):

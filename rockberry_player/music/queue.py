@@ -12,7 +12,7 @@ class QueueControl(MediaController):
 
     tracklist = ListProperty()
     queue_point = NumericProperty(0)
-    shuffle_mode = BooleanProperty(False)
+    shuffle_mode = BooleanProperty(True)
 
     def __init__(self, **kwargs):
         super(QueueControl, self).__init__(**kwargs)

@@ -12,16 +12,18 @@ class BrowserControl (MediaController):
 
     reflist = ListProperty([])
     browse_tree = ListProperty([RefUtils.RefNone])
-    browse_ref = AliasProperty(lambda self: self.browse_tree[-1], None, bind=['browse_tree'])
+    browse_ref = AliasProperty(lambda self: self.browse_tree[-1],
+                               None,
+                               bind=['browse_tree'])
 
     @scheduled
     def set_reflist(self, reflist, *args):
-        self.reflist = reflist
+        self.reflist = reflist or []
 
     @scheduled
     def set_reflist_from_tracks(self, tracks, *args):
-        self.reflist = [RefUtils.make_reference(track)
-                        for track in tracks]
+        self.reflist = [RefUtils.make_reference(track) for track in tracks] \
+            if tracks else []
 
     def on_browse_ref(self, *args):
         self.refresh()
@@ -46,6 +48,9 @@ class BrowserControl (MediaController):
             self.mopidy.library.browse(
                 uri=browse_uri,
                 on_result=self.set_reflist)
+
+    def reset(self, *args):
+        self.browse_home()
 
     def server_refresh(self, *args):
         if self.browse_ref['uri'] == 'playlists:':

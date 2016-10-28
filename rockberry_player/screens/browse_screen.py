@@ -53,6 +53,7 @@ Builder.load_string("""
                 ToggleButton:
                     text: 'Mix'
                     size_hint_y: 0.3
+                    state: 'down' if app.mm.queue.shuffle_mode else 'normal'
                     on_state: app.mm.queue.shuffle_mode = self.state == 'down'
 
                 Button:
