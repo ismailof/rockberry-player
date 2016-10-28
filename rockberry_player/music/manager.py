@@ -220,13 +220,13 @@ class MediaManager(EventDispatcher):
             tl_index = self.mopidy.tracklist.index(timeout=5) or 0
             tltracks = self.mopidy.tracklist.add(
                 uris=uris,
-                at_position=tl_index,  # play just before current track
+                at_position=tl_index + 1,  # play just before current track
                 timeout=20
             )
             tlid_first = tltracks[0]['tlid']
             self.mopidy.playback.play(tlid=tlid_first)
             self.app.main.switch_to(screen='playback')
-        except:
+        except Exception as ex:
             pass
 
     @scheduled

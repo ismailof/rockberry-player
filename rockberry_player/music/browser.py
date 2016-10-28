@@ -18,17 +18,34 @@ class BrowserControl (MediaController):
     def set_reflist(self, reflist, *args):
         self.reflist = reflist
 
+    @scheduled
+    def set_reflist_from_tracks(self, tracks, *args):
+        self.reflist = [RefUtils.make_reference(track)
+                        for track in tracks]
+
     def on_browse_ref(self, *args):
         self.refresh()
 
     def refresh(self, *args):
         self.reflist = []
-        # TEMPORAL WORKAROUND FOR GETTING PLAYLISTS
-        if self.browse_ref['uri'] == 'playlists:':
-            self.mopidy.playlists.as_list(on_result=self.set_reflist)
+        browse_uri = RefUtils.get_uri(self.browse_ref)
+        # TEMPORAL WORKAROUND FOR GETTING ALL THE PLAYLISTS
+        if browse_uri == 'playlists:':
+            self.mopidy.playlists.as_list(
+                on_result=self.set_reflist)
+        # Browsing means different depending on ref type
+        elif RefUtils.get_type(self.browse_ref) == 'playlist':
+            self.mopidy.playlists.get_items(
+                uri=browse_uri,
+                on_result=self.set_reflist)
+        elif RefUtils.get_type(self.browse_ref) == 'artist':
+            self.mopidy.library.lookup(
+                uri=browse_uri,
+                on_result=self.set_reflist_from_tracks)
         else:
-            self.mopidy.library.browse(uri=self.browse_ref['uri'],
-                                       on_result=self.set_reflist)
+            self.mopidy.library.browse(
+                uri=browse_uri,
+                on_result=self.set_reflist)
 
     def server_refresh(self, *args):
         if self.browse_ref['uri'] == 'playlists:':

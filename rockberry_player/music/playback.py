@@ -44,15 +44,15 @@ class PlaybackControl(MediaController):
     def tick_position(self, dt=0, *args):
         self.time_position = self.time_position + dt / float(self.resolution)
 
-    @scheduled
-    def set_playback_state(self, state):
-        self.playback_state = state
-
     def on_playback_state(self, *args):
         if self.playback_state == 'playing':
             Clock.schedule_interval(self.tick_position, self.update_interval)
         else:
             Clock.unschedule(self.tick_position)
+
+    @scheduled
+    def set_playback_state(self, state):
+        self.playback_state = state
 
     @scheduled
     def set_stream_title(self, title, *args, **kwargs):

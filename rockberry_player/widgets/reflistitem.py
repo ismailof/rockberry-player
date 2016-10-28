@@ -29,7 +29,7 @@ Builder.load_string("""
     padding: 2
     spacing: 10
 
-    on_press: self.selected = not self.selected
+    on_click: self.selected = not self.selected
 
     canvas.before:
         Color:
@@ -56,9 +56,8 @@ Builder.load_string("""
             size: (22, 22)
             right: cover.right
 
-    ReferenceLabel:
+    Label:
         text: root.title
-        item: root.ref
         halign: 'left'
         valign: 'top'
         text_size: self.size

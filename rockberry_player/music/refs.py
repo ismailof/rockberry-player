@@ -54,6 +54,7 @@ class RefUtils(object):
     def get_media_from_uri(uri):
         specials = {'spotifyweb': 'spotify',
                     'yt': 'youtube',
+                    'm3u': 'local',
                    }
         uri_header = uri.split(':')[0].split('+')[0] if uri else ''
         if uri_header in specials:
