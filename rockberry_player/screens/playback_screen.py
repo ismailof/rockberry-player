@@ -76,6 +76,14 @@ Builder.load_string("""
                 width: self.height * min(self.image_ratio, 1.3)
                 on_click: app.mm.browser.browse(app.mm.current.item.get('album'))
 
+            AtlasIcon:
+                atlas: 'media'
+                item: app.mm.current.media
+                size_hint: (None, None)
+                center: cover.center
+                size: (cover.width * 0.9, cover.height * 0.9)
+                opacity: 1 if cover.source == cover.default else 0
+
             DeviceImage:
                 id: device_image
                 size_hint_x: 1.2
