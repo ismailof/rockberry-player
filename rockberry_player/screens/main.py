@@ -124,6 +124,6 @@ Builder.load_string("""
                         halign: 'center'
                         valign: 'middle'
                         text_size: self.size
-                        font_size: 40                        
+                        font_size: 40
 
 """)

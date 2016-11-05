@@ -5,6 +5,9 @@ from kivy.uix.image import AsyncImage
 
 from widgets.holdbutton import HoldButtonBehavior
 from music.images import ImageCache
+from utils import scheduled
+
+from debug import debug_function
 
 
 class AlbumCover(AsyncImage):
@@ -20,16 +23,18 @@ class AlbumCover(AsyncImage):
                 self.norm_image_size[0],
                 self.norm_image_size[1])
 
-    border_rectangle = AliasProperty(get_border_rectangle,
-                                     None,
-                                     bind=['center', 'size', 'image_ratio'])
+    border_rectangle = AliasProperty(
+        get_border_rectangle,
+        None,
+        bind=['center', 'size', 'image_ratio']
+    )
 
+    @scheduled
     def update_image(self, *args):
-        new_source = ImageCache.select_image(uri=self.uri,
-                                             size=self.size)
-
-        if self.source != new_source:
-            self.source = new_source
+        img_source = ImageCache.select_image(
+            uri=self.uri,
+            size=self.size)
+        self.source = img_source or self.default
 
     def on_uri(self, *args):
         self.source = self.default
@@ -38,13 +43,8 @@ class AlbumCover(AsyncImage):
     def on_size(self, *args):
         self.update_image()
 
-    def on_source(self, *args):
-        if not self.source and self.default:
-            self.source = self.default
-
-    def on_default(self, instance, source):
-        if not self.source and self.default:
-            self.source = self.default
+    def on_error(self, error):
+        self.source = self.default
 
 
 class RefreshableCover(HoldButtonBehavior, AlbumCover):
@@ -73,7 +73,7 @@ Builder.load_string("""
             rectangle: self.border_rectangle
             width: max(self.border_width, 1)
 
-    default: app.IMG_FOLDER + 'default_track.png'
+    default: app.IMG_FOLDER + 'transparent.png'
     allow_stretch: True
 
 """)

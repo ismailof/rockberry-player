@@ -44,6 +44,7 @@ Builder.load_string("""
             id: cover
             border_width: 1
             background: (0.3, 0.3, 0.3, 0.5)
+            default: app.IMG_FOLDER + root.defaultimg
             mipmap: True
             uri: root.uri
 

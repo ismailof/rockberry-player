@@ -68,7 +68,7 @@ Builder.load_string("""
         size_hint_x: 0.2
         opacity: 0.7
         text: root.action
-        hold_secs: 1.5
+        hold_secs: 2.5
         on_click: app.mm.play_uris(uris=[root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
         on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index) if root.action == 'play' else app.mm.browser.browse(root.ref)
 

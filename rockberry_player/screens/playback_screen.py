@@ -68,21 +68,13 @@ Builder.load_string("""
             RefreshableCover:
                 id: cover
                 uri: app.mm.current.uri
-                default: app.IMG_FOLDER + 'default_album.png'
+                default: 'atlas://{}{}/{}'.format(app.IMG_FOLDER, 'media', app.mm.current.media or 'null')
                 border_width: 0 if device_image.device in ['radio'] else 3
                 pos_hint: {'center_x': 0.5, 'y': 0.36}
                 size_hint: (None, None)
                 height: albumzone.width * 0.87
                 width: self.height * min(self.image_ratio, 1.3)
                 on_click: app.mm.browser.browse(app.mm.current.item.get('album'))
-
-            AtlasIcon:
-                atlas: 'media'
-                item: app.mm.current.media
-                size_hint: (None, None)
-                center: cover.center
-                size: (cover.width * 0.9, cover.height * 0.9)
-                opacity: 1 if cover.source == cover.default else 0
 
             DeviceImage:
                 id: device_image
