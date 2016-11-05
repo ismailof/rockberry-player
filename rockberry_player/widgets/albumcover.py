@@ -73,7 +73,7 @@ Builder.load_string("""
             rectangle: self.border_rectangle
             width: max(self.border_width, 1)
 
-    default: app.IMG_FOLDER + 'transparent.png'
+    default: app.IMG_NONE
     allow_stretch: True
 
 """)

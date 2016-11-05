@@ -63,7 +63,7 @@ Builder.load_string("""
 
     Image:
         size_hint_x: 0.15
-        source: app.IMG_FOLDER + ('playing.zip' if root.current and app.mm.state.playback_state == 'playing' else 'transparent.png')
+        source: app.IMG_FOLDER + 'playing.zip' if root.current and app.mm.state.playback_state == 'playing' else app.IMG_NONE
         anim_delay: 0.12
 
     BoxLayout:
