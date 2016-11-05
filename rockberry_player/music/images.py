@@ -23,16 +23,13 @@ class MediaCache(MediaController):
         Logger.debug('{} : _update_cache: {}'.format (cls.__name__, items))
         cls._cache.update(items)
         for uri in items.keys():
-            #for callback in cls._callbacks.pop(uri, []):
             cb_set = cls._callbacks.get(uri, [])
             Logger.trace(
                 "{} : _update_cache on uri '{}'. Callbacks:{}".format(
                     cls.__name__, uri, cb_set)
             )
             for callback in cb_set:
-                Clock.schedule_once(
-                    partial(callback, (items[uri], ))
-                )
+                Clock.schedule_once(partial(callback, items[uri]))
 
     @classmethod
     def request_item(cls, uri, callback):
@@ -43,35 +40,40 @@ class MediaCache(MediaController):
                 "{} : _request_item on uri '{}'. Found in cache".format(
                     cls.__name__, uri)
             )
-            Clock.schedule_once(callback)
+            Clock.schedule_once(partial(callback, cls._cache.get(uri)))
             return
 
+        # URI not found in cache. Add to request list
         cls._requested_uris.add(uri)
         Logger.debug(
             "{} : _request_item on uri '{}'. Added to request list".format(
                 cls.__name__, uri)
         )
 
+        # Update callback
         cb_set = cls._callbacks.get(uri, set())
         cb_set.add(callback)
         cls._callbacks.update({uri: cb_set})
 
-        Logger.debug(
-            "{} : _request_item on uri '{}'. Added to request list".format(
-                cls.__name__, uri)
+        Logger.trace(
+            "{} : _request_item on uri '{}'. Callbacks:{}".format(
+                cls.__name__, uri, cb_set)
         )
 
+        # Perform server request
         cls._get_server_items()
 
     @classmethod
     @delayed(0.5)
     def _get_server_items(cls):
-        if cls.mopidy and cls._requested_uris:
+        if not cls.mopidy:
+            return
+
+        if cls._requested_uris:
             Logger.debug(
                 "{} : _get_server_items for uris: '{}': ".format(
                     cls.__name__, cls._requested_uris)
             )
-
             cls._server_request(
                 uris=list(cls._requested_uris),
                 on_result=cls._update_cache
@@ -116,12 +118,6 @@ class ImageCache(MediaCache):
 
     @classmethod
     def select_image(cls, uri, size=None):
-
-        def compare(a, b):
-            if a == 0 or b == 0:
-                return 1.0
-            return max(a, b) / float(min(a, b))
-
         if not uri:
             return cls.app.IMG_FOLDER + 'neon_R.jpg'
 
@@ -130,6 +126,16 @@ class ImageCache(MediaCache):
         except KeyError:
             return ''
 
+        return get_fittest_image(imagelist, size)
+
+    @classmethod
+    def get_fittest_image(cls, imagelist=[], size=None):
+
+        def compare(a, b):
+            if a == 0 or b == 0:
+                return 1.0
+            return max(a, b) / float(min(a, b))
+
         if not imagelist:
             return ''
 
@@ -137,7 +143,7 @@ class ImageCache(MediaCache):
             # Select first image
             item_fit = 0
         else:
-            # Select fittest image to size
+            # Select closest image to size
             size_diff = [compare(image.get('width', 0) + image.get('height', 0),
                                  size[0] + size[1])
                          for image in imagelist]

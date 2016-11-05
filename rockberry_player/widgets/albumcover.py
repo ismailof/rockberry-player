@@ -16,6 +16,7 @@ class AlbumCover(AsyncImage):
     border_width = NumericProperty(0)
     uri = StringProperty('', allownone=True)
     default = StringProperty('')
+    imagelist = ListProperty([])
     background = ListProperty([0, 0, 0, 0])
 
     def get_border_rectangle(self):
@@ -30,35 +31,41 @@ class AlbumCover(AsyncImage):
         bind=['center', 'size', 'image_ratio']
     )
 
-    def update_image(self, *args):
-        img_source = ImageCache.select_image(
-            uri=self.uri,
-            size=self.size)
-        self.source = img_source or self.default
-
-    def on_uri(self, *args):
+    def on_uri(self, _, uri):
         self.source = self.default
-        ImageCache.remove_callback(self.update_image)
-        ImageCache.request_item(self.uri, self.update_image)
+        ImageCache.remove_callback(self.update_imagelist)
+        ImageCache.request_item(self.uri, self.update_imagelist)
 
-    def on_parent(self, *args):
+    def on_parent(self, _, parent):
         if self.parent is None:
-            ImageCache.remove_callback(self.update_image)
+            ImageCache.remove_callback(self.update_imagelist)
+
+    def on_imagelist(self, *args):
+        self.select_image()
 
     def on_size(self, *args):
-        self.update_image()
+        self.select_image()
 
     @scheduled
     def on_error(self, error):
         self.source = self.default
 
+    def update_imagelist(self, imagelist, _):
+        self.imagelist = imagelist or []
+
+    def select_image(self, *args):
+        img_source = ImageCache.get_fittest_image(
+            imagelist=self.imagelist,
+            size=self.size)
+        self.source = img_source or self.default
+
 
 class RefreshableCover(HoldButtonBehavior, AlbumCover):
 
     def refresh(self, *args):
-        self.source = self.default
+        self.imagelist = []
         ImageCache.remove_items(uris=[self.uri])
-        ImageCache.request_item(self.uri, self.update_image)
+        ImageCache.request_item(self.uri, self.update_imagelist)
 
     def on_hold(self, *args):
         self.refresh()

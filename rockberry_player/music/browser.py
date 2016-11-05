@@ -1,3 +1,4 @@
+from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import ObjectProperty, ListProperty, AliasProperty
 
@@ -53,11 +54,13 @@ class BrowserControl (MediaController):
         self.browse_home()
 
     def server_refresh(self, *args):
+
         if self.browse_ref['uri'] == 'playlists:':
             self.mopidy.playlists.refresh()
         else:
             self.mopidy.library.refresh(uri=self.browse_ref['uri'])
-        self.refresh()
+
+        Clock.schedule_once(self.refresh, 2)
 
     @scheduled
     def browse(self, item):
