@@ -24,6 +24,12 @@ class MediaController(EventDispatcher):
     def reset(self, *args, **kwargs):
         pass
 
+    def call_method(self, method, **parameters):
+        if not self.mopidy:
+            return
+
+        self.mopidy.core.send(method, **parameters)
+
     def bind_event(self, method, events):
         if not self.mopidy:
             return

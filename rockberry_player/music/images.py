@@ -1,5 +1,7 @@
+from functools import partial
+
 from kivy.clock import Clock
-from kivy.properties import StringProperty, DictProperty
+from kivy.properties import StringProperty
 from kivy.logger import Logger
 
 from utils import delayed
@@ -8,32 +10,56 @@ from base import MediaController
 
 class MediaCache(MediaController):
 
+    _default_cache = {}
     _cache = {}
+    _callbacks = {}
     _requested_uris = set()
-    _update_callbacks = {}
 
     @classmethod
     def _update_cache(cls, items):
         if not items:
             return
 
-        Logger.debug('%s:_update_cache: %r' % (cls.__name__, items))
+        Logger.debug('{} : _update_cache: {}'.format (cls.__name__, items))
         cls._cache.update(items)
         for uri in items.keys():
-            for callback in cls._update_callbacks.pop(uri, []):
-                Clock.schedule_once(callback)
+            #for callback in cls._callbacks.pop(uri, []):
+            cb_set = cls._callbacks.get(uri, [])
+            Logger.trace(
+                "{} : _update_cache on uri '{}'. Callbacks:{}".format(
+                    cls.__name__, uri, cb_set)
+            )
+            for callback in cb_set:
+                Clock.schedule_once(
+                    partial(callback, (items[uri], ))
+                )
 
     @classmethod
     def request_item(cls, uri, callback):
+
+        # URI is found in cache
         if not uri or uri in cls._cache:
+            Logger.debug(
+                "{} : _request_item on uri '{}'. Found in cache".format(
+                    cls.__name__, uri)
+            )
             Clock.schedule_once(callback)
             return
 
         cls._requested_uris.add(uri)
+        Logger.debug(
+            "{} : _request_item on uri '{}'. Added to request list".format(
+                cls.__name__, uri)
+        )
 
-        if uri not in cls._update_callbacks:
-            cls._update_callbacks[uri] = set()
-        cls._update_callbacks[uri].add(callback)
+        cb_set = cls._callbacks.get(uri, set())
+        cb_set.add(callback)
+        cls._callbacks.update({uri: cb_set})
+
+        Logger.debug(
+            "{} : _request_item on uri '{}'. Added to request list".format(
+                cls.__name__, uri)
+        )
 
         cls._get_server_items()
 
@@ -41,9 +67,15 @@ class MediaCache(MediaController):
     @delayed(0.5)
     def _get_server_items(cls):
         if cls.mopidy and cls._requested_uris:
+            Logger.debug(
+                "{} : _get_server_items for uris: '{}': ".format(
+                    cls.__name__, cls._requested_uris)
+            )
+
             cls._server_request(
                 uris=list(cls._requested_uris),
-                on_result=cls._update_cache)
+                on_result=cls._update_cache
+            )
             cls._requested_uris.clear()
 
     @classmethod
@@ -60,18 +92,31 @@ class MediaCache(MediaController):
                 del cls._cache[uri]
 
     @classmethod
+    def remove_callback(cls, callback, uri=None):
+        for cb_uri in ([uri] if uri else cls._callbacks.keys()):
+            cls._callbacks[cb_uri].discard(callback)
+
+    @classmethod
+    def set_default_cache(cls, default_cache):
+        cls._default_cache.clear()
+        cls._default_cache.update(default_cache)
+
+    @classmethod
     def clear_cache(cls):
-        cls._cache = {}
+        cls._cache = dict(cls._default_cache)
+        cls._callbacks = {}
+
 
 class ImageCache(MediaCache):
 
     _cache = {}
     _requested_uris = set()
-    _update_callbacks = {}
+    _callbacks = {}
     interface = None
 
     @classmethod
     def select_image(cls, uri, size=None):
+
         def compare(a, b):
             if a == 0 or b == 0:
                 return 1.0
@@ -79,10 +124,11 @@ class ImageCache(MediaCache):
 
         if not uri:
             return cls.app.IMG_FOLDER + 'neon_R.jpg'
-        elif uri not in cls._cache:
-            return ''
 
-        imagelist = cls._cache[uri]
+        try:
+            imagelist = cls._cache[uri]
+        except KeyError:
+            return ''
 
         if not imagelist:
             return ''

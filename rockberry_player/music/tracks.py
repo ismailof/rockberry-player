@@ -86,7 +86,7 @@ class TrackControl(TrackItem, MediaController):
 
     def refresh(self, *args, **kwargs):
         if self.refresh_method:
-            self.mopidy.core.send(
+            self.call_method(
                 self.refresh_method,
                 on_result=self.set_tl_track,
                 **self.refresh_args

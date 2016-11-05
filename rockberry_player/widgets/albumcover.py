@@ -1,4 +1,5 @@
 from kivy.lang import Builder
+from kivy.loader import Loader
 from kivy.properties import NumericProperty, StringProperty,\
     ListProperty, AliasProperty
 from kivy.uix.image import AsyncImage
@@ -29,7 +30,6 @@ class AlbumCover(AsyncImage):
         bind=['center', 'size', 'image_ratio']
     )
 
-    @scheduled
     def update_image(self, *args):
         img_source = ImageCache.select_image(
             uri=self.uri,
@@ -38,11 +38,17 @@ class AlbumCover(AsyncImage):
 
     def on_uri(self, *args):
         self.source = self.default
+        ImageCache.remove_callback(self.update_image)
         ImageCache.request_item(self.uri, self.update_image)
+
+    def on_parent(self, *args):
+        if self.parent is None:
+            ImageCache.remove_callback(self.update_image)
 
     def on_size(self, *args):
         self.update_image()
 
+    @scheduled
     def on_error(self, error):
         self.source = self.default
 
@@ -50,6 +56,7 @@ class AlbumCover(AsyncImage):
 class RefreshableCover(HoldButtonBehavior, AlbumCover):
 
     def refresh(self, *args):
+        self.source = self.default
         ImageCache.remove_items(uris=[self.uri])
         ImageCache.request_item(self.uri, self.update_image)
 
