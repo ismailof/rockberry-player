@@ -45,7 +45,7 @@ class ImageUtils(object):
 
 # TODO: Total refactor.
 # Not inherit MediaCache but using cache object
-# Rename to ImageItem ¿?
+# Rename to ImageItem ?
 # Move most of AlbumCover (related to server images) here
 class ImageCache(MediaCache):
 
