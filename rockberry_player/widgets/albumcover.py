@@ -5,7 +5,9 @@ from kivy.properties import NumericProperty, StringProperty,\
 from kivy.uix.image import AsyncImage
 
 from widgets.holdbutton import HoldButtonBehavior
+from music.base import MediaController
 from music.images import ImageUtils, ImageCache
+from music.refs import RefUtils
 from utils import scheduled
 
 from debug import debug_function
@@ -33,7 +35,8 @@ class AlbumCover(AsyncImage):
 
     def on_uri(self, _, uri):
         if not self.uri:
-            ImageUtils.IMG_LOGO
+            self.source = ImageUtils.IMG_LOGO
+            return
 
         self.source = self.default
         ImageCache.remove_callback(self.update_imagelist)
@@ -57,9 +60,17 @@ class AlbumCover(AsyncImage):
         self.imagelist = imagelist or []
 
     def select_image(self, *args):
-        img_source = ImageCache.get_fittest_image(
+        img_source = ImageUtils.get_fittest_image(
             imagelist=self.imagelist,
             size=self.size)
+
+        # TODO: Currently here. Move anywhere else
+        # Local backend. Add server path
+        if img_source \
+            and RefUtils.get_media_from_uri(self.uri) == 'local' \
+            and '://' not in img_source:
+            img_source = 'http://' + ImageCache.app.MOPIDY_SERVER + img_source
+
         self.source = img_source or self.default
 
 
