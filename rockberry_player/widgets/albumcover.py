@@ -5,7 +5,7 @@ from kivy.properties import NumericProperty, StringProperty,\
 from kivy.uix.image import AsyncImage
 
 from widgets.holdbutton import HoldButtonBehavior
-from music.images import ImageCache
+from music.images import ImageUtils, ImageCache
 from utils import scheduled
 
 from debug import debug_function
@@ -15,7 +15,7 @@ class AlbumCover(AsyncImage):
 
     border_width = NumericProperty(0)
     uri = StringProperty('', allownone=True)
-    default = StringProperty('')
+    default = StringProperty(ImageUtils.IMG_NONE)
     imagelist = ListProperty([])
     background = ListProperty([0, 0, 0, 0])
 
@@ -32,6 +32,9 @@ class AlbumCover(AsyncImage):
     )
 
     def on_uri(self, _, uri):
+        if not self.uri:
+            ImageUtils.IMG_LOGO
+
         self.source = self.default
         ImageCache.remove_callback(self.update_imagelist)
         ImageCache.request_item(self.uri, self.update_imagelist)
@@ -87,7 +90,6 @@ Builder.load_string("""
             rectangle: self.border_rectangle
             width: max(self.border_width, 1)
 
-    default: app.IMG_NONE
     allow_stretch: True
 
 """)

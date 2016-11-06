@@ -56,6 +56,7 @@ class RockberryMainScreen(FloatLayout):
 
 Builder.load_string("""
 #:import sm kivy.uix.screenmanager
+#:import ImageUtils music.images.ImageUtils
 
 #<Label>
     #font_name: 'DroidSans'
@@ -64,7 +65,7 @@ Builder.load_string("""
 
     BackgroundImage:
         id: background
-        default: app.IMG_FOLDER + 'bg1.jpg'
+        default: ImageUtils.IMG_FOLDER + 'bg1.jpg'
         uri: app.mm.current.uri
         tint: (0.6, 0.6, 0.6, 1)
         outbounds: 0.1

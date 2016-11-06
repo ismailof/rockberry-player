@@ -4,6 +4,7 @@ from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, AliasProperty
 
 from utils import scheduled
+from music.images import ImageUtils
 
 
 class RefUtils(object):
@@ -64,13 +65,13 @@ class RefUtils(object):
 
     @staticmethod
     def get_type_image(reftype):
-        def_imgs = {None: 'transparent.png',
-                    'directory': 'browse_folder.png',
+        def_imgs = {'directory': 'browse_folder.png',
                     'playlist': 'browse_pl.png',
                     'track': 'default_track.png',
                     'album': 'default_album.png',
                     'artist': 'browse_artist.png'}
-        return def_imgs.get(reftype , def_imgs[None])
+        return ImageUtils.IMG_FOLDER + \
+            def_imgs.get(reftype, ImageUtils.IMG_NONE)
 
 
 class RefItem(EventDispatcher):

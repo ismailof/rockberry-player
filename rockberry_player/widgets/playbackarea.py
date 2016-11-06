@@ -29,7 +29,7 @@ Builder.load_string("""
         RefreshableCover:
             id: cover
             uri: root.uri
-            default: app.IMG_FOLDER + root.defaultimg
+            default: root.defaultimg
             border_width: 2
             background: (0.3, 0.3, 0.3, 0.5)
             size_hint_x: 0.9

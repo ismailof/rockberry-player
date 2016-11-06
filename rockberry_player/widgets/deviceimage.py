@@ -4,11 +4,22 @@ from kivy.properties import StringProperty, BooleanProperty, \
 from kivy.uix.image import Image
 from utils import scheduled
 
+from music.images import ImageUtils
+
 
 class DeviceImage(Image):
 
     media = StringProperty(None, allownone=True)
     playing = BooleanProperty(None)
+
+    dev_types = {'spotify': 'turntable',
+                 'local': 'turntable',
+                 'dleyna': 'turntable',
+                 'soundcloud': 'turntable',
+                 'tunein': 'radio',
+                 'podcast': 'microphone',
+                 'bt': 'bluetooth',
+                 'youtube': 'tv'}
 
     dev_images = {None: 'transparent.png',
                   'turntable': 'turntable.zip',
@@ -23,24 +34,12 @@ class DeviceImage(Image):
                             allownone=True,
                             errorvalue=None)
 
-    dev_types = {'spotify': 'turntable',
-                 'local': 'turntable',
-                 'dleyna': 'turntable',
-                 'soundcloud': 'turntable',
-                 'tunein': 'radio',
-                 'podcast': 'microphone',
-                 'bt': 'bluetooth',
-                 'youtube': 'tv'}
-
-    def get_dev_image(self):
-        return self.dev_images.get(self.device, self.dev_images[None])
-
-    device_image = AliasProperty(get_dev_image, None, bind=['device'])
-
     def on_media(self, *args):
         self.device = self.dev_types.get(self.media)
 
     def on_device(self, *args):
+        device_image = self.dev_images.get(self.device)
+        self.source = ImageUtils.IMG_FOLDER + device_image or ImageUtils.IMG_NONE
         self.set_anim_delay()
 
     def on_playing(self, *args):
@@ -58,6 +57,5 @@ Builder.load_string("""
 
 <DeviceImage>:
     allow_stretch: True
-    source: app.IMG_FOLDER + root.device_image
 
 """)

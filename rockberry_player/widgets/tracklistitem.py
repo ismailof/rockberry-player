@@ -44,7 +44,7 @@ Builder.load_string("""
             id: cover
             border_width: 1
             background: (0.3, 0.3, 0.3, 0.5)
-            default: app.IMG_FOLDER + root.defaultimg
+            default: root.defaultimg
             mipmap: True
             uri: root.uri
 
@@ -63,7 +63,7 @@ Builder.load_string("""
 
     Image:
         size_hint_x: 0.15
-        source: app.IMG_FOLDER + 'playing.zip' if root.current and app.mm.state.playback_state == 'playing' else app.IMG_NONE
+        source: ImageUtils.IMG_FOLDER + 'playing.zip' if root.current and app.mm.state.playback_state == 'playing' else ImageUtils.IMG_NONE
         anim_delay: 0.12
 
     BoxLayout:

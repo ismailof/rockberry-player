@@ -15,7 +15,7 @@ class PlaybackScreen(Screen):
 
 Builder.load_string("""
 #:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
-
+#:import ImageUtils music.images.ImageUtils
 
 <OptionsBar@BoxLayout>:
     spacing: 5
@@ -68,7 +68,7 @@ Builder.load_string("""
             RefreshableCover:
                 id: cover
                 uri: app.mm.current.uri
-                default: 'atlas://{}{}/{}'.format(app.IMG_FOLDER, 'media', app.mm.current.media or 'null')
+                default: ImageUtils.atlas_image('media', app.mm.current.media)
                 border_width: 0 if device_image.device in ['radio'] else 3
                 pos_hint: {'center_x': 0.5, 'y': 0.36}
                 size_hint: (None, None)
