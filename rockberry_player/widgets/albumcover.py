@@ -13,7 +13,7 @@ from utils import scheduled
 from debug import debug_function
 
 
-class AlbumCover(AsyncImage):
+class AlbumCover(HoldButtonBehavior, AsyncImage):
 
     border_width = NumericProperty(0)
     uri = StringProperty('', allownone=True)
@@ -73,16 +73,10 @@ class AlbumCover(AsyncImage):
 
         self.source = img_source or self.default
 
-
-class RefreshableCover(HoldButtonBehavior, AlbumCover):
-
     def refresh(self, *args):
         self.imagelist = []
         ImageCache.remove_items(uris=[self.uri])
         ImageCache.request_item(self.uri, self.update_imagelist)
-
-    def on_hold(self, *args):
-        self.refresh()
 
 
 Builder.load_string("""

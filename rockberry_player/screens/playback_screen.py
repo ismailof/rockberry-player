@@ -3,7 +3,7 @@ from kivy.uix.screenmanager import Screen
 
 from widgets.playback_slider import PlaybackSlider
 from widgets.playbackbar import PlaybackBar
-from widgets.albumcover import RefreshableCover
+from widgets.albumcover import AlbumCover
 from widgets.deviceimage import DeviceImage
 from widgets.trackinfolabel import TrackInfoLabel
 
@@ -65,7 +65,7 @@ Builder.load_string("""
             id: albumzone
             size_hint: (0.54, 1)
 
-            RefreshableCover:
+            AlbumCover:
                 id: cover
                 uri: app.mm.current.uri
                 default: ImageUtils.atlas_image('media', app.mm.current.media)
@@ -75,6 +75,7 @@ Builder.load_string("""
                 height: albumzone.width * 0.87
                 width: self.height * min(self.image_ratio, 1.3)
                 on_click: app.mm.browser.browse(app.mm.current.item.get('album'))
+                on_hold: self.refresh()
 
             DeviceImage:
                 id: device_image

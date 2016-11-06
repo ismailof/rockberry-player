@@ -43,7 +43,7 @@ class ImageUtils(object):
         return image_url
 
 
-# TODO: Total refactor. 
+# TODO: Total refactor.
 # Not inherit MediaCache but using cache object
 # Rename to ImageItem ¿?
 # Move most of AlbumCover (related to server images) here

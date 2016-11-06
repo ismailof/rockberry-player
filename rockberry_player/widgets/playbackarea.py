@@ -26,7 +26,7 @@ Builder.load_string("""
 
     RelativeLayout:
 
-        RefreshableCover:
+        AlbumCover:
             id: cover
             uri: root.uri
             default: root.defaultimg
@@ -34,6 +34,7 @@ Builder.load_string("""
             background: (0.3, 0.3, 0.3, 0.5)
             size_hint_x: 0.9
             pos_hint: {'center_x': 0.5}
+            on_hold: self.refresh()
 
         AtlasIcon:
             atlas: 'media'
