@@ -4,7 +4,7 @@ from kivy.uix.slider import Slider
 
 class SeekSlider(Slider):
 
-    user_touch = BooleanProperty(False)
+    _locked = False
     constraint = BooleanProperty(False)
     cached_value = NumericProperty(0)
 
@@ -20,22 +20,22 @@ class SeekSlider(Slider):
         pass
 
     def on_cached_value(self, *args):
-        if not self.user_touch:
+        if not self._locked:
             self.value = self.cached_value
 
     def on_touch_down(self, touch, *args):
         if self.collide_point(*touch.pos):
             self.cached_value = self.value
-            self.user_touch = True
+            self._locked = True
         super(SeekSlider, self).on_touch_down(touch, *args)
 
     def on_touch_move(self, touch, *args):
         if touch.grab_current is not None:
             if self.collide_point(*touch.pos) or not self.constraint:
-                self.user_touch = True
+                self._locked = True
                 super(SeekSlider, self).on_touch_move(touch, *args)
             else:
-                self.user_touch = False
+                self._locked = False
                 self.value = self.cached_value
 
     def on_touch_up(self, touch, *args):
@@ -45,4 +45,14 @@ class SeekSlider(Slider):
                 self.dispatch('on_seek', self.value)
             else:
                 self.value = self.cached_value
-            self.user_touch = False
+            self._locked = False
+
+    def manual_step(self, step, lock=False, *args):
+        if lock:
+            self._locked = True
+        self.value += step
+
+    def manual_release(self, *args):
+        if self._locked:
+            self.dispatch('on_seek', self.value)
+        self._locked = False

@@ -37,6 +37,7 @@ Builder.load_string("""
                 on_press: app.mm.browser.browse_back()
             HoldButton:
                 text: 'Refresh'
+                holdtime: 1.5
                 on_click: app.mm.browser.refresh()
                 on_hold: app.mm.browser.server_refresh()
             Button:

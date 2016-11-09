@@ -97,4 +97,6 @@ Builder.load_string("""
 
     allow_stretch: True
 
+    holdtime: 1.5
+
 """)

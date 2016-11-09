@@ -1,6 +1,7 @@
-from threading import Timer
+#from threading import Timer
 from functools import partial
 
+from kivy.clock import Clock
 from kivy.properties import NumericProperty, BooleanProperty
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivy.uix.button import Button
@@ -8,46 +9,56 @@ from kivy.uix.button import Button
 
 class HoldButtonBehavior(ButtonBehavior):
 
-    hold_secs = NumericProperty(1)
+    holdtime = NumericProperty(0)
+    ticktime = NumericProperty(0)
     pressed = BooleanProperty(False)
-    _hold_timer = None
 
     def __init__(self, *args, **kwargs):
-        self.register_event_type('on_hold')
+
         self.register_event_type('on_click')
+        self.register_event_type('on_hold')
+        self.register_event_type('on_tick')
+
         super(HoldButtonBehavior, self).__init__(*args, **kwargs)
 
     def on_press(self, *args, **kwargs):
 
         self.pressed = True
 
-        if self.hold_secs:
-            self._hold_timer = Timer(self.hold_secs,
-                                     self.dispatch_hold)
-            self._hold_timer.start()
+        if self.holdtime:
+            Clock.schedule_once(self._dispatch_hold, self.holdtime)
+
+        if self.ticktime:
+            Clock.unschedule(self._dispatch_tick)
+            Clock.schedule_interval(self._dispatch_tick, self.ticktime)
 
         super(HoldButtonBehavior, self).on_press(*args, **kwargs)
 
     def on_release(self, *args, **kwargs):
 
-        if self._hold_timer:
-            self._hold_timer.cancel()
-            self._hold_timer = None
         if self.pressed:
             self.dispatch('on_click')
-
         self.pressed = False
 
         super(HoldButtonBehavior, self).on_release(*args, **kwargs)
 
-    def dispatch_hold(self):
+    def _dispatch_hold(self, *args):
         self.pressed = False
         self.dispatch('on_hold')
+
+    def _dispatch_tick(self, *args):
+        if self.pressed:
+            self.dispatch('on_tick')
+        else:
+            Clock.unschedule(self._dispatch_tick)
+
+    def on_click(self, *args, **kwargs):
+        pass
 
     def on_hold(self, *args, **kwargs):
         pass
 
-    def on_click(self, *args, **kwargs):
+    def on_tick(self, *args, **kwargs):
         pass
 
 
