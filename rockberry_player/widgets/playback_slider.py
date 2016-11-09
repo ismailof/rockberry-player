@@ -71,7 +71,6 @@ Builder.load_string("""
     disabled: False if self.secs and self.show else True
     opacity: 0 if self.disabled else 1
     ticktime: 0.5
-    holdtime: 5
 
 
 <PlaybackSlider>:
@@ -85,7 +84,6 @@ Builder.load_string("""
         on_press: slider.manual_step(self.secs/root.resolution, lock=True)
         on_tick: slider.manual_step(self.secs/root.resolution)
         on_release: slider.manual_release()
-        on_hold: slider.manual_release()
 
     SecondsLabel:
         secs: root.shortcut_secs[1]
@@ -96,7 +94,6 @@ Builder.load_string("""
         on_press: slider.manual_step(self.secs/root.resolution, lock=True)
         on_tick: slider.manual_step(self.secs/root.resolution)
         on_release: slider.manual_release()
-        on_hold: slider.manual_release()
 
     BoxLayout:
         orientation: 'horizontal'

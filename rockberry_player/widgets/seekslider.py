@@ -48,9 +48,11 @@ class SeekSlider(Slider):
             self._locked = False
 
     def manual_step(self, step, lock=False, *args):
+        self.value += step
         if lock:
             self._locked = True
-        self.value += step
+        else:
+            self.dispatch('on_seek', self.value)
 
     def manual_release(self, *args):
         if self._locked:

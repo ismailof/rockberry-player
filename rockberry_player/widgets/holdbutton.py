@@ -9,9 +9,9 @@ from kivy.uix.button import Button
 
 class HoldButtonBehavior(ButtonBehavior):
 
+    _locked = False
     holdtime = NumericProperty(0)
     ticktime = NumericProperty(0)
-    pressed = BooleanProperty(False)
 
     def __init__(self, *args, **kwargs):
 
@@ -22,7 +22,6 @@ class HoldButtonBehavior(ButtonBehavior):
         super(HoldButtonBehavior, self).__init__(*args, **kwargs)
 
     def on_press(self, *args, **kwargs):
-
         self.pressed = True
 
         if self.holdtime:
@@ -35,6 +34,8 @@ class HoldButtonBehavior(ButtonBehavior):
         super(HoldButtonBehavior, self).on_press(*args, **kwargs)
 
     def on_release(self, *args, **kwargs):
+        Clock.unschedule(self._dispatch_tick)
+        Clock.unschedule(self._dispatch_hold)
 
         if self.pressed:
             self.dispatch('on_click')
@@ -44,10 +45,11 @@ class HoldButtonBehavior(ButtonBehavior):
 
     def _dispatch_hold(self, *args):
         self.pressed = False
-        self.dispatch('on_hold')
+        if self.state == 'down':
+            self.dispatch('on_hold')
 
     def _dispatch_tick(self, *args):
-        if self.pressed:
+        if self.state == 'down':
             self.dispatch('on_tick')
         else:
             Clock.unschedule(self._dispatch_tick)

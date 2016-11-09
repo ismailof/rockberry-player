@@ -106,7 +106,7 @@ Builder.load_string("""
                 position: app.mm.state.time_position
                 duration: app.mm.current.duration
                 resolution: app.mm.state.resolution
-                shortcut_secs: 15
+                shortcut_secs: 10, 30
                 on_seek: app.mm.state.seek(args[1])
 
             BoxLayout:
