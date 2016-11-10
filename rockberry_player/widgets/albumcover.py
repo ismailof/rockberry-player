@@ -34,16 +34,14 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
     )
 
     def on_uri(self, _, uri):
-        if not self.uri:
-            self.source = ImageUtils.IMG_LOGO
-            return
-
         self.source = self.default
         ImageCache.remove_callback(self.update_imagelist)
         ImageCache.request_item(self.uri, self.update_imagelist)
 
     def on_parent(self, _, parent):
-        if self.parent is None:
+        if self.parent is not None:
+            self.select_image()
+        else:
             ImageCache.remove_callback(self.update_imagelist)
 
     def on_imagelist(self, *args):
@@ -80,6 +78,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
 
 
 Builder.load_string("""
+#:import ImageUtils music.images.ImageUtils
 
 <AlbumCover>:
     canvas.before:
@@ -96,7 +95,7 @@ Builder.load_string("""
             width: max(self.border_width, 1)
 
     allow_stretch: True
-
+    default: ImageUtils.IMG_LOGO
     holdtime: 1.5
 
 """)

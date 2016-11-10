@@ -29,7 +29,7 @@ Builder.load_string("""
         AlbumCover:
             id: cover
             uri: root.uri
-            default: root.defaultimg
+            default: root.typeimg
             border_width: 2
             background: (0.3, 0.3, 0.3, 0.5)
             size_hint_x: 0.9

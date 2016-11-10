@@ -10,7 +10,7 @@ from music.images import ImageUtils
 class RefUtils(object):
 
     RefNone = {'__model__': 'Ref',
-               'type': 'None',
+               'type': '',
                'name': '',
                'uri': None}
 
@@ -34,7 +34,8 @@ class RefUtils(object):
         return {'__model__': 'Ref',
                 'type': item.get('__model__'),
                 'name': item.get('name'),
-                'uri': item.get('uri')}
+                'uri': item.get('uri')
+                }
 
     @staticmethod
     def get_title(item):
@@ -70,8 +71,14 @@ class RefUtils(object):
                     'track': 'default_track.png',
                     'album': 'default_album.png',
                     'artist': 'browse_artist.png'}
-        return ImageUtils.IMG_FOLDER + \
-            def_imgs.get(reftype, ImageUtils.IMG_NONE)
+        type_img = def_imgs.get(reftype)
+        return ImageUtils.IMG_FOLDER + type_img \
+            if type_img else ImageUtils.IMG_LOGO
+
+    @staticmethod
+    def get_media_image(media):
+        return ImageUtils.atlas_image('media', media) \
+            if media else ImageUtils.IMG_NONE
 
 
 class RefItem(EventDispatcher):
@@ -98,11 +105,11 @@ class RefItem(EventDispatcher):
     def get_media(self):
         return RefUtils.get_media_from_uri(self.uri)
 
-    def get_defaultimg(self):
+    def get_typeimg(self):
         return RefUtils.get_type_image(self.reftype)
 
     title = AliasProperty(get_title, None, bind=['ref'])
     reftype = AliasProperty(get_reftype, None, bind=['ref'])
     uri = AliasProperty(get_uri, None, bind=['ref'])
     media = AliasProperty(get_media, None, bind=['uri'])
-    defaultimg = AliasProperty(get_defaultimg, None, bind=['reftype'])
+    typeimg = AliasProperty(get_typeimg, None, bind=['reftype'])
