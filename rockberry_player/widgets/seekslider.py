@@ -49,6 +49,11 @@ class SeekSlider(Slider):
 
     def manual_step(self, step, lock=False, *args):
         self.value += step
+        if self.value < self.min:
+            self.value = self.min
+        if self.value > self.max:
+            self.value = self.max
+
         if lock:
             self._locked = True
         else:

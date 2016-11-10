@@ -82,7 +82,7 @@ Builder.load_string("""
         pos: (slider.x, slider.top)
         resolution: root.resolution
         on_press: slider.manual_step(self.secs/root.resolution, lock=True)
-        on_tick: slider.manual_step(self.secs/root.resolution)
+        on_tick: slider.manual_step(self.secs/root.resolution, lock=True)
         on_release: slider.manual_release()
 
     SecondsLabel:
@@ -92,7 +92,7 @@ Builder.load_string("""
         pos: (slider.right - self.width, slider.top)
         resolution: root.resolution
         on_press: slider.manual_step(self.secs/root.resolution, lock=True)
-        on_tick: slider.manual_step(self.secs/root.resolution)
+        on_tick: slider.manual_step(self.secs/root.resolution, lock=True)
         on_release: slider.manual_release()
 
     BoxLayout:

@@ -9,7 +9,7 @@ from kivy.uix.button import Button
 
 class HoldButtonBehavior(ButtonBehavior):
 
-    _locked = False
+    _holding = False
     holdtime = NumericProperty(0)
     ticktime = NumericProperty(0)
 
@@ -21,8 +21,11 @@ class HoldButtonBehavior(ButtonBehavior):
 
         super(HoldButtonBehavior, self).__init__(*args, **kwargs)
 
-    def on_press(self, *args, **kwargs):
-        self.pressed = True
+    def on_touch_down(self, touch, *args):
+        if not self.collide_point(*touch.pos):
+            return
+
+        self._holding = True
 
         if self.holdtime:
             Clock.schedule_once(self._dispatch_hold, self.holdtime)
@@ -31,20 +34,23 @@ class HoldButtonBehavior(ButtonBehavior):
             Clock.unschedule(self._dispatch_tick)
             Clock.schedule_interval(self._dispatch_tick, self.ticktime)
 
-        super(HoldButtonBehavior, self).on_press(*args, **kwargs)
+        super(HoldButtonBehavior, self).on_touch_down(touch, *args)
 
-    def on_release(self, *args, **kwargs):
+    def on_touch_up(self, touch, *args):
+        super(HoldButtonBehavior, self).on_touch_up(touch, *args)
+
+        if touch.grab_current is None:
+            return
+
         Clock.unschedule(self._dispatch_tick)
         Clock.unschedule(self._dispatch_hold)
 
-        if self.pressed:
+        if self._holding:
             self.dispatch('on_click')
-        self.pressed = False
-
-        super(HoldButtonBehavior, self).on_release(*args, **kwargs)
+        self._holding = False
 
     def _dispatch_hold(self, *args):
-        self.pressed = False
+        self._holding = False
         if self.state == 'down':
             self.dispatch('on_hold')
 
