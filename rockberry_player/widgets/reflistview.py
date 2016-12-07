@@ -25,7 +25,7 @@ class RefListView(RecycleView):
 
 
 Builder.load_string("""
-#:import RefListItem widgets.reflistitem.RefListItem
+#:import RefListItem rockberry_player.widgets.reflistitem.RefListItem
 
 <RefListView>:
     viewclass: 'RefListItem'

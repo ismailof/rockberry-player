@@ -1,11 +1,14 @@
 #!/usr/bin/python
+from __future__ import absolute_import, print_function
+__package__ = 'rockberry_player'
+
 import os
 import kivy
 kivy.require('1.9.2')
 from kivy.app import App
 
-from screens import RockberryMainScreen
-from music import MediaManager
+from .screens import RockberryMainScreen
+from .music import MediaManager
 
 #import logging
 #logger = logging.getLogger(__name__)
@@ -13,6 +16,7 @@ from music import MediaManager
 #logger.setLevel(logging.DEBUG)
 #LOGFILE = os.path.abspath(fullpath + '/../rockberry-player.log')
 #logger.addHandler(logging.FileHandler(self.LOGFILE))
+
 
 class RockberryPlayerApp(App):
 
@@ -28,6 +32,9 @@ class RockberryPlayerApp(App):
 
         return self.main
 
+def main():
+    RockberryPlayerApp().run()
+
 
 if __name__ == '__main__':
-    RockberryPlayerApp().run()
+    main()

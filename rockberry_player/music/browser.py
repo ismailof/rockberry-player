@@ -5,8 +5,7 @@ from kivy.properties import ObjectProperty, ListProperty, AliasProperty
 from base import MediaController
 from refs import RefUtils, RefItem
 
-from utils import scheduled
-from debug import debug_function
+from ..utils import scheduled
 
 
 class BrowserControl (MediaController):

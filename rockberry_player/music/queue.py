@@ -5,7 +5,7 @@ from kivy.properties import ListProperty, NumericProperty, \
 
 from base import MediaController
 
-from utils import scheduled
+from ..utils import scheduled
 
 
 class QueueControl(MediaController):

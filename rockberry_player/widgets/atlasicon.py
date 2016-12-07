@@ -2,7 +2,7 @@ from kivy.lang import Builder
 from kivy.uix.image import Image
 from kivy.properties import StringProperty, NumericProperty, VariableListProperty
 
-from music.images import ImageUtils
+from ..music.images import ImageUtils
 
 
 class AtlasIcon(Image):
@@ -11,7 +11,7 @@ class AtlasIcon(Image):
 
 
 Builder.load_string("""
-#:import ImageUtils music.images.ImageUtils
+#:import ImageUtils rockberry_player.music.images.ImageUtils
 
 <AtlasIcon>
     allowstretch: True

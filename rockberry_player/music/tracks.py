@@ -6,7 +6,7 @@ from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
 from base import MediaController
-from utils import scheduled
+from ..utils import scheduled
 from refs import RefUtils, RefItem
 
 

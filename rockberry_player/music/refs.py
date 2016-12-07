@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, AliasProperty
 
-from utils import scheduled
-from music.images import ImageUtils
+from ..utils import scheduled
+from ..music.images import ImageUtils
 
 
 class RefUtils(object):

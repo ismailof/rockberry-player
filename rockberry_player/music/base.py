@@ -1,8 +1,6 @@
 from kivy.app import App
 from kivy.event import EventDispatcher
 
-from debug import debug_function
-
 
 class MediaController(EventDispatcher):
 

@@ -2,10 +2,10 @@ from kivy.lang import Builder
 from kivy.properties import NumericProperty, BooleanProperty
 from kivy.uix.boxlayout import BoxLayout
 
-from music.tracks import TrackItem
-from widgets.albumcover import AlbumCover
-from widgets.atlasicon import AtlasIcon
-from widgets.simpletrackinfo import SimpleTrackInfo
+from ..music.tracks import TrackItem
+from ..widgets.albumcover import AlbumCover
+from ..widgets.atlasicon import AtlasIcon
+from ..widgets.simpletrackinfo import SimpleTrackInfo
 
 
 class TrackListItem(TrackItem, BoxLayout):

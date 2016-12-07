@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import, print_function
 import random
 
 from kivy.app import App
@@ -9,19 +9,19 @@ from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
 
-from utils import scheduled, delayed, assign_property
+from ..utils import scheduled, delayed, assign_property
 
-from base import MediaController
-from refs import RefUtils
-from tracks import TrackItem, TrackControl
-from images import ImageCache
-from playback import PlaybackControl
-from options import OptionsControl
-from mixer import MixerControl
-from queue import QueueControl
-from browser import BrowserControl
+from .base import MediaController
+from .refs import RefUtils
+from .tracks import TrackItem, TrackControl
+from .images import ImageCache
+from .playback import PlaybackControl
+from .options import OptionsControl
+from .mixer import MixerControl
+from .queue import QueueControl
+from .browser import BrowserControl
 
-from debug import debug_function
+from ..debug import debug_function
 
 
 class MediaManager(EventDispatcher):

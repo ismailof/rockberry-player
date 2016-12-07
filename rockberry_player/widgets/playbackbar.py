@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function
+
 from kivy.lang import Builder
 from kivy.event import EventDispatcher
 from kivy.properties import OptionProperty, ListProperty
@@ -5,7 +7,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
-from music.playback import PlaybackControl, PlaybackStateAware
+from ..music.playback import PlaybackControl, PlaybackStateAware
 
 
 playback_controls = ['play_pause', 'stop', 'next', 'prev']

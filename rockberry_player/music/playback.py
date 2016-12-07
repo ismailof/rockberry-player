@@ -6,8 +6,7 @@ from kivy.properties import NumericProperty, OptionProperty, \
 
 from base import MediaController
 
-from utils import scheduled
-from debug import debug_function
+from ..utils import scheduled
 
 
 class PlaybackControl(MediaController):

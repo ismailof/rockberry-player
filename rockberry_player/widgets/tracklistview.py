@@ -1,7 +1,7 @@
 from kivy.lang import Builder
 from kivy.properties import ListProperty, NumericProperty, AliasProperty
 
-from widgets.reflistview import RefListView
+from ..widgets.reflistview import RefListView
 
 
 class TrackListView(RefListView):
@@ -34,7 +34,7 @@ class TrackListView(RefListView):
 
 
 Builder.load_string("""
-#:import TrackListItem widgets.tracklistitem.TrackListItem
+#:import TrackListItem rockberry_player.widgets.tracklistitem.TrackListItem
 
 <TrackListView>:
     viewclass: 'TrackListItem'

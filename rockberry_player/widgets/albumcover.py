@@ -4,13 +4,13 @@ from kivy.properties import NumericProperty, StringProperty,\
     ListProperty, AliasProperty
 from kivy.uix.image import AsyncImage
 
-from widgets.holdbutton import HoldButtonBehavior
-from music.base import MediaController
-from music.images import ImageUtils, ImageCache
-from music.refs import RefUtils
-from utils import scheduled
+from ..widgets.holdbutton import HoldButtonBehavior
+from ..music.base import MediaController
+from ..music.images import ImageUtils, ImageCache
+from ..music.refs import RefUtils
+from ..utils import scheduled
 
-from debug import debug_function
+from ..debug import debug_function
 
 
 class AlbumCover(HoldButtonBehavior, AsyncImage):
@@ -78,7 +78,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
 
 
 Builder.load_string("""
-#:import ImageUtils music.images.ImageUtils
+#:import ImageUtils rockberry_player.music.images.ImageUtils
 
 <AlbumCover>:
     canvas.before:

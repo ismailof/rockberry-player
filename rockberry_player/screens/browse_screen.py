@@ -1,10 +1,10 @@
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
-from widgets.inputbar import InputBar
-from widgets.playbackarea import PlaybackArea
-from widgets.reflistview import RefListView
-from widgets.holdbutton import HoldButton
+from ..widgets.inputbar import InputBar
+from ..widgets.playbackarea import PlaybackArea
+from ..widgets.reflistview import RefListView
+from ..widgets.holdbutton import HoldButton
 
 
 class BrowseScreen(Screen):

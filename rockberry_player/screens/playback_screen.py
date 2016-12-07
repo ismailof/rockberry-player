@@ -1,11 +1,13 @@
+from __future__ import absolute_import, print_function
+
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
-from widgets.playback_slider import PlaybackSlider
-from widgets.playbackbar import PlaybackBar
-from widgets.albumcover import AlbumCover
-from widgets.deviceimage import DeviceImage
-from widgets.trackinfolabel import TrackInfoLabel
+from ..widgets.playback_slider import PlaybackSlider
+from ..widgets.playbackbar import PlaybackBar
+from ..widgets.albumcover import AlbumCover
+from ..widgets.deviceimage import DeviceImage
+from ..widgets.trackinfolabel import TrackInfoLabel
 
 
 class PlaybackScreen(Screen):
@@ -15,8 +17,8 @@ class PlaybackScreen(Screen):
 
 Builder.load_string("""
 #:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
-#:import RefUtils music.refs.RefUtils
-#:import ImageUtils music.images.ImageUtils
+#:import RefUtils rockberry_player.music.refs.RefUtils
+#:import ImageUtils rockberry_player.music.images.ImageUtils
 
 
 <OptionsBar@BoxLayout>:
@@ -40,6 +42,7 @@ Builder.load_string("""
         on_active: app.mm.options.set_repeat(args[1])
         background_checkbox_down: 'atlas://images/options/repeat_on'
         background_checkbox_normal: 'atlas://images/options/repeat_off'
+
 
 <VolumeBar@BoxLayout>:
     spacing: 5

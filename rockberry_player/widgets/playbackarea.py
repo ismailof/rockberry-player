@@ -1,8 +1,8 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
-from widgets.atlasicon import AtlasIcon
-from music.refs import RefItem
+from ..widgets.atlasicon import AtlasIcon
+from ..music.refs import RefItem
 
 
 class PlaybackArea(RefItem, BoxLayout):

@@ -1,4 +1,4 @@
-from music.cache import MediaCache
+from ..music.cache import MediaCache
 
 
 class ImageUtils(object):

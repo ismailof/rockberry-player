@@ -4,10 +4,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import AliasProperty, \
     NumericProperty, BooleanProperty
 
-from music.refs import RefItem
-from widgets.holdbutton import HoldButton, HoldButtonBehavior
-from widgets.albumcover import AlbumCover
-from widgets.atlasicon import AtlasIcon
+from ..music.refs import RefItem
+from ..widgets.holdbutton import HoldButton, HoldButtonBehavior
+from ..widgets.albumcover import AlbumCover
+from ..widgets.atlasicon import AtlasIcon
 
 
 class RefListItem(RefItem, HoldButtonBehavior, BoxLayout):

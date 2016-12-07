@@ -2,7 +2,7 @@ from kivy.lang import Builder
 from kivy.properties import VariableListProperty, OptionProperty
 from kivy.uix.boxlayout import BoxLayout
 
-from music.tracks import TrackItem
+from ..music.tracks import TrackItem
 
 
 class SimpleTrackInfo(TrackItem, BoxLayout):

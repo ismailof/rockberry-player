@@ -3,11 +3,11 @@ from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 
-from widgets.inputbar import InputBar
-from widgets.playbackarea import PlaybackArea
-from widgets.tracklistview import TrackListView
+from ..widgets.inputbar import InputBar
+from ..widgets.playbackarea import PlaybackArea
+from ..widgets.tracklistview import TrackListView
 
-from music.tracks import TrackUtils
+from ..music.tracks import TrackUtils
 
 
 class TracklistScreen(Screen):

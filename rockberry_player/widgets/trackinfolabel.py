@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.label import Label
 
-from widgets.referencelabel import ReferenceLabel
-from music.tracks import TrackItem
-from utils import MarkupText
+from ..widgets.referencelabel import ReferenceLabel
+from ..music.tracks import TrackItem
+from ..utils import MarkupText
 
 
 class TrackInfoLabel(TrackItem, ReferenceLabel):

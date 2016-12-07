@@ -3,7 +3,7 @@ from kivy.logger import Logger
 from kivy.properties import AliasProperty
 from kivy.uix.label import Label
 
-from music.refs import RefUtils
+from ..music.refs import RefUtils
 
 
 class ReferenceLabel(Label):

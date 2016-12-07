@@ -1,6 +1,6 @@
 from kivy.event import EventDispatcher
 from kivy.properties import BooleanProperty
-from utils import scheduled
+from ..utils import scheduled
 
 from base import MediaController
 

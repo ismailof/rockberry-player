@@ -1,7 +1,7 @@
 from kivy.event import EventDispatcher
 from kivy.properties import BoundedNumericProperty, \
     BooleanProperty, AliasProperty
-from utils import scheduled
+from ..utils import scheduled
 
 from base import MediaController
 

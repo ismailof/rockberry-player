@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function
+
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.properties import StringProperty, NumericProperty, \
@@ -6,11 +8,11 @@ from kivy.properties import StringProperty, NumericProperty, \
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.label import Label
 
-from widgets.seekslider import SeekSlider
-from widgets.holdbutton import HoldButtonBehavior
+from ..widgets.seekslider import SeekSlider
+from ..widgets.holdbutton import HoldButtonBehavior
 
 
-from debug import debug_function
+from ..debug import debug_function
 
 
 class PlaybackSlider(RelativeLayout):

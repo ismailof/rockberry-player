@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function
+
 import time
 
 from kivy.lang import Builder
@@ -8,13 +10,13 @@ from kivy.uix.togglebutton import ToggleButton
 
 from functools import partial
 
-from playback_screen import PlaybackScreen
-from tracklist_screen import TracklistScreen
-from browse_screen import BrowseScreen
+from .playback_screen import PlaybackScreen
+from .tracklist_screen import TracklistScreen
+from .browse_screen import BrowseScreen
 
-from widgets.backgroundimage import BackgroundImage
-from widgets.simpleclock import DigitalClock
-from widgets.error_popup import ErrorPopup
+from ..widgets.backgroundimage import BackgroundImage
+from ..widgets.simpleclock import DigitalClock
+from ..widgets.error_popup import ErrorPopup
 
 
 class RockberryMainScreen(FloatLayout):
@@ -56,7 +58,7 @@ class RockberryMainScreen(FloatLayout):
 
 Builder.load_string("""
 #:import sm kivy.uix.screenmanager
-#:import ImageUtils music.images.ImageUtils
+#:import ImageUtils rockberry_player.music.images.ImageUtils
 
 #<Label>
     #font_name: 'DroidSans'

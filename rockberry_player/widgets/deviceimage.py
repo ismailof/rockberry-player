@@ -2,9 +2,9 @@ from kivy.lang import Builder
 from kivy.properties import StringProperty, BooleanProperty, \
     AliasProperty, OptionProperty
 from kivy.uix.image import Image
-from utils import scheduled
+from ..utils import scheduled
 
-from music.images import ImageUtils
+from ..music.images import ImageUtils
 
 
 class DeviceImage(Image):
