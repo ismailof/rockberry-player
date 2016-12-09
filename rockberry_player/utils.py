@@ -60,33 +60,3 @@ class delayed(object):
         self._trigger()
 
 
-# TODO: Catch exceptions and raise with better information
-@scheduled
-def set_property(instance, prop_name, value):
-    instance.property(prop_name).set(instance, value)
-    # logger.debug('[%r] Property %s = %r', instance, prop_name, value)
-
-
-def assign_property(instance, prop_name, field=None, get_data=None):
-
-    if field is None:
-        field = prop_name
-
-    def _get_data(data):
-        if len(data) == 1:
-            return data.values()[0]
-        else:
-            return data.get(field)
-
-    if get_data is None:
-        get_data = _get_data
-
-    def cb_set_property(*args, **kwargs):
-        if args:
-            value = get_data({i: arg for i, arg in enumerate(args)})
-        else:
-            value = get_data(kwargs)
-
-        set_property(instance, prop_name, value)
-
-    return cb_set_property

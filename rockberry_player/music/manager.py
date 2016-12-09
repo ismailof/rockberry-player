@@ -9,7 +9,7 @@ from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
 
-from ..utils import scheduled, delayed, assign_property
+from ..utils import scheduled, delayed
 
 from .base import MediaController
 from .refs import RefUtils
@@ -64,9 +64,6 @@ class MediaManager(EventDispatcher):
 
         for event in events:
             self.mopidy.bind_event(event, method)
-
-    def bind_property(self, instance, prop_name, events, **kwargs):
-        self.bind_method(assign_property(instance, prop_name, **kwargs), events)
 
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
@@ -124,9 +121,7 @@ class MediaManager(EventDispatcher):
         self.bind_method(self.mixer.update_volume, 'volume_changed')
         self.bind_method(self.mixer.update_mute, 'mute_changed')
 
-        self.bind_property(self.state, 'playback_state', 'playback_state_changed',
-                           field='new_state')
-
+        self.bind_method(self.state.set_playback_state, 'playback_state_changed')
         self.bind_method(self.state.set_time_position, 'seeked')
 
         self.bind_method(self.track_playback_started, 'track_playback_started')

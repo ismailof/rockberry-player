@@ -50,8 +50,8 @@ class PlaybackControl(MediaController):
             Clock.unschedule(self.tick_position)
 
     @scheduled
-    def set_playback_state(self, state):
-        self.playback_state = state
+    def set_playback_state(self, state=None, new_state=None, **kwargs):
+        self.playback_state = state or new_state
 
     @scheduled
     def set_stream_title(self, title, *args, **kwargs):
