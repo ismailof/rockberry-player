@@ -173,6 +173,7 @@ class MediaManager(EventDispatcher):
                            self.current):
             controller.refresh()
 
+    @delayed(1)
     def refresh_context_info(self, *args):
         for trackitem in (self.next,
                           self.prev,

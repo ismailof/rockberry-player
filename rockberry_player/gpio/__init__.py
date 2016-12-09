@@ -1,1 +1,1 @@
-from .gpio import GpioInputProvider, GpioBehavior
+from .gpio import GpioBehavior

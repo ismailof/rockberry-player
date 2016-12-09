@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
-from functools import wraps
+from functools import partial, wraps
 from kivy.clock import Clock
+
+from .debug import debug_function
 
 
 def MarkupText(text, **fmt_options):
@@ -31,32 +33,35 @@ def scheduled(_function_):
         return _function_(*args, **kwargs)
 
     def schedule_function(*args, **kwargs):
-        Clock.schedule_once(lambda dt:
-                            do_function(*args, **kwargs))
+        Clock.schedule_once(
+            lambda dt: do_function(*args, **kwargs))
+
     return schedule_function
 
 
-class delayed(object):
+def delayed(timeout):
 
-    def __init__(self, timeout):
-        self._trigger = Clock.create_trigger(self.cb_function, timeout)
+    def scheduled(_function_):
 
-    def __call__(self, function):
-        self._function_ = function
-        return self.trigger_function
+        def cb_function(*args, **kwargs):
+            @wraps(_function_)
+            def do_function(*args, **kwargs):
+                return _function_(*args, **kwargs)
 
-    def cb_function(self, dt):
-        @wraps(self._function_)
-        def do_function(*args, **kwargs):
-            return self._function_(*args, **kwargs)
+            # Remove dt parameter (last 'args' item)
+            largs = list(args)
+            dt = largs.pop(-1)
+            args = tuple(largs)
+            # Call the function
+            do_function(*args, **kwargs)
 
-        do_function(*self._args, **self._kwargs)
+        def schedule_function(*args, **kwargs):
+            Clock.unschedule(cb_function)
+            Clock.schedule_once(
+                partial(cb_function, *args, **kwargs),
+                timeout=timeout)
 
-    def trigger_function(self, *args, **kwargs):
-        if 'time_position' in kwargs:
-            time_position = kwargs.pop('time_position')
-        self._args = args
-        self._kwargs = kwargs
-        self._trigger()
+        return schedule_function
 
+    return scheduled
 

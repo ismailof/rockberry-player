@@ -5,7 +5,7 @@ from kivy.properties import ListProperty, NumericProperty, \
 
 from base import MediaController
 
-from ..utils import scheduled
+from ..utils import scheduled, delayed
 
 
 class QueueControl(MediaController):
@@ -14,17 +14,11 @@ class QueueControl(MediaController):
     queue_point = NumericProperty(0)
     shuffle_mode = BooleanProperty(True)
 
-    def __init__(self, **kwargs):
-        super(QueueControl, self).__init__(**kwargs)
-        self.trigger_refresh = Clock.create_trigger(self._triggered_refresh, timeout=2)
-
-    def refresh(self, *args):
-        self.trigger_refresh()
-
     def reset(self, *args):
         self.set_tracklist(None)
 
-    def _triggered_refresh(self, *args):
+    @delayed(2)
+    def refresh(self, *args):
         if self.interface:
             self.interface.get_tl_tracks(on_result=self.set_tracklist)
 

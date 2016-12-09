@@ -9,6 +9,8 @@ from ..widgets.tracklistview import TrackListView
 
 from ..music.tracks import TrackUtils
 
+from ..utils import delayed
+
 
 class TracklistScreen(Screen):
 
@@ -19,8 +21,6 @@ class TracklistScreen(Screen):
 
     def __init__(self, **kwargs):
         super(TracklistScreen, self).__init__(**kwargs)
-        self.trigger_filter = Clock.create_trigger(self.do_filter, timeout=1.7)
-        self.trigger_filter()
 
     def matches_filter(self, track, filter):
         filter_words = filter.lower().split(' ')
@@ -40,10 +40,10 @@ class TracklistScreen(Screen):
         self.do_filter()
 
     def on_filter(self, *args):
-        self.trigger_filter()
+        self.do_filter()
 
+    @delayed(1.7)
     def do_filter(self, *args):
-        #self.ids['tlview'].scroll_to(0)
         self.filtered_tracklist = self.filter_tracklist()
 
 

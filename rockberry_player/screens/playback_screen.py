@@ -8,6 +8,7 @@ from ..widgets.playbackbar import PlaybackBar
 from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
 from ..widgets.trackinfolabel import TrackInfoLabel
+from ..widgets.volumebar import VolumeBar
 
 
 class PlaybackScreen(Screen):
@@ -16,7 +17,6 @@ class PlaybackScreen(Screen):
 
 
 Builder.load_string("""
-#:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
 #:import RefUtils rockberry_player.music.refs.RefUtils
 #:import ImageUtils rockberry_player.music.images.ImageUtils
 
@@ -42,25 +42,6 @@ Builder.load_string("""
         on_active: app.mm.options.set_repeat(args[1])
         background_checkbox_down: 'atlas://images/options/repeat_on'
         background_checkbox_normal: 'atlas://images/options/repeat_off'
-
-
-<VolumeBar@BoxLayout>:
-    spacing: 5
-
-    CheckBox:
-        id: chk_mute
-        active: app.mm.mixer.mute or False
-        disabled: app.mm.mixer.disabled
-        on_active: app.mm.mixer.set_mute(args[1])
-        background_checkbox_down: default_atlas + 'audio-volume-muted'
-        background_checkbox_normal: default_atlas + 'audio-volume-high'
-        size_hint_x: 0.2
-
-    SeekSlider:
-        range: (0, 100)
-        value: app.mm.mixer.volume or 0
-        disabled: app.mm.mixer.disabled
-        on_seek: app.mm.mixer.set_volume(args[1])
 
 
 <PlaybackScreen>:
@@ -99,6 +80,12 @@ Builder.load_string("""
                 size_hint: (0.6, 0.1)
                 pos_hint: {'right': 1}
                 opacity: 0.4
+                gpio_group: 'volume'
+                disabled: app.mm.mixer.disabled
+                volume: app.mm.mixer.volume or 0
+                mute: app.mm.mixer.mute or False
+                on_mute_change: app.mm.mixer.set_mute(args[1])
+                on_volume_change: app.mm.mixer.set_volume(args[1])
 
             TrackInfoLabel:
                 item: app.mm.current.item

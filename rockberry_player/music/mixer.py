@@ -1,7 +1,7 @@
 from kivy.event import EventDispatcher
 from kivy.properties import BoundedNumericProperty, \
     BooleanProperty, AliasProperty
-from ..utils import scheduled
+from ..utils import scheduled, delayed
 
 from base import MediaController
 
@@ -28,6 +28,7 @@ class MixerControl(MediaController):
     def update_mute(self, mute, *args, **kwargs):
         self.mute = mute
 
+    @delayed(0.5)
     def set_volume(self, volume, *args):
         self.interface.set_volume(int(volume))
 
