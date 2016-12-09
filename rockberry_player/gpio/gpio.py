@@ -1,3 +1,4 @@
+from kivy.logger import Logger
 from kivy.event import EventDispatcher
 from kivy.properties import StringProperty, \
     ListProperty, AliasProperty

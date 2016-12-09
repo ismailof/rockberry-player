@@ -71,21 +71,17 @@ Builder.load_string("""
                 media: app.mm.current.media
                 playing: app.mm.state.playback_state == 'playing'
 
-
         BoxLayout:
             orientation: 'vertical'
             spacing: 10
 
             VolumeBar:
-                size_hint: (0.6, 0.1)
+                size_hint: (1, 0.1)
                 pos_hint: {'right': 1}
                 opacity: 0.4
+                text: 'MASTER'
                 gpio_group: 'volume'
-                disabled: app.mm.mixer.disabled
-                volume: app.mm.mixer.volume or 0
-                mute: app.mm.mixer.mute or False
-                on_mute_change: app.mm.mixer.set_mute(args[1])
-                on_volume_change: app.mm.mixer.set_volume(args[1])
+                mixer: app.mm.mixer
 
             TrackInfoLabel:
                 item: app.mm.current.item
