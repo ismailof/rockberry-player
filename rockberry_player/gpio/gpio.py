@@ -3,7 +3,7 @@ from kivy.event import EventDispatcher
 from kivy.properties import StringProperty, \
     ListProperty, AliasProperty
 
-from gpio_controls.inputs import GpioInputManager
+from gpio_controls.manager import GpioInputManager
 
 
 class GpioBehavior(EventDispatcher):

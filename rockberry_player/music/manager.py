@@ -78,7 +78,7 @@ class MediaManager(EventDispatcher):
             connection_handler=self.on_connection,
         )
 
-        # self.mopidy.debug_client(True)
+        self.mopidy.debug_client(True)
         self.bind_events()
 
     @scheduled
