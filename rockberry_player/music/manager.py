@@ -57,14 +57,6 @@ class MediaManager(EventDispatcher):
 
     browser = ObjectProperty(BrowserControl(), rebind=True)
 
-
-    def bind_method(self, method, events):
-        if type(events) != list:
-            events = [events]
-
-        for event in events:
-            self.mopidy.bind_event(event, method)
-
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
 
@@ -118,29 +110,36 @@ class MediaManager(EventDispatcher):
 
     def bind_events(self, *args):
 
-        self.bind_method(self.mixer.update_volume, 'volume_changed')
-        self.bind_method(self.mixer.update_mute, 'mute_changed')
+        # Clear previous events to avoid duplicity
+        self.mopidy.listener.clear()
 
-        self.bind_method(self.state.set_playback_state, 'playback_state_changed')
-        self.bind_method(self.state.set_time_position, 'seeked')
+        # Mixer events
+        self.mopidy.bind_event('volume_changed', self.mixer.update_volume)
+        self.mopidy.bind_event('mute_changed', self.mixer.update_mute)
 
-        self.bind_method(self.track_playback_started, 'track_playback_started')
-        self.bind_method(self.track_playback_ended, 'track_playback_ended')
-        self.bind_method(self.track_playback_paused_or_resumed, ['track_playback_paused',
-                                                                 'track_playback_resumed'])
+        # State events
+        self.mopidy.bind_event('playback_state_changed', self.state.set_playback_state)
+        self.mopidy.bind_event('seeked', self.state.set_time_position)
+        self.mopidy.bind_event('stream_title_changed', self.state.set_stream_title)
 
+        # Playback events
+        self.mopidy.bind_event('track_playback_started', self.track_playback_started)
+        self.mopidy.bind_event('track_playback_ended', self.track_playback_ended)
+        self.mopidy.bind_event('track_playback_paused', self.track_playback_paused_or_resumed)
+        self.mopidy.bind_event('track_playback_resumed', self.track_playback_paused_or_resumed)
+
+        # Current track updates
         self.current.bind(item=self.refresh_context_info)
         self.state.bind(on_next=self.current.refresh,
                         on_prev=self.current.refresh)
 
-        self.bind_method(self.state.set_stream_title, 'stream_title_changed')
+        # Context update: Options and Tracklist
+        self.mopidy.bind_event('options_changed', self.options.refresh)
+        self.mopidy.bind_event('tracklist_changed', self.queue.refresh)
+        self.mopidy.bind_event('options_changed', self.refresh_context_info)
+        self.mopidy.bind_event('tracklist_changed', self.refresh_context_info)
 
-        self.bind_method(self.refresh_context_info, ['options_changed',
-                                                     'tracklist_changed'])
-
-        self.bind_method(self.queue.refresh, 'tracklist_changed')
-        self.bind_method(self.options.refresh, 'options_changed')
-
+        # Trigger to update status on playback end
         self.check_playback_end = Clock.create_trigger(self.refresh_main_info, 1)
 
     def init_player_state(self):
