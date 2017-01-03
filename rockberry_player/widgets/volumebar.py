@@ -53,5 +53,6 @@ Builder.load_string("""
         range: (0, 100)
         cached_value: root.mixer and root.mixer.volume or 0
         on_seek: root.mixer.set_volume(args[1])
-
+        value_track: True
+        value_track_color: [0, 1, 1, 1]
 """)

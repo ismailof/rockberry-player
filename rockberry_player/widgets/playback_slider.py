@@ -113,6 +113,9 @@ Builder.load_string("""
             cached_value: root.position if root.available else 1
             disabled: not root.seekable if root.available else True
             constraint: True
+            value_track: True
+            value_track_color: [0.5, 0, 0, 1]
+            value_track_width: 2
             on_seek: root.dispatch('on_seek', int(args[1]))
 
         Label:

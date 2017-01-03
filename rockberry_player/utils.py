@@ -55,6 +55,7 @@ def delayed(timeout):
             # Call the function
             do_function(*args, **kwargs)
 
+        @wraps(_function_)
         def schedule_function(*args, **kwargs):
             Clock.unschedule(cb_function)
             Clock.schedule_once(
