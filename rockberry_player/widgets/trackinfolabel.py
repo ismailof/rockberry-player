@@ -13,8 +13,17 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
     full_text = StringProperty('')
     stream_title = StringProperty('')
 
-    def format_title(self):
+    def __init__(self, **kwargs):
+        super(TrackInfoLabel, self).__init__(**kwargs)
+        self.bind(item=self.update_text, stream_title=self.update_text)
+        self.update_text()
 
+    def update_text(self, *args):
+        self.clear_refs()
+        self.text = self.format_track()
+
+    def format_track(self, *args):
+        # Text for No Track
         if not self.item:
             return MarkupText('Browse Music ...',
                               size=30,
@@ -22,7 +31,26 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                               b=True,
                               ref=self.new_ref(None))
 
-        title = self.stream_title or self.title
+        # Use stream_title as 'Artist - Track'.
+        if self.stream_title:
+            try:
+                artist, title = self.stream_title.split(' - ', 1)
+                return '\n'.join([self.format_title(title),
+                                  self.format_artists([{'name': artist}]),
+                                  self.format_album(self.item.get('album', ''))])
+            except:
+                pass
+
+        # Tunein station with no stream_title. Return only station name
+        if self.media == 'tunein' and not self.stream_title:
+            return self.format_title(self.title)
+
+        # Usual format
+        return '\n'.join([self.format_title(self.stream_title or self.title),
+                          self.format_artists(self.item.get('artists')),
+                          self.format_album(self.item.get('album', ''))])
+
+    def format_title(self, title):
         parts = title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
         parts = [MarkupText(item,
                             size=self.font_size if index > 0
@@ -34,45 +62,29 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         return MarkupText('\n'.join(parts),
                           ref=self.new_ref(self.item))
 
-    def format_artists(self):
-        if not self.item or 'artists' not in self.item:
+    def format_artists(self, artists):
+        if not artists:
             return ''
 
-        artists = self.item['artists']
-        artists_list = [MarkupText(artist.get('name'),
-                                   size=max(self.font_size - len(artists) // 2, 10),
-                                   color='#d0d0d0',
-                                   ref=self.new_ref(artist),
-                                   )
-                        for artist in artists]
+        artists_list = [
+            MarkupText(artist.get('name'),
+                       size=max(self.font_size - len(artists) // 2, 10),
+                       color='#d0d0d0',
+                       ref=self.new_ref(artist))
+            for artist in artists]
 
         return ' \xb7 '.join(artists_list)
 
-    def format_album(self):
-        if not self.item or 'album' not in self.item:
-            return ''
-
-        album = self.item['album']
-
+    def format_album(self, album):
         parts = album.get('name').replace('(', '~(').replace('[', '~[').split('~')
-        parts = [MarkupText(item,
-                            size=self.font_size if index == 0
-                                 else self.font_size - 2)
-                 for index, item in enumerate(parts)]
+        parts = [
+            MarkupText(item,
+                       size=self.font_size if index == 0 else self.font_size - 2)
+            for index, item in enumerate(parts)]
 
         return MarkupText(''.join(parts),
                           color='#e7e7e7',
-                          ref=self.new_ref(album),
-                          )
+                          ref=self.new_ref(album))
 
-    def __init__(self, **kwargs):
-        super(TrackInfoLabel, self).__init__(**kwargs)
-        self.bind(item=self.update_text, stream_title=self.update_text)
-        self.update_text()
 
-    def update_text(self, *args):
-        self.clear_refs()
-        self.text = '\n'.join([self.format_title(),
-                               self.format_artists(),
-                               self.format_album()])
 
