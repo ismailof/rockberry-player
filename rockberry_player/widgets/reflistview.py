@@ -10,8 +10,7 @@ class RefListView(RecycleView):
 
     def on_reflist(self, *args):
         self.data = [{'ref': ref,
-                      'index': index,
-                      'selected': False}
+                      'index': index}
                      for index, ref in enumerate(self.reflist)]
         self.scroll_to_index(0)
 

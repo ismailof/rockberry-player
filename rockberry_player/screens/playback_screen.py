@@ -121,10 +121,6 @@ Builder.load_string("""
                 size_hint_y:0.25
                 spacing: 20
 
-                OptionsBar:
-                    size_hint_x: 0.25
-                    pos_hint: {'right': 1}
-
                 PlaybackBar:
                     size_hint_x: 0.8
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -132,4 +128,7 @@ Builder.load_string("""
                     spacing: 5
                     controls: ['stop', 0.1, 'prev', 'play_pause', 'next']
 
+                OptionsBar:
+                    size_hint_x: 0.25
+                    pos_hint: {'x': 0.5}
 """)

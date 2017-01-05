@@ -29,14 +29,12 @@ Builder.load_string("""
     padding: 2
     spacing: 10
 
-    on_click: self.selected = not self.selected
-
-    canvas.before:
-        Color:
-            rgba: (0.4, 0.2, 0.2, 0.5) if root.selected else (0,0,0,0)
-        Rectangle:
-            pos: self.pos
-            size: self.size
+#    canvas.before:
+#        Color:
+#            rgba: (0.4, 0.2, 0.2, 0.5) if root.selected else (0,0,0,0)
+#        Rectangle:
+#            pos: self.pos
+#            size: self.size
 
     RelativeLayout:
         size_hint_x: None

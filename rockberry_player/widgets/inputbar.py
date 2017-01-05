@@ -7,9 +7,6 @@ class InputBar(BoxLayout):
     title = StringProperty('')
     text = StringProperty('')
 
-    def set_text(self, text):
-        self.ids['input'].text = text
-
 
 Builder.load_string("""
 
@@ -32,6 +29,9 @@ Builder.load_string("""
         id: input
         valign: 'middle'
         font_size: 23
+        multiline: False
+        write_tab: False
+        hint_text: root.title
     Button:
         size_hint_x: None
         width: 60
