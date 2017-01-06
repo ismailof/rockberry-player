@@ -12,17 +12,8 @@ It conforms the screen interface for a personal music device (Rockberry)
 Screenshots
 -----------
 ![Playback Screen](screenshots/playback_screen.png)
-![Radio](screenshots/playback_radio.png)
+![Radio playing](screenshots/playback_radio.png)
+![Podcast playing](screenshots/playback_podcast.png)
 ![Tracklist Screen](screenshots/tracklist_screen.png)
 ![Browse Screen](screenshots/browse_screen.png)
 ![Connection Screen](screenshots/server_connected.png)
-
-Changelog
----------
-
-* v0.1.2 (UNRELEASED)
-    - Browse screen (first approach)
-    - Screenshots
-
-* v0.1.0 (UNRELEASED)
-    - Initial release on GitHub
