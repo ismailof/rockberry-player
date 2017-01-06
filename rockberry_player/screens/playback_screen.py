@@ -43,7 +43,6 @@ Builder.load_string("""
         background_checkbox_down: 'atlas://images/options/repeat_on'
         background_checkbox_normal: 'atlas://images/options/repeat_off'
 
-
 <PlaybackScreen>:
     BoxLayout:
         spacing:10
@@ -90,12 +89,12 @@ Builder.load_string("""
                 padding_x: 20
 
             PlaybackSlider:
-                size_hint: (1.02, 0.12)
-                pos_hint: {'right': 1}
+                size_hint: (1, 0.12)
+                pos_hint: {'center': 1}
                 position: app.mm.state.time_position
                 duration: app.mm.current.duration
                 resolution: app.mm.state.resolution
-                shortcut_secs: 10, 30
+                shortcut_secs: 30, 30
                 on_seek: app.mm.state.seek(args[1])
 
             BoxLayout:
@@ -122,13 +121,13 @@ Builder.load_string("""
                 spacing: 20
 
                 PlaybackBar:
-                    size_hint_x: 0.8
+                    size_hint_x: 0.7
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     opacity: 0.5
                     spacing: 5
                     controls: ['stop', 0.1, 'prev', 'play_pause', 'next']
 
                 OptionsBar:
-                    size_hint_x: 0.25
+                    size_hint_x: 0.3
                     pos_hint: {'x': 0.5}
 """)

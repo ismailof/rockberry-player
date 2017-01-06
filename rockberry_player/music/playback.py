@@ -85,28 +85,3 @@ class PlaybackControl(MediaController):
 
     def on_stop(self):
         self.interface.stop()
-
-
-# TODO: Remove this awful thing
-
-class PlaybackStateAware(EventDispatcher):
-    playback_state = PlaybackControl.playback_state
-    baseparm = ObjectProperty('')
-    parmlist = DictProperty({state: '' for state in PlaybackControl.StateList})
-    stateparm = ObjectProperty('')
-
-    def __init__(self, **kwargs):
-        super(PlaybackStateAware, self).__init__(**kwargs)
-        App.get_running_app().mm.state.bind(playback_state=self.update_state)
-
-    def on_baseparm(self, *args):
-        self.parmlist = {state: self.baseparm for state in PlaybackControl.StateList}
-        self.on_playback_state()
-
-    def update_state(self, instance, playback_state):
-        self.playback_state = playback_state
-
-    def on_playback_state(self, *args):
-        self.stateparm = self.parmlist[self.playback_state] \
-            if self.playback_state in self.parmlist \
-                else self.baseparm

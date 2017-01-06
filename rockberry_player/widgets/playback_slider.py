@@ -68,6 +68,7 @@ Builder.load_string("""
 <SecondsLabel>:
     markup: True
     text: '%+ds' % self.secs
+    font_size: 18
     size_hint: (None, None)
     size: (60, 25)
     disabled: False if self.secs and self.show else True

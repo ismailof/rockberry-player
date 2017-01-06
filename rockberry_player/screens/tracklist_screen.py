@@ -84,7 +84,7 @@ Builder.load_string("""
 
                 PlaybackBar:
                     opacity: 0.5
-                    controls: ['play_pause', 'next']
+                    controls: ['prev', 'play_pause', 'next']
                     size_hint_y: 0.3
 
             TrackListView:
