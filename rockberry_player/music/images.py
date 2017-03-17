@@ -1,21 +1,20 @@
+from os import path
+from kivy.resources import resource_find
 from ..music.cache import MediaCache
 
 
 class ImageUtils(object):
 
     # TODO: Get base directory to do relative searching
-    BASE_FOLDER = '/home/pi/rockberry-player/rockberry_player'
-    IMG_FOLDER = BASE_FOLDER + '/images/'
-    IMG_LOGO = IMG_FOLDER + 'neon_R.jpg'
-    IMG_NONE = IMG_FOLDER + 'transparent.png'
+    IMG_LOGO = 'neon_R.jpg'
+    IMG_NONE = 'transparent.png'
 
     @classmethod
-    def atlas_image(cls, atlas, item):
+    def atlas_image(cls, atlas, item, default=IMG_NONE):
         if not atlas:
-            return cls.IMG_NONE
+            return default
 
-        return 'atlas://{}{}/{}'.format(
-            cls.IMG_FOLDER,
+        return 'atlas://{}/{}'.format(
             atlas,
             item or 'null')
 

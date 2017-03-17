@@ -1,5 +1,6 @@
 from __future__ import absolute_import, print_function
 
+import os
 import time
 
 from kivy.lang import Builder
@@ -55,19 +56,26 @@ class RockberryMainScreen(FloatLayout):
         popup = ErrorPopup(error=error)
         Clock.schedule_once(popup.open)
 
+    def shutdown(self):
+        os.system('sudo shutdown -P now')
+
+    def reset_server(self):
+        os.system('sudo systemctl restart mopidy')
+
 
 Builder.load_string("""
 #:import sm kivy.uix.screenmanager
-#:import ImageUtils rockberry_player.music.images.ImageUtils
 
-#<Label>
-    #font_name: 'DroidSans'
+<ImageButton@ButtonBehavior+Image>
+    allow_stretch: True
+    pos_hint: {'center_y': 0.5}
+    size: self.texture_size
 
 <RockberryMainScreen>
 
     BackgroundImage:
         id: background
-        default: ImageUtils.IMG_FOLDER + 'bg1.jpg'
+        default: 'bg1.jpg'
         uri: app.mm.current.uri
         tint: (0.6, 0.6, 0.6, 1)
         outbounds: 0.1
@@ -121,6 +129,7 @@ Builder.load_string("""
             Screen:
                 name: 'server'
                 BoxLayout:
+                    orientation: 'vertical'                   
                     Label:
                         text: 'Mopidy Server is [b]%s[/b]' % ('Connected' if app.mm.connected else 'Disconnected')
                         markup: True
@@ -128,5 +137,16 @@ Builder.load_string("""
                         valign: 'middle'
                         text_size: self.size
                         font_size: 40
+                    BoxLayout:
+                        size_hint_y: 0.4
+                        Button:
+                            text: 'Reset'
+                            on_release: exit(0)
+                        Button:
+                            text: 'Reset Mopidy'
+                            on_release: root.reset_server()
+                        Button:
+                            text: 'Apagar'
+                            on_release: root.shutdown()
 
 """)

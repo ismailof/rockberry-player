@@ -117,6 +117,8 @@ Builder.load_string("""
             value_track: True if root.available else False
             value_track_color: [0.5, 0, 0, 1]
             value_track_width: 2
+            cursor_image: 'slider_knob.png'
+            cursor_disabled_image: 'slider_knob.png'
             on_seek: root.dispatch('on_seek', int(args[1]))
 
         Label:

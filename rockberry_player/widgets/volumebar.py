@@ -28,6 +28,7 @@ class VolumeBar(BoxLayout):
 Builder.load_string("""
 #:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
 
+
 <VolumeBar>:
     spacing: 5
     disabled: root.mixer is None or root.mixer.disabled
@@ -55,4 +56,6 @@ Builder.load_string("""
         on_seek: root.mixer.set_volume(args[1])
         value_track: True
         value_track_color: [0, 1, 1, 1]
+        cursor_image: 'slider_knob.png'
+        cursor_disabled_image: 'slider_knob.png'
 """)

@@ -74,12 +74,12 @@ Builder.load_string("""
                     opacity: 0.5
                     size_hint_y: 0.3
 
-                    Button:
-                        text: 'clear'
+                    ImageButton:
+                        source: 'button_delete.png'
                         on_press: app.mm.queue.clear()
 
-                    Button:
-                        text: 'MIX'
+                    ImageButton:
+                        source: 'button_mix.png'
                         on_press: app.mm.queue.shuffle()
 
                 PlaybackBar:

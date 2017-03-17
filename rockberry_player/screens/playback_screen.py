@@ -18,7 +18,6 @@ class PlaybackScreen(Screen):
 
 Builder.load_string("""
 #:import RefUtils rockberry_player.music.refs.RefUtils
-#:import ImageUtils rockberry_player.music.images.ImageUtils
 
 
 <OptionsBar@BoxLayout>:
@@ -28,20 +27,20 @@ Builder.load_string("""
     CheckBox:
         active: app.mm.options.random
         on_active: app.mm.options.set_random(args[1])
-        background_checkbox_down: 'atlas://images/options/random_on'
-        background_checkbox_normal: 'atlas://images/options/random_off'
+        background_checkbox_down: 'atlas://options/random_on'
+        background_checkbox_normal: 'atlas://options/random_off'
 
     CheckBox:
         active: app.mm.options.single
         on_active: app.mm.options.set_single(args[1])
-        background_checkbox_down: 'atlas://images/options/single_on'
-        background_checkbox_normal: 'atlas://images/options/single_off'
+        background_checkbox_down: 'atlas://options/single_on'
+        background_checkbox_normal: 'atlas://options/single_off'
 
     CheckBox:
         active: app.mm.options.repeat
         on_active: app.mm.options.set_repeat(args[1])
-        background_checkbox_down: 'atlas://images/options/repeat_on'
-        background_checkbox_normal: 'atlas://images/options/repeat_off'
+        background_checkbox_down: 'atlas://options/repeat_on'
+        background_checkbox_normal: 'atlas://options/repeat_off'
 
 <PlaybackScreen>:
     BoxLayout:

@@ -24,6 +24,8 @@ class RockberryPlayerApp(App):
     MOPIDY_SERVER = 'localhost:6680'
     BASE_FOLDER = os.path.abspath(os.path.dirname(__file__))
 
+    kivy.resources.resource_add_path(os.path.join(BASE_FOLDER, 'images'))
+
     def build(self):
         self.mm = MediaManager()
         self.main = RockberryMainScreen()

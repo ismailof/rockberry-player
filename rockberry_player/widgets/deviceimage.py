@@ -39,7 +39,7 @@ class DeviceImage(Image):
 
     def on_device(self, *args):
         device_image = self.dev_images.get(self.device)
-        self.source = ImageUtils.IMG_FOLDER + device_image or ImageUtils.IMG_NONE
+        self.source = device_image or ImageUtils.IMG_NONE
         self.set_anim_delay()
 
     def on_playing(self, *args):

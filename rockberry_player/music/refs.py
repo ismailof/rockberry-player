@@ -71,14 +71,12 @@ class RefUtils(object):
                     'track': 'default_track.png',
                     'album': 'default_album.png',
                     'artist': 'browse_artist.png'}
-        type_img = def_imgs.get(reftype)
-        return ImageUtils.IMG_FOLDER + type_img \
-            if type_img else ImageUtils.IMG_LOGO
+        return def_imgs.get(reftype, ImageUtils.IMG_LOGO)
 
     @staticmethod
     def get_media_image(media):
-        return ImageUtils.atlas_image('media', media) \
-            if media else ImageUtils.IMG_NONE
+        return ImageUtils.atlas_image(atlas='media', 
+                                      item=media)
 
 
 class RefItem(EventDispatcher):

@@ -32,10 +32,9 @@ Builder.load_string("""
         multiline: False
         write_tab: False
         hint_text: root.title
-    Button:
-        size_hint_x: None
+    ImageButton:
+        size_hint: None, 0.6
         width: 60
-        text: 'del'
-        # u'\u232b'
+        source: 'button_x.png'
         on_press: input.text = ''
 """)
