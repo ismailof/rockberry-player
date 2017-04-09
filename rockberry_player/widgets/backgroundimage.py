@@ -23,16 +23,15 @@ Builder.load_string("""
     y: - Window.height * root.outbounds/2.0
 
     AlbumCover:
-        id: proxy
+        id: hidden
         keep_ratio: False
         color: root.tint
         default: root.default
         uri: root.uri or ''
 
-    #Image:
-        #id: top
-        #keep_ratio: False
-        #color: root.tint
-        ##on_load: root.album_loaded()
+    # Image:
+        # id: top
+        # keep_ratio: False
+        # color: root.tint
 
 """)

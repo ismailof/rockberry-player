@@ -1,6 +1,5 @@
 from __future__ import absolute_import, print_function
 
-import os
 import time
 
 from kivy.lang import Builder
@@ -14,6 +13,7 @@ from functools import partial
 from .playback_screen import PlaybackScreen
 from .tracklist_screen import TracklistScreen
 from .browse_screen import BrowseScreen
+from .system_screen import SystemScreen
 
 from ..widgets.backgroundimage import BackgroundImage
 from ..widgets.simpleclock import DigitalClock
@@ -55,12 +55,6 @@ class RockberryMainScreen(FloatLayout):
     def show_error(self, error, *args):
         popup = ErrorPopup(error=error)
         Clock.schedule_once(popup.open)
-
-    def shutdown(self):
-        os.system('sudo shutdown -P now')
-
-    def reset_server(self):
-        os.system('sudo systemctl restart mopidy')
 
 
 Builder.load_string("""
@@ -126,27 +120,7 @@ Builder.load_string("""
             #Screen:
                 #name: 'history'
 
-            Screen:
+            SystemScreen:
                 name: 'server'
-                BoxLayout:
-                    orientation: 'vertical'                   
-                    Label:
-                        text: 'Mopidy Server is [b]%s[/b]' % ('Connected' if app.mm.connected else 'Disconnected')
-                        markup: True
-                        halign: 'center'
-                        valign: 'middle'
-                        text_size: self.size
-                        font_size: 40
-                    BoxLayout:
-                        size_hint_y: 0.4
-                        Button:
-                            text: 'Reset'
-                            on_release: exit(0)
-                        Button:
-                            text: 'Reset Mopidy'
-                            on_release: root.reset_server()
-                        Button:
-                            text: 'Apagar'
-                            on_release: root.shutdown()
 
 """)
