@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
-from kivy.properties import StringProperty, NumericProperty
-from kivy.uix.label import Label
+from kivy.properties import StringProperty
 
 from ..widgets.referencelabel import ReferenceLabel
 from ..music.tracks import TrackItem
@@ -36,7 +35,8 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
             try:
                 artist, title = self.stream_title.split(' - ', 1)
                 return '\n'.join([self.format_title(title),
-                                  self.format_artists([{'name': artist}]),
+                                  self.format_artists([{'name': artist,
+                                                        '__model__': 'artist'}]),
                                   self.format_album(self.item.get('album', ''))])
             except:
                 pass
@@ -52,12 +52,12 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
 
     def format_title(self, title):
         parts = title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
-        parts = [MarkupText(item,
+        parts = [MarkupText(textpart,
                             size=self.font_size if index > 0
                                  else int(self.font_size * 1.3),
                             color='#ffffff',
                             b=True)
-                 for index, item in enumerate(parts)]
+                 for index, textpart in enumerate(parts)]
 
         return MarkupText('\n'.join(parts),
                           ref=self.new_ref(self.item))

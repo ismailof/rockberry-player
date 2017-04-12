@@ -1,6 +1,4 @@
 from __future__ import unicode_literals
-from unidecode import unidecode
-import re
 
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
@@ -30,43 +28,26 @@ class TrackUtils(object):
 
     @staticmethod
     def words_in_track(track):
-        full_text = ' '.join([TrackUtils.title_text(track),
-                              TrackUtils.artists_text(track),
-                              TrackUtils.album_text(track)]).lower()
-
-        clean_text = unidecode(full_text)
-
-        replace_list = [('[\(\)\[\]\{\}-~_\?]', ''),
-                        ('\ +', ' '),
-                        ]
-
-        for orig_str, dest_str in replace_list[:]:
-            clean_text = re.sub(orig_str, dest_str, clean_text)
-
-        return set(clean_text.split(' '))
+        return RefUtils.clean_words(
+            TrackUtils.title_text(track),
+            TrackUtils.artists_text(track),
+            TrackUtils.album_text(track))
 
 
 class TrackItem(RefItem):
 
     tlid = NumericProperty(0)
 
-    def get_title(self):
-        return TrackUtils.title_text(self.item)
-
-    def get_album(self):
-        return TrackUtils.album_text(self.item)
-
-    def get_artists(self):
-        return TrackUtils.artists_text(self.item)
-
     def get_duration(self):
         return self.item.length \
             if self.item and 'length' in self.item \
                 else None
 
-    title = AliasProperty(get_title, None, bind=['item'])
-    album = AliasProperty(get_album, None, bind=['item'])
-    artists = AliasProperty(get_artists, None, bind=['item'])
+    title = AliasProperty(lambda x: TrackUtils.title_text(x.item), None, bind=['item'])
+    album = AliasProperty(lambda x: TrackUtils.album_text(x.item), None, bind=['item'])
+    artists = AliasProperty(lambda x: TrackUtils.artists_text(x.item), None, bind=['item'])
+    words = AliasProperty(lambda x: RefUtils.get_words(x.title, x.album, x.artists), None, 
+                          bind=['title', 'album', 'artists'])
     duration = AliasProperty(get_duration, None, bind=['item'])
 
 

@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
 
+from unidecode import unidecode
+import re
+
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, AliasProperty
 
@@ -25,7 +28,7 @@ class RefUtils(object):
             return RefUtils.RefNone
 
         if '__model__' not in item:
-            print 'item %r is not a Mopidy Model' % item
+            #logger.debug('%s. Item %r is not a Mopidy Model', self.__class__.__name__, item)
             return RefUtils.RefNone
 
         if item['__model__'] == 'Ref':
@@ -75,8 +78,19 @@ class RefUtils(object):
 
     @staticmethod
     def get_media_image(media):
-        return ImageUtils.atlas_image(atlas='media', 
-                                      item=media)
+        return ImageUtils.atlas_image(atlas='media', item=media)
+
+    @staticmethod
+    def get_words(*text_args):
+        # unidecode simplifies accents and tildes from non-ascii letters
+        clean_text = unidecode(' '.join(text_args).lower())
+        # remove non-alphanumeric and extra spaces
+        replace_list = [('[\(\)\[\]\{\}-~_\?\.]', ''),
+                        ('\ +', ' ')]
+        for orig_str, dest_str in replace_list[:]:
+            clean_text = re.sub(orig_str, dest_str, clean_text)
+
+        return set(clean_text.split(' '))
 
 
 class RefItem(EventDispatcher):
@@ -91,23 +105,9 @@ class RefItem(EventDispatcher):
     def on_item(self, *args):
         self.ref = RefUtils.make_reference(self.item)
 
-    def get_title(self):
-        return RefUtils.get_title(self.ref)
-
-    def get_reftype(self):
-        return RefUtils.get_type(self.ref)
-
-    def get_uri(self):
-        return RefUtils.get_uri(self.ref)
-
-    def get_media(self):
-        return RefUtils.get_media_from_uri(self.uri)
-
-    def get_typeimg(self):
-        return RefUtils.get_type_image(self.reftype)
-
-    title = AliasProperty(get_title, None, bind=['ref'])
-    reftype = AliasProperty(get_reftype, None, bind=['ref'])
-    uri = AliasProperty(get_uri, None, bind=['ref'])
-    media = AliasProperty(get_media, None, bind=['uri'])
-    typeimg = AliasProperty(get_typeimg, None, bind=['reftype'])
+    title = AliasProperty(lambda x: RefUtils.get_title(x.ref), None, bind=['ref'])
+    reftype = AliasProperty(lambda x: RefUtils.get_type(x.ref), None, bind=['ref'])
+    uri = AliasProperty(lambda x: RefUtils.get_uri(x.ref), None, bind=['ref'])
+    media = AliasProperty(lambda x: RefUtils.get_media_from_uri(x.uri), None, bind=['uri'])
+    typeimg = AliasProperty(lambda x: RefUtils.get_type_image(x.reftype), None, bind=['reftype'])
+    words = AliasProperty(lambda x: RefUtils.get_words(x.title), None, bind=['title'])
