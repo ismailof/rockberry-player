@@ -40,7 +40,7 @@ Builder.load_string("""
 <PlaybackButton>:
     allow_stretch: True
     source: 'playback_{}.png'.format(self.action)
-    on_press: app.mm.state.dispatch('on_' + self.action)
+    on_click: app.mm.state.dispatch('on_' + self.action)
     aura_radius: min(self.size) / 2 + self.aura_width
     color: (1,1,1,1) if root.state == 'normal' else self.aura_color_pressed
     

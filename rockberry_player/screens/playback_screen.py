@@ -101,26 +101,24 @@ Builder.load_string("""
                     border_width: 2
                     size_hint: (0.3, 1.5)
                     uri: app.mm.prev.uri
-                    #on_press: app.mm.state.on_prev()
-                
+
                     PlaybackButton:
                         action: 'prev'
                         color: (1, 1, 1, 0.4)
                         size: self.parent.size
                         pos: self.parent.pos
-                
-                PlaybackBar:
+
+                PlaybackButton:
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    opacity: 0.5
-                    spacing: 5
-                    controls: ['stop', 0.1, 'play_pause', 1.1]
-                
+                    action: 'play_pause'
+                    holdtime: 1.5
+                    on_hold: app.mm.state.on_stop()
+
                 AlbumCover:
                     border_width: 2
                     size_hint: (0.3, 1.5)
                     uri: app.mm.next.uri
-                    # on_press: app.mm.state.on_next()
-                    
+
                     PlaybackButton:
                         action: 'next'
                         color: (1, 1, 1, 0.4)
