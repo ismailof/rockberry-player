@@ -8,13 +8,13 @@ from kivy.uix.button import Button
 
 
 class HoldButtonBehavior(ButtonBehavior):
-        
+
     holdtime = NumericProperty(0)
     ticktime = NumericProperty(0)
 
     def __init__(self, *args, **kwargs):
         self._press_start = None
- 
+
         self.register_event_type('on_click')
         self.register_event_type('on_hold')
         self.register_event_type('on_tick')
@@ -23,7 +23,7 @@ class HoldButtonBehavior(ButtonBehavior):
 
     def on_touch_down(self, touch, *args):
         if not self.collide_point(*touch.pos):
-            return
+            return False
 
         self._press_start = time.time()
 
@@ -33,14 +33,14 @@ class HoldButtonBehavior(ButtonBehavior):
 
         if self.holdtime:
             Clock.schedule_once(self._dispatch_hold, self.holdtime)
-            
-        super(HoldButtonBehavior, self).on_touch_down(touch, *args)
+
+        return super(HoldButtonBehavior, self).on_touch_down(touch, *args)
 
     def on_touch_up(self, touch, *args):
         super(HoldButtonBehavior, self).on_touch_up(touch, *args)
 
         if touch.grab_current is None:
-            return
+            return False
 
         Clock.unschedule(self._dispatch_tick)
         Clock.unschedule(self._dispatch_hold)
@@ -49,15 +49,16 @@ class HoldButtonBehavior(ButtonBehavior):
             self.dispatch('on_click')
         self._press_start = None
 
-    def _dispatch_hold(self, *args):        
+        return True
+
+    def _dispatch_hold(self, *args):
         self._press_start = None
         if self.state == 'down':
             self.dispatch('on_hold')
 
     def _dispatch_tick(self, *args):
         if self.state == 'down' and self._press_start is not None:
-            pressed_time = time.time() - self._press_start
-            self.dispatch('on_tick', pressed_time)
+            self.dispatch('on_tick', time.time() - self._press_start)
         else:
             Clock.unschedule(self._dispatch_tick)
 
@@ -74,4 +75,3 @@ class HoldButtonBehavior(ButtonBehavior):
 class HoldButton(HoldButtonBehavior, Button):
     pass
 
-    

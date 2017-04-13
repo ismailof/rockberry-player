@@ -32,9 +32,11 @@ class PlaybackButton(ImageHoldButton):
 Builder.load_string('''
 
 <ImageHoldButton>:
-    allow_stretch: True
     ticktime: 0.1 if self.holdtime else 0
     color: self.color_released if root.state == 'normal' else self.color_pressed
+    allow_stretch: True
+    always_release: True
+    min_state_time: 0.1
 
     canvas.before:
         Color:
