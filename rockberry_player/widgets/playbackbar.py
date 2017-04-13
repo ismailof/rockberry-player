@@ -1,4 +1,4 @@
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from kivy.lang import Builder
 from kivy.properties import OptionProperty, ListProperty, NumericProperty
@@ -6,19 +6,27 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 
-from ..widgets.holdbutton import HoldButtonBehavior
+from ..music.playback import PlaybackControl
+from ..widgets.imageholdbutton import ImageHoldButton
 
 
-playback_controls = ['play_pause', 'stop', 'next', 'prev']
+class PlaybackButton(ImageHoldButton):
+    action = OptionProperty(PlaybackControl.ACTIONS[0],
+                            options=PlaybackControl.ACTIONS)
 
 
-class PlaybackButton(HoldButtonBehavior, Image):
-    action = OptionProperty(None, options=playback_controls)
-    aura_color = ListProperty([1, 1, 1, 0])
-    aura_color_pressed = ListProperty([0.8, 0.0, 0.0, 1])
-    aura_radius = NumericProperty(50)
-    aura_width = NumericProperty(2)
+class PlayButton(PlaybackButton):
+    playback_state = OptionProperty(PlaybackControl.STATES[0],
+                                    options=PlaybackControl.STATES)
 
+    def on_playback_state(self, *args):
+        if self.playback_state == 'playing':
+            self.action = 'pause'
+        else:
+            self.action = 'play'
+
+    def on_hold(self, *args):
+        self.action = 'stop'
 
 class PlaybackBar(BoxLayout):
 
@@ -38,21 +46,10 @@ class PlaybackBar(BoxLayout):
 Builder.load_string("""
 
 <PlaybackButton>:
-    allow_stretch: True
     source: 'playback_{}.png'.format(self.action)
-    on_click: app.mm.state.dispatch('on_' + self.action)
-    aura_radius: min(self.size) / 2 + self.aura_width
-    color: (1,1,1,1) if root.state == 'normal' else self.aura_color_pressed
+    on_release: app.mm.state.dispatch('on_' + self.action)
 
-    canvas.before:
-        Color:
-            rgba: self.aura_color if root.state == 'normal' else self.aura_color_pressed
-        Line:
-            #circle: (self.center_x, self.center_y, self.aura_radius)
-            rectangle: self.x, self.y, self.width, self.height
-            width: self.aura_width
-
-<PlaybackBar>
+<PlayButton>:
     playback_state: app.mm.state.playback_state
 
 """)

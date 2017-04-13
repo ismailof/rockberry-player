@@ -1,4 +1,4 @@
-#from threading import Timer
+import time
 from functools import partial
 
 from kivy.clock import Clock
@@ -8,13 +8,13 @@ from kivy.uix.button import Button
 
 
 class HoldButtonBehavior(ButtonBehavior):
-
-    _holding = False
+        
     holdtime = NumericProperty(0)
     ticktime = NumericProperty(0)
 
     def __init__(self, *args, **kwargs):
-
+        self._press_start = None
+ 
         self.register_event_type('on_click')
         self.register_event_type('on_hold')
         self.register_event_type('on_tick')
@@ -25,15 +25,15 @@ class HoldButtonBehavior(ButtonBehavior):
         if not self.collide_point(*touch.pos):
             return
 
-        self._holding = True
-
-        if self.holdtime:
-            Clock.schedule_once(self._dispatch_hold, self.holdtime)
+        self._press_start = time.time()
 
         if self.ticktime:
             Clock.unschedule(self._dispatch_tick)
             Clock.schedule_interval(self._dispatch_tick, self.ticktime)
 
+        if self.holdtime:
+            Clock.schedule_once(self._dispatch_hold, self.holdtime)
+            
         super(HoldButtonBehavior, self).on_touch_down(touch, *args)
 
     def on_touch_up(self, touch, *args):
@@ -45,18 +45,19 @@ class HoldButtonBehavior(ButtonBehavior):
         Clock.unschedule(self._dispatch_tick)
         Clock.unschedule(self._dispatch_hold)
 
-        if self._holding:
+        if self._press_start is not None:
             self.dispatch('on_click')
-        self._holding = False
+        self._press_start = None
 
-    def _dispatch_hold(self, *args):
-        self._holding = False
+    def _dispatch_hold(self, *args):        
+        self._press_start = None
         if self.state == 'down':
             self.dispatch('on_hold')
 
     def _dispatch_tick(self, *args):
-        if self.state == 'down':
-            self.dispatch('on_tick')
+        if self.state == 'down' and self._press_start is not None:
+            pressed_time = time.time() - self._press_start
+            self.dispatch('on_tick', pressed_time)
         else:
             Clock.unschedule(self._dispatch_tick)
 
@@ -72,3 +73,5 @@ class HoldButtonBehavior(ButtonBehavior):
 
 class HoldButton(HoldButtonBehavior, Button):
     pass
+
+    

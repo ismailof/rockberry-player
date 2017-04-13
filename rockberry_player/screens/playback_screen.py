@@ -4,7 +4,8 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
 from ..widgets.playback_slider import PlaybackSlider
-from ..widgets.playbackbar import PlaybackBar
+from ..widgets.playbackbar import PlaybackButton
+from ..widgets.playbackbar import PlayButton
 from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
 from ..widgets.trackinfolabel import TrackInfoLabel
@@ -13,7 +14,6 @@ from ..widgets.volumebar import VolumeBar
 
 class PlaybackScreen(Screen):
     pass
-
 
 
 Builder.load_string("""
@@ -70,6 +70,7 @@ Builder.load_string("""
                 position: app.mm.state.time_position
                 duration: app.mm.current.duration
                 resolution: app.mm.state.resolution
+                default_text: '\u221e'
                 shortcut_secs: 30, 30
                 on_seek: app.mm.state.seek(args[1])
 
@@ -105,16 +106,15 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'prev'
-                        color: (1, 1, 1, 0.4)
+                        color_released: (1, 1, 1, 0.4)
                         size: self.parent.size
                         pos: self.parent.pos
 
-                PlaybackButton:
+                PlayButton:
                     size_hint_y: 0.9
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    action: 'play_pause'
+                    color_progress: (1, 1, 1, 0)
                     holdtime: 1.5
-                    on_hold: app.mm.state.on_stop()
 
                 AlbumCover:
                     border_width: 2
@@ -123,7 +123,7 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'next'
-                        color: (1, 1, 1, 0.4)
+                        color_released: (1, 1, 1, 0.4)
                         size: self.parent.size
                         pos: self.parent.pos
 

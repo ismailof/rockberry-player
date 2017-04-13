@@ -1,21 +1,24 @@
+from __future__ import absolute_import
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty, OptionProperty, \
     AliasProperty, ObjectProperty, DictProperty, StringProperty
 
-from base import MediaController
+from .base import MediaController
 
 from ..utils import scheduled
 
 
 class PlaybackControl(MediaController):
 
-    STATE_LIST = ['stopped', 'playing', 'paused']
+    STATES = ['stopped', 'playing', 'paused']
+    ACTIONS = ['play_pause', 'play', 'pause', 'stop', 'next', 'prev']
 
-    playback_state = OptionProperty(STATE_LIST[0],
-                                    options=STATE_LIST,
-                                    errorvalue=STATE_LIST[0])
+    playback_state = OptionProperty(STATES[0],
+                                    options=STATES,
+                                    errorvalue=STATES[0])
 
     stream_title = StringProperty('')
 
@@ -24,10 +27,8 @@ class PlaybackControl(MediaController):
     resolution = NumericProperty(0.001)
 
     def __init__(self, controls=None, **kwargs):
-        self.register_event_type('on_play_pause')
-        self.register_event_type('on_stop')
-        self.register_event_type('on_next')
-        self.register_event_type('on_prev')
+        for action in self.ACTIONS:
+            self.register_event_type('on_' + action)
         super(PlaybackControl, self).__init__(**kwargs)
 
     def refresh(self, *args):
@@ -66,22 +67,29 @@ class PlaybackControl(MediaController):
     def seek(self, time_position, *args):
         self.interface.seek(int(time_position))
 
-    # ACTION BUTTONS METHOD. In Use??
+    # ACTION BUTTONS METHOD.
     # TODO: Erase all of these
 
     def on_play_pause(self):
         if self.playback_state == 'playing':
-            self.interface.pause()
-        elif self.playback_state == 'paused':
+            self.on_pause()
+        else:
+            self.on_play()
+
+    def on_play(self):
+        if self.playback_state == 'paused':
             self.interface.resume()
         else:
             self.interface.play()
+
+    def on_pause(self):
+        self.interface.pause()
+
+    def on_stop(self):
+        self.interface.stop()
 
     def on_next(self):
         self.interface.next()
 
     def on_prev(self):
         self.interface.previous()
-
-    def on_stop(self):
-        self.interface.stop()
