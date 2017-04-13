@@ -58,6 +58,8 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                             color='#ffffff',
                             b=True)
                  for index, textpart in enumerate(parts)]
+        if len(parts) > 3:
+            parts[2] = ' '.join(parts[2:])
 
         return MarkupText('\n'.join(parts),
                           ref=self.new_ref(self.item))
