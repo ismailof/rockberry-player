@@ -56,7 +56,6 @@ Builder.load_string("""
                 pos_hint: {'right': 1}
                 opacity: 0.4
                 text: 'MASTER'
-                gpio_group: 'volume'
                 mixer: app.mm.mixer
 
             TrackInfoLabel:
@@ -75,31 +74,33 @@ Builder.load_string("""
                 on_seek: app.mm.state.seek(args[1])
 
             BoxLayout:
-                size_hint: (1.02, 0.1)
-                pos_hint: {'right': 1}
+                size_hint: (1.04, 0.1)
+                pos_hint: {'right': 1.02}
                 spacing: 5
 
-                ReferenceLabel:
-                    item: app.mm.prev.item
+                Label:
+                    text: app.mm.prev.title
+                    text_size: self.size
                     halign: 'left'
                     valign: 'top'
                     shorten: True
                     shorten_from: 'right'
 
-                ReferenceLabel:
-                    item: app.mm.next.item
+                Label:
+                    text: app.mm.next.title
+                    text_size: self.size
                     halign: 'right'
                     valign: 'top'
                     shorten: True
                     shorten_from: 'right'
 
             BoxLayout:
-                size_hint_y:0.25
+                size_hint_y: 0.4
                 spacing: 20
 
                 AlbumCover:
                     border_width: 2
-                    size_hint: (0.3, 1.5)
+                    size_hint: (0.3, 1)
                     uri: app.mm.prev.uri
 
                     PlaybackButton:
@@ -109,6 +110,7 @@ Builder.load_string("""
                         pos: self.parent.pos
 
                 PlaybackButton:
+                    size_hint_y: 0.9
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     action: 'play_pause'
                     holdtime: 1.5
@@ -116,7 +118,7 @@ Builder.load_string("""
 
                 AlbumCover:
                     border_width: 2
-                    size_hint: (0.3, 1.5)
+                    size_hint: (0.3, 1)
                     uri: app.mm.next.uri
 
                     PlaybackButton:
@@ -124,4 +126,5 @@ Builder.load_string("""
                         color: (1, 1, 1, 0.4)
                         size: self.parent.size
                         pos: self.parent.pos
+
 """)

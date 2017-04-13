@@ -69,7 +69,7 @@ Builder.load_string("""
         on_active: app.mm.options.set_repeat(args[1])
         background_checkbox_down: 'atlas://options/repeat_on'
         background_checkbox_normal: 'atlas://options/repeat_off'
-        
+
 
 <TracklistScreen>
 
@@ -106,7 +106,7 @@ Builder.load_string("""
 
                 OptionsBar:
                     size_hint_y: 0.3
-                    
+
                 # PlaybackBar:
                     # opacity: 0.5
                     # controls: ['prev', 'play_pause', 'next']

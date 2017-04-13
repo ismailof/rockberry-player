@@ -19,7 +19,7 @@ class PlaybackButton(HoldButtonBehavior, Image):
     aura_radius = NumericProperty(50)
     aura_width = NumericProperty(2)
 
-    
+
 class PlaybackBar(BoxLayout):
 
     controls = ListProperty()
@@ -32,7 +32,7 @@ class PlaybackBar(BoxLayout):
             elif isinstance(item, basestring):
                 self.add_widget(
                     PlaybackButton(action=item)
-                )                
+                )
 
 
 Builder.load_string("""
@@ -43,9 +43,9 @@ Builder.load_string("""
     on_click: app.mm.state.dispatch('on_' + self.action)
     aura_radius: min(self.size) / 2 + self.aura_width
     color: (1,1,1,1) if root.state == 'normal' else self.aura_color_pressed
-    
+
     canvas.before:
-        Color: 
+        Color:
             rgba: self.aura_color if root.state == 'normal' else self.aura_color_pressed
         Line:
             #circle: (self.center_x, self.center_y, self.aura_radius)
