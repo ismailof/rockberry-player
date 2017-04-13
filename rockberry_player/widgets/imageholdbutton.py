@@ -34,6 +34,7 @@ Builder.load_string('''
 <ImageHoldButton>:
     ticktime: 0.1 if self.holdtime else 0
     color: self.color_released if root.state == 'normal' else self.color_pressed
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     allow_stretch: True
     always_release: True
     min_state_time: 0.1

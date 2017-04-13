@@ -13,12 +13,11 @@ Builder.load_string("""
 <InputBar>:
     size_hint_y: None
     height: 45
-    spacing: 4
+    spacing: 30
     text: input.text
 
     Label:
-        size_hint_x: None
-        width: 100
+        size_hint_x: 0.2
         font_size: 23
         bold: True
         text: root.title + ' '
@@ -33,8 +32,7 @@ Builder.load_string("""
         write_tab: False
         hint_text: root.title
     ImageButton:
-        size_hint: None, 0.6
-        width: 60
+        size_hint_x: 0.1
         source: 'button_x.png'
         on_press: input.text = ''
 """)

@@ -62,14 +62,14 @@ Builder.load_string("""
 
 <ImageButton@ButtonBehavior+Image>
     allow_stretch: True
-    pos_hint: {'center_y': 0.5}
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     size: self.texture_size
 
 <RockberryMainScreen>
 
     BackgroundImage:
         id: background
-        default: 'bg1.jpg'
+        default: 'background.jpg'
         uri: app.mm.current.uri
         tint: (0.6, 0.6, 0.6, 1)
         outbounds: 0.1

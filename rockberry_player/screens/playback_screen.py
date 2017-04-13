@@ -113,7 +113,6 @@ Builder.load_string("""
                     action: 'pause' if app.mm.state.playback_state == 'playing' else 'play'
                     on_hold: self.action = 'stop'
                     size_hint_y: 0.9
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     color_progress: (1, 1, 1, 0)
                     holdtime: 1.5
 
