@@ -5,15 +5,14 @@ from kivy.properties import OptionProperty, ListProperty, NumericProperty
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
-from kivy.uix.behaviors.button import ButtonBehavior
 
-from ..music.playback import PlaybackControl
+from ..widgets.holdbutton import HoldButtonBehavior
 
 
 playback_controls = ['play_pause', 'stop', 'next', 'prev']
 
 
-class PlaybackButton(ButtonBehavior, Image):
+class PlaybackButton(HoldButtonBehavior, Image):
     action = OptionProperty(None, options=playback_controls)
     aura_color = ListProperty([1, 1, 1, 0])
     aura_color_pressed = ListProperty([0.8, 0.0, 0.0, 1])
@@ -21,7 +20,7 @@ class PlaybackButton(ButtonBehavior, Image):
     aura_width = NumericProperty(2)
 
     
-class PlaybackBar(PlaybackControl, BoxLayout):
+class PlaybackBar(BoxLayout):
 
     controls = ListProperty()
 
@@ -41,7 +40,7 @@ Builder.load_string("""
 <PlaybackButton>:
     allow_stretch: True
     source: 'playback_{}.png'.format(self.action)
-    on_press: self.parent.dispatch('on_' + self.action)
+    on_press: app.mm.state.dispatch('on_' + self.action)
     aura_radius: min(self.size) / 2 + self.aura_width
     color: (1,1,1,1) if root.state == 'normal' else self.aura_color_pressed
     
@@ -49,7 +48,8 @@ Builder.load_string("""
         Color: 
             rgba: self.aura_color if root.state == 'normal' else self.aura_color_pressed
         Line:
-            circle: (self.center_x, self.center_y, self.aura_radius)
+            #circle: (self.center_x, self.center_y, self.aura_radius)
+            rectangle: self.x, self.y, self.width, self.height
             width: self.aura_width
 
 <PlaybackBar>

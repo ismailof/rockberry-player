@@ -20,28 +20,6 @@ Builder.load_string("""
 #:import RefUtils rockberry_player.music.refs.RefUtils
 
 
-<OptionsBar@BoxLayout>:
-    spacing: 5
-    padding_x: 10
-
-    CheckBox:
-        active: app.mm.options.random
-        on_active: app.mm.options.set_random(args[1])
-        background_checkbox_down: 'atlas://options/random_on'
-        background_checkbox_normal: 'atlas://options/random_off'
-
-    CheckBox:
-        active: app.mm.options.single
-        on_active: app.mm.options.set_single(args[1])
-        background_checkbox_down: 'atlas://options/single_on'
-        background_checkbox_normal: 'atlas://options/single_off'
-
-    CheckBox:
-        active: app.mm.options.repeat
-        on_active: app.mm.options.set_repeat(args[1])
-        background_checkbox_down: 'atlas://options/repeat_on'
-        background_checkbox_normal: 'atlas://options/repeat_off'
-
 <PlaybackScreen>:
     BoxLayout:
         spacing:10
@@ -119,14 +97,33 @@ Builder.load_string("""
                 size_hint_y:0.25
                 spacing: 20
 
+                AlbumCover:
+                    border_width: 2
+                    size_hint: (0.3, 1.5)
+                    uri: app.mm.prev.uri
+                    #on_press: app.mm.state.on_prev()
+                
+                    PlaybackButton:
+                        action: 'prev'
+                        color: (1, 1, 1, 0.4)
+                        size: self.parent.size
+                        pos: self.parent.pos
+                
                 PlaybackBar:
-                    size_hint_x: 0.7
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     opacity: 0.5
                     spacing: 5
-                    controls: ['stop', 0.1, 'prev', 'play_pause', 'next']
-
-                OptionsBar:
-                    size_hint_x: 0.3
-                    pos_hint: {'x': 0.5}
+                    controls: ['stop', 0.1, 'play_pause', 1.1]
+                
+                AlbumCover:
+                    border_width: 2
+                    size_hint: (0.3, 1.5)
+                    uri: app.mm.next.uri
+                    # on_press: app.mm.state.on_next()
+                    
+                    PlaybackButton:
+                        action: 'next'
+                        color: (1, 1, 1, 0.4)
+                        size: self.parent.size
+                        pos: self.parent.pos
 """)

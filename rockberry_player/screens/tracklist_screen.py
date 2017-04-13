@@ -49,6 +49,28 @@ class TracklistScreen(Screen):
 
 Builder.load_string("""
 
+<OptionsBar@BoxLayout>:
+    spacing: 5
+
+    CheckBox:
+        active: app.mm.options.random
+        on_active: app.mm.options.set_random(args[1])
+        background_checkbox_down: 'atlas://options/random_on'
+        background_checkbox_normal: 'atlas://options/random_off'
+
+    CheckBox:
+        active: app.mm.options.single
+        on_active: app.mm.options.set_single(args[1])
+        background_checkbox_down: 'atlas://options/single_on'
+        background_checkbox_normal: 'atlas://options/single_off'
+
+    CheckBox:
+        active: app.mm.options.repeat
+        on_active: app.mm.options.set_repeat(args[1])
+        background_checkbox_down: 'atlas://options/repeat_on'
+        background_checkbox_normal: 'atlas://options/repeat_off'
+        
+
 <TracklistScreen>
 
     filter: filterbar.text
@@ -82,10 +104,13 @@ Builder.load_string("""
                         source: 'button_mix.png'
                         on_press: app.mm.queue.shuffle()
 
-                PlaybackBar:
-                    opacity: 0.5
-                    controls: ['prev', 'play_pause', 'next']
+                OptionsBar:
                     size_hint_y: 0.3
+                    
+                # PlaybackBar:
+                    # opacity: 0.5
+                    # controls: ['prev', 'play_pause', 'next']
+                    # size_hint_y: 0.3
 
             TrackListView:
                 id: tlview

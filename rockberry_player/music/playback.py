@@ -11,11 +11,11 @@ from ..utils import scheduled
 
 class PlaybackControl(MediaController):
 
-    StateList = ['stopped', 'playing', 'paused']
+    STATE_LIST = ['stopped', 'playing', 'paused']
 
-    playback_state = OptionProperty(StateList[0],
-                                    options=StateList,
-                                    errorvalue=StateList[0])
+    playback_state = OptionProperty(STATE_LIST[0],
+                                    options=STATE_LIST,
+                                    errorvalue=STATE_LIST[0])
 
     stream_title = StringProperty('')
 

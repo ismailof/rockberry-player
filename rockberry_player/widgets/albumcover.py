@@ -17,7 +17,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
 
     border_width = NumericProperty(0)
     uri = StringProperty('', allownone=True)
-    default = StringProperty(ImageUtils.IMG_LOGO)
+    default = StringProperty(None, allownone=True)
     imagelist = ListProperty([])
     background = ListProperty([0, 0, 0, 0])
 
@@ -34,7 +34,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
     )
 
     def on_uri(self, _, uri):
-        self.source = self.default
+        self.source = self.default or ImageUtils.IMG_NONE
         ImageCache.remove_callback(self.update_imagelist)
         ImageCache.request_item(uri=self.uri, callback=self.update_imagelist)
 
@@ -52,12 +52,12 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
 
     @scheduled
     def on_error(self, error):
-        self.source = self.default
+        self.source = self.default or ImageUtils.IMG_NONE
 
     def update_imagelist(self, imagelist, _):
         self.imagelist = imagelist or []
 
-    @scheduled        
+    @scheduled
     def select_image(self, *args):
         img_source = ImageUtils.get_fittest_image(
             imagelist=self.imagelist,
@@ -69,7 +69,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
                 and not self.is_uri(img_source):
             img_source = 'http://' + ImageCache.app.MOPIDY_SERVER + img_source
 
-        self.source = img_source or self.default
+        self.source = img_source or self.default or ImageUtils.IMG_NONE
 
     def refresh(self, *args):
         self.imagelist = []
@@ -91,10 +91,12 @@ Builder.load_string("""
         Color:
             rgba: (0.2, 0.2, 0.2, 0.6) if self.border_width else (0,0,0,0)
         Line:
-            rectangle: self.border_rectangle            
+            rectangle: self.border_rectangle
             width: max(self.border_width, 1)
 
     allow_stretch: True
     holdtime: 1.5
+    disabled: not (self.uri or self.default)
+    opacity: 0 if self.disabled else 1
 
 """)

@@ -46,7 +46,7 @@ class TrackItem(RefItem):
     title = AliasProperty(lambda x: TrackUtils.title_text(x.item), None, bind=['item'])
     album = AliasProperty(lambda x: TrackUtils.album_text(x.item), None, bind=['item'])
     artists = AliasProperty(lambda x: TrackUtils.artists_text(x.item), None, bind=['item'])
-    words = AliasProperty(lambda x: RefUtils.get_words(x.title, x.album, x.artists), None, 
+    words = AliasProperty(lambda x: RefUtils.get_words(x.title, x.album, x.artists), None,
                           bind=['title', 'album', 'artists'])
     duration = AliasProperty(get_duration, None, bind=['item'])
 
