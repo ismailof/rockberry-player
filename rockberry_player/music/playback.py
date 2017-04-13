@@ -14,7 +14,7 @@ from ..utils import scheduled
 class PlaybackControl(MediaController):
 
     STATES = ['stopped', 'playing', 'paused']
-    ACTIONS = ['play_pause', 'play', 'pause', 'stop', 'next', 'prev']
+    ACTIONS = ['play', 'pause', 'stop', 'next', 'prev']
 
     playback_state = OptionProperty(STATES[0],
                                     options=STATES,
@@ -67,14 +67,7 @@ class PlaybackControl(MediaController):
     def seek(self, time_position, *args):
         self.interface.seek(int(time_position))
 
-    # ACTION BUTTONS METHOD.
-    # TODO: Erase all of these
-
-    def on_play_pause(self):
-        if self.playback_state == 'playing':
-            self.on_pause()
-        else:
-            self.on_play()
+    # ACTION BUTTONS METHODS
 
     def on_play(self):
         if self.playback_state == 'paused':
