@@ -4,8 +4,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
 from ..widgets.playback_slider import PlaybackSlider
-from ..widgets.playbackbar import PlaybackButton
-from ..widgets.playbackbar import PlayButton
+from ..widgets.imageholdbutton import PlaybackButton
 from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
 from ..widgets.trackinfolabel import TrackInfoLabel
@@ -110,7 +109,9 @@ Builder.load_string("""
                         size: self.parent.size
                         pos: self.parent.pos
 
-                PlayButton:
+                PlaybackButton:
+                    action: 'pause' if app.mm.state.playback_state == 'playing' else 'play'
+                    on_hold: self.action = 'stop'
                     size_hint_y: 0.9
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     color_progress: (1, 1, 1, 0)

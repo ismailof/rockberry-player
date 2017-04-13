@@ -13,7 +13,7 @@ class TrackListItem(TrackItem, BoxLayout):
 
 
 Builder.load_string("""
-    
+
 <TrackListItem>
     size_hint_y: None
     height: 70
@@ -61,13 +61,13 @@ Builder.load_string("""
     SimpleTrackInfo:
         item: root.item
 
-    ImageButton:
+    ImageHoldButton:
         size_hint: 0.15, 0.5
-        source: 'action_play.png' if not root.current else 'playing.zip' if app.mm.state.playback_state == 'playing' else 'action_pause.png'
+        source: 'playback_play.png' if not root.current else 'playing.zip' if app.mm.state.playback_state == 'playing' else 'playback_pause.png'
         anim_delay: 0.12
         on_release: app.mm.mopidy.playback.play(tlid=root.tlid)
-        
-    ImageButton:
+
+    ImageHoldButton:
         size_hint: 0.15, 0.5
         source: 'action_delete.png'
         on_release: app.mm.mopidy.tracklist.remove(criteria={'tlid':[root.tlid]})
