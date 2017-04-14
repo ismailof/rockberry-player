@@ -97,17 +97,15 @@ Builder.load_string("""
                 size_hint_y: 0.4
                 spacing: 20
 
-                RelativeLayout:
+                AlbumCover:
                     size_hint: (0.3, 1)
-
-                    AlbumCover:
-                        border_width: 2
-                        uri: app.mm.prev.uri
-                        size: self.parent.size
+                    border_width: 2
+                    uri: app.mm.prev.uri
 
                     PlaybackButton:
                         action: 'prev'
                         color_released: (1, 1, 1, 0.75)
+                        pos: self.parent.pos
                         size: self.parent.size
 
                 PlaybackButton:
@@ -132,17 +130,15 @@ Builder.load_string("""
                             halign: 'right'
                             text_size: self.size
 
-                RelativeLayout:
+                AlbumCover:
                     size_hint: (0.3, 1)
-
-                    AlbumCover:
-                        border_width: 2
-                        uri: app.mm.next.uri
-                        size: self.parent.size
+                    border_width: 2
+                    uri: app.mm.next.uri
 
                     PlaybackButton:
                         action: 'next'
                         color_released: (1, 1, 1, 0.75)
+                        pos: self.parent.pos
                         size: self.parent.size
 
 """)

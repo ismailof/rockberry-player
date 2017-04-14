@@ -83,7 +83,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                                 else self.font_size - 2)
                  for index, item in enumerate(parts)]
 
-        return MarkupText(''.join(parts),
+        return MarkupText(' '.join(parts),
                           color='#e7e7e7',
                           ref=self.new_ref(album))
 
