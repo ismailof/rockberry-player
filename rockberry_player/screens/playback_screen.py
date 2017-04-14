@@ -107,7 +107,7 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'prev'
-                        color_released: (1, 1, 1, 0.4)
+                        color_released: (1, 1, 1, 0.75)
                         size: self.parent.size
 
                 PlaybackButton:
@@ -142,7 +142,7 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'next'
-                        color_released: (1, 1, 1, 0.4)
+                        color_released: (1, 1, 1, 0.75)
                         size: self.parent.size
 
 """)

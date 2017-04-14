@@ -9,8 +9,17 @@ class ImageUtils(object):
     IMG_LOGO = 'neon_R.jpg'
     IMG_NONE = 'transparent.png'
 
-    @classmethod
-    def atlas_image(cls, atlas, item, default=IMG_NONE):
+    @staticmethod
+    def get_type_image(reftype):
+        IMAGES_TYPE = {'directory': 'browse_folder.png',
+                       'playlist': 'browse_pl.png',
+                       'track': 'default_track.png',
+                       'album': 'default_album.jpg',
+                       'artist': 'browse_artist.png'}
+        return IMAGES_TYPE.get(reftype) or ImageUtils.IMG_LOGO
+
+    @staticmethod
+    def atlas_image(atlas, item, default=IMG_NONE):
         if not atlas:
             return default
 
