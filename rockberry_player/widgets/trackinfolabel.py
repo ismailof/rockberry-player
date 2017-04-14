@@ -33,11 +33,12 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         # Use stream_title as 'Artist - Track'.
         if self.stream_title:
             try:
-                artist, title = self.stream_title.split(' - ', 1)
+                artists, title = self.stream_title.split(' - ', 1)
+                artists_items = [{'name': artist.strip(), '__model__': 'artist'}
+                                 for artist in artists.split(',')]
                 return '\n'.join([self.format_title(title),
-                                  self.format_artists([{'name': artist,
-                                                        '__model__': 'artist'}]),
-                                  self.format_album(self.item.get('album', ''))])
+                                  self.format_artists(artists_items),
+                                  self.format_album(self.item.get('album', {}))])
             except:
                 pass
 
@@ -45,21 +46,19 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         if self.media == 'tunein' and not self.stream_title:
             return self.format_title(self.title)
 
-        # Usual format
+        # Usual format: Title, Artists, Album
         return '\n'.join([self.format_title(self.stream_title or self.title),
                           self.format_artists(self.item.get('artists')),
-                          self.format_album(self.item.get('album', ''))])
+                          self.format_album(self.item.get('album', {}))])
 
     def format_title(self, title):
-        parts = title.replace('(', '~(').replace('[', '~[').replace(' - ', '~').split('~')
+        parts = self._split_text(title, max=3)
         parts = [MarkupText(textpart,
                             size=self.font_size if index > 0
                                  else int(self.font_size * 1.3),
                             color='#ffffff',
                             b=True)
                  for index, textpart in enumerate(parts)]
-        if len(parts) > 3:
-            parts[2] = ' '.join(parts[2:])
 
         return MarkupText('\n'.join(parts),
                           ref=self.new_ref(self.item))
@@ -78,15 +77,25 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         return ' \xb7 '.join(artists_list)
 
     def format_album(self, album):
-        parts = album.get('name').replace('(', '~(').replace('[', '~[').split('~')
-        parts = [
-            MarkupText(item,
-                       size=self.font_size if index == 0 else self.font_size - 2)
-            for index, item in enumerate(parts)]
+        parts = self._split_text(album.get('name', ''))
+        parts = [MarkupText(item,
+                            size=self.font_size if index == 0
+                                else self.font_size - 2)
+                 for index, item in enumerate(parts)]
 
         return MarkupText(''.join(parts),
                           color='#e7e7e7',
                           ref=self.new_ref(album))
 
-
+    def _split_text(self, text,  max=None):
+        separators = [(' - ', '~'), ('[', '~['), ('(', '~(')]
+        for sep, sub in separators:
+            if max:
+                remain = max - text.count('~') - 1
+                if remain <= 0:
+                    break
+                text = text.replace(sep, sub, remain)
+            else:
+                text = text.replace(sep, sub)
+        return [part.strip(' \t\n\r') for part in text.split('~')]
 
