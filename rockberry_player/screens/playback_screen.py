@@ -89,8 +89,8 @@ Builder.load_string("""
                 spacing: 20
 
                 AlbumCover:
-                    size_hint: (0.3, 1)
-                    border_width: 2
+                    size_hint_x: None
+                    width: self.height
                     uri: app.mm.prev.uri
 
                     PlaybackButton:
@@ -108,9 +108,9 @@ Builder.load_string("""
                     ProgressRectangle:
                         size: self.parent.size
                         pos: self.parent.pos
-                        progress_color: (1, 1, 1, 0.3)
-                        progress_value: app.mm.state.time_position or 0
-                        progress_max: app.mm.current.duration or 0
+                        color: (1, 1, 1, 0.3)
+                        value: app.mm.state.time_position or 0
+                        max: app.mm.current.duration or 0
 
                     BoxLayout:
                         size: self.parent.size
@@ -127,7 +127,8 @@ Builder.load_string("""
                             text_size: self.size
 
                 AlbumCover:
-                    size_hint: (0.3, 1)
+                    size_hint_x: None
+                    width: self.height
                     border_width: 2
                     uri: app.mm.next.uri
 
