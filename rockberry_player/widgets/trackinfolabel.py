@@ -97,5 +97,6 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                 text = text.replace(sep, sub, remain)
             else:
                 text = text.replace(sep, sub)
+        text = text.strip('~')
         return [part.strip(' \t\n\r') for part in text.split('~')]
 
