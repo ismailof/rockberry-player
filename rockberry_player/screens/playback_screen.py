@@ -3,11 +3,12 @@ from __future__ import absolute_import, print_function
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
-from ..widgets.imageholdbutton import PlaybackButton
 from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
 from ..widgets.trackinfolabel import TrackInfoLabel
 from ..widgets.volumebar import VolumeBar
+from ..widgets.imageholdbutton import PlaybackButton
+from ..widgets.progress_rectangle import ProgressRectangle
 
 
 class PlaybackScreen(Screen):
@@ -60,16 +61,6 @@ Builder.load_string("""
                 font_size: 23
                 padding_x: 20
 
-            # PlaybackSlider:
-                # size_hint: (1, 0.12)
-                # pos_hint: {'center': 1}
-                # position: app.mm.state.time_position
-                # duration: app.mm.current.duration
-                # resolution: TrackUtils.time_resolution
-                # default_text: '\u221e'
-                # shortcut_secs: 30, 30
-                # on_seek: app.mm.state.seek(args[1])
-
             BoxLayout:
                 size_hint: (1.04, 0.1)
                 pos_hint: {'right': 1.02}
@@ -111,10 +102,15 @@ Builder.load_string("""
                 PlaybackButton:
                     action: 'pause' if app.mm.state.playback_state == 'playing' else 'play'
                     on_hold: self.action = 'stop'
-                    size_hint_y: 0.9
-                    color_progress: (1, 1, 1, 0.3)
-                    progress: app.mm.state.time_position / app.mm.current.duration if app.mm.current.duration else 0
+                    size_hint_y: 0.8
                     holdtime: 1.5
+
+                    ProgressRectangle:
+                        size: self.parent.size
+                        pos: self.parent.pos
+                        progress_color: (1, 1, 1, 0.3)
+                        progress_value: app.mm.state.time_position or 0
+                        progress_max: app.mm.current.duration or 0
 
                     BoxLayout:
                         size: self.parent.size

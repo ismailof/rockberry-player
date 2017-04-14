@@ -9,19 +9,7 @@ from .holdbutton import HoldButtonBehavior
 class ImageHoldButton(HoldButtonBehavior, Image):
     color_released = ListProperty([1, 1, 1, 1])
     color_pressed = ListProperty([0.8, 0.0, 0.0, 1])
-    color_progress = ListProperty([0.8, 0.0, 0.0, 0.25])
     border_width = NumericProperty(2)
-    progress = NumericProperty(0)
-
-    # def on_tick(self, pressed_time, *args):
-        # self.hold_progress = pressed_time / self.holdtime \
-            # if self.state == 'down' else 0
-
-    # def on_hold(self, *args):
-        # self.hold_progress = 1
-
-    # def on_release(self, *args):
-        # self.hold_progress = 0
 
 
 class PlaybackButton(ImageHoldButton):
@@ -32,19 +20,13 @@ class PlaybackButton(ImageHoldButton):
 Builder.load_string('''
 
 <ImageHoldButton>:
-    #ticktime: 0.1 if self.holdtime else 0
     color: self.color_released if root.state == 'normal' else self.color_pressed
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     allow_stretch: True
     always_release: True
     min_state_time: 0.1
 
-    canvas.before:
-        Color:
-            rgba: self.color_progress
-        Rectangle:
-            pos: self.pos
-            size: self.width * self.progress, self.height
+    canvas:
         Color:
             rgba: [1, 1, 1, 0] if root.state == 'normal' else self.color_pressed
         Line:
