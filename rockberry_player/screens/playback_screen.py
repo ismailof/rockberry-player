@@ -3,7 +3,6 @@ from __future__ import absolute_import, print_function
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
-from ..widgets.playback_slider import PlaybackSlider
 from ..widgets.imageholdbutton import PlaybackButton
 from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
@@ -16,8 +15,6 @@ class PlaybackScreen(Screen):
 
 
 Builder.load_string("""
-#:import RefUtils rockberry_player.music.refs.RefUtils
-
 
 <PlaybackScreen>:
     BoxLayout:
@@ -63,20 +60,20 @@ Builder.load_string("""
                 font_size: 23
                 padding_x: 20
 
-            PlaybackSlider:
-                size_hint: (1, 0.12)
-                pos_hint: {'center': 1}
-                position: app.mm.state.time_position
-                duration: app.mm.current.duration
-                resolution: app.mm.state.resolution
-                default_text: '\u221e'
-                shortcut_secs: 30, 30
-                on_seek: app.mm.state.seek(args[1])
+            # PlaybackSlider:
+                # size_hint: (1, 0.12)
+                # pos_hint: {'center': 1}
+                # position: app.mm.state.time_position
+                # duration: app.mm.current.duration
+                # resolution: TrackUtils.time_resolution
+                # default_text: '\u221e'
+                # shortcut_secs: 30, 30
+                # on_seek: app.mm.state.seek(args[1])
 
             BoxLayout:
                 size_hint: (1.04, 0.1)
                 pos_hint: {'right': 1.02}
-                spacing: 5
+                spacing: 10
 
                 Label:
                     text: app.mm.prev.title
@@ -85,6 +82,8 @@ Builder.load_string("""
                     valign: 'top'
                     shorten: True
                     shorten_from: 'right'
+
+                Widget:
 
                 Label:
                     text: app.mm.next.title
@@ -98,33 +97,52 @@ Builder.load_string("""
                 size_hint_y: 0.4
                 spacing: 20
 
-                AlbumCover:
-                    border_width: 2
+                RelativeLayout:
                     size_hint: (0.3, 1)
-                    uri: app.mm.prev.uri
+
+                    AlbumCover:
+                        border_width: 2
+                        uri: app.mm.prev.uri
+                        size: self.parent.size
 
                     PlaybackButton:
                         action: 'prev'
                         color_released: (1, 1, 1, 0.4)
                         size: self.parent.size
-                        pos: self.parent.pos
 
                 PlaybackButton:
                     action: 'pause' if app.mm.state.playback_state == 'playing' else 'play'
                     on_hold: self.action = 'stop'
                     size_hint_y: 0.9
-                    color_progress: (1, 1, 1, 0)
+                    color_progress: (1, 1, 1, 0.3)
+                    progress: app.mm.state.time_position / app.mm.current.duration if app.mm.current.duration else 0
                     holdtime: 1.5
 
-                AlbumCover:
-                    border_width: 2
+                    BoxLayout:
+                        size: self.parent.size
+                        pos: self.parent.pos
+
+                        Label:
+                            text: TrackUtils.format_time(app.mm.state.time_position) if app.mm.current.duration else ''
+                            halign: 'left'
+                            text_size: self.size
+
+                        Label:
+                            text: TrackUtils.format_time(app.mm.current.duration)
+                            halign: 'right'
+                            text_size: self.size
+
+                RelativeLayout:
                     size_hint: (0.3, 1)
-                    uri: app.mm.next.uri
+
+                    AlbumCover:
+                        border_width: 2
+                        uri: app.mm.next.uri
+                        size: self.parent.size
 
                     PlaybackButton:
                         action: 'next'
                         color_released: (1, 1, 1, 0.4)
                         size: self.parent.size
-                        pos: self.parent.pos
 
 """)

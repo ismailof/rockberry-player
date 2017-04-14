@@ -10,6 +10,8 @@ from refs import RefUtils, RefItem
 
 class TrackUtils(object):
 
+    time_resolution = 0.001
+
     @staticmethod
     def title_text(track):
         return track.get('name', '') \
@@ -32,6 +34,21 @@ class TrackUtils(object):
             TrackUtils.title_text(track),
             TrackUtils.artists_text(track),
             TrackUtils.album_text(track))
+
+    @staticmethod
+    def format_time(time):
+        if time is None:
+            return ''
+
+        time_secs = round(time * TrackUtils.time_resolution)
+        time_st = {'s': time_secs % 60,
+                   'm': (time_secs // 60) % 60,
+                   'h': time_secs // 3600}
+
+        time_format = '%(h)d:%(m)02d:%(s)02d' if time_st['h'] \
+            else '%(m)d:%(s)02d'
+
+        return time_format % time_st
 
 
 class TrackItem(RefItem):

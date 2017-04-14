@@ -7,6 +7,7 @@ from kivy.properties import NumericProperty, OptionProperty, \
     AliasProperty, ObjectProperty, DictProperty, StringProperty
 
 from .base import MediaController
+from .tracks import TrackUtils
 
 from ..utils import scheduled
 
@@ -24,7 +25,6 @@ class PlaybackControl(MediaController):
 
     time_position = NumericProperty(0)
     update_interval = NumericProperty(0.25)
-    resolution = NumericProperty(0.001)
 
     def __init__(self, controls=None, **kwargs):
         for action in self.ACTIONS:
@@ -42,7 +42,8 @@ class PlaybackControl(MediaController):
         self.set_stream_title(None)
 
     def tick_position(self, dt=0, *args):
-        self.time_position = self.time_position + dt / float(self.resolution)
+        self.time_position = (self.time_position
+                                + dt / TrackUtils.time_resolution)
 
     def on_playback_state(self, *args):
         if self.playback_state == 'playing':

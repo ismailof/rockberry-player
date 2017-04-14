@@ -59,6 +59,10 @@ class RockberryMainScreen(FloatLayout):
 
 Builder.load_string("""
 #:import sm kivy.uix.screenmanager
+#:import ImageUtils rockberry_player.music.images.ImageUtils
+#:import TrackUtils rockberry_player.music.tracks.TrackUtils
+#:import RefUtils rockberry_player.music.refs.RefUtils
+
 
 <ImageButton@ButtonBehavior+Image>
     allow_stretch: True

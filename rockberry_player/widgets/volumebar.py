@@ -6,6 +6,7 @@ from kivy.properties import BooleanProperty, StringProperty,\
     NumericProperty, ObjectProperty
 
 from ..music.mixer import MixerControl
+from ..widgets.seekslider import SeekSlider
 #from ..gpio.gpiodial import GpioDialBehavior
 from ..utils import scheduled
 

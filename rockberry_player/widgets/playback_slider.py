@@ -40,20 +40,6 @@ class PlaybackSlider(RelativeLayout):
         super(PlaybackSlider, self).__init__(**kwargs)
         self.register_event_type('on_seek')
 
-    def format_time(self, time):
-        if time is None:
-            return self.default_text
-
-        time_secs = round(time * self.resolution)
-        time_st = {'s': time_secs % 60,
-                   'm': (time_secs // 60) % 60,
-                   'h': time_secs // 3600}
-
-        time_format = '%(h)d:%(m)02d:%(s)02d' if time_st['h'] \
-            else '%(m)d:%(s)02d'
-
-        return time_format % time_st
-
     def on_seek(self, value):
         pass
 
@@ -102,7 +88,7 @@ Builder.load_string("""
         orientation: 'horizontal'
 
         Label:
-            text: root.format_time(slider.value if root.available else root.position)
+            text: TrackUtils.format_time(slider.value if root.available else root.position) or root.default_text
             halign: 'right'
             size_hint_x: None
             width: 25
@@ -122,7 +108,7 @@ Builder.load_string("""
             on_seek: root.dispatch('on_seek', int(args[1]))
 
         Label:
-            text: root.format_time(root.duration)
+            text: TrackUtils.format_time(root.duration) or root.default_text
             halign: 'left'
             size_hint_x: None
             width: 25
