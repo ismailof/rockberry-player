@@ -10,9 +10,33 @@ from ..widgets.volumebar import VolumeBar
 from ..widgets.imageholdbutton import PlaybackButton
 from ..widgets.progress_rectangle import ProgressRectangle
 
+from ..music.tracks import TrackUtils
+from ..utils import MarkupText
+
 
 class PlaybackScreen(Screen):
-    pass
+
+    def format_time(self, time):
+        if time is None:
+            return ''
+
+        time_secs = int(round(time * TrackUtils.time_resolution))
+        time_st = {'s': time_secs % 60,
+                   'm': (time_secs // 60) % 60,
+                   'h': time_secs // 3600}
+
+        if time_secs >= 3600:
+            time_format = MarkupText('{h:d} ', size=18) \
+                + MarkupText('{m:02d} ', size=18, b=True) \
+                + MarkupText('{s:02d}', size=14)
+        elif time_secs >= 60:
+            time_format = MarkupText('{m:d} ', size=18, b=True) \
+                + MarkupText('{s:02d}', size=14)
+        else:
+            time_format = MarkupText(' ', size=18, b=True) \
+                + MarkupText('{s:02d}', size=14)
+
+        return time_format.format(**time_st)
 
 
 Builder.load_string("""
@@ -91,6 +115,7 @@ Builder.load_string("""
                 AlbumCover:
                     size_hint_x: None
                     width: self.height
+                    border_width: 2
                     uri: app.mm.prev.uri
 
                     PlaybackButton:
@@ -113,17 +138,22 @@ Builder.load_string("""
                         max: app.mm.current.duration or 0
 
                     BoxLayout:
+                        orientation: 'vertical'
                         size: self.parent.size
                         pos: self.parent.pos
 
                         Label:
-                            text: TrackUtils.format_time(app.mm.state.time_position) if app.mm.current.duration else ''
-                            halign: 'left'
+                            text: root.format_time(app.mm.state.time_position) if app.mm.current.duration else ''
+                            markup: True
+                            halign: 'right'
+                            valign: 'top'
                             text_size: self.size
 
                         Label:
-                            text: TrackUtils.format_time(app.mm.current.duration)
+                            text: root.format_time(app.mm.current.duration)
+                            markup: True
                             halign: 'right'
+                            valign: 'bottom'
                             text_size: self.size
 
                 AlbumCover:
