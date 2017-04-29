@@ -120,6 +120,7 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'prev'
+                        call: app.mm.state.dispatch
                         color_released: (1, 1, 1, 0.75)
                         pos: self.parent.pos
                         size: self.parent.size
@@ -127,6 +128,7 @@ Builder.load_string("""
                 PlaybackButton:
                     action: 'pause' if app.mm.state.playback_state == 'playing' else 'play'
                     on_hold: self.action = 'stop'
+                    call: app.mm.state.dispatch
                     size_hint_y: 0.8
                     holdtime: 1.5
 
@@ -164,6 +166,7 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'next'
+                        call: app.mm.state.dispatch
                         color_released: (1, 1, 1, 0.75)
                         pos: self.parent.pos
                         size: self.parent.size

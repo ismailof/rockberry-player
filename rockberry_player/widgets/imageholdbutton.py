@@ -1,5 +1,8 @@
+import collections
+
 from kivy.lang import Builder
-from kivy.properties import NumericProperty, ListProperty, OptionProperty
+from kivy.properties import NumericProperty, ListProperty, OptionProperty, \
+    DictProperty, ObjectProperty
 from kivy.uix.image import Image
 
 from ..music.playback import PlaybackControl
@@ -15,7 +18,8 @@ class ImageHoldButton(HoldButtonBehavior, Image):
 class PlaybackButton(ImageHoldButton):
     action = OptionProperty(PlaybackControl.ACTIONS[0],
                             options=PlaybackControl.ACTIONS)
-
+    call = ObjectProperty(baseclass=collections.Callable)
+    args = DictProperty(defaultvalue={}, rebind=True)
 
 Builder.load_string('''
 
@@ -35,6 +39,7 @@ Builder.load_string('''
 
 <PlaybackButton>:
     source: 'playback_{}.png'.format(self.action)
-    on_release: app.mm.state.dispatch('on_' + self.action)
+    args: {'event_type': 'on_' + self.action}
+    on_release: self.call(**self.args)
 
 ''')
