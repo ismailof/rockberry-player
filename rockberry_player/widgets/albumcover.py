@@ -20,6 +20,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
     default = StringProperty(None, allownone=True)
     imagelist = ListProperty([])
     background = ListProperty([0, 0, 0, 0])
+    _prev_uri = ''
 
     def get_border_rectangle(self):
         return (self.center_x - self.norm_image_size[0] / 2.0,
@@ -34,6 +35,9 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
     )
 
     def on_uri(self, _, uri):
+        if self.uri == self._prev_uri:
+            return
+        self._prev_uri = self.uri
         self.source = self.default or ImageUtils.IMG_NONE
         ImageCache.remove_callback(self.update_imagelist)
         ImageCache.request_item(uri=self.uri, callback=self.update_imagelist)
@@ -44,9 +48,6 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
         else:
             ImageCache.remove_callback(self.update_imagelist)
 
-    def on_imagelist(self, *args):
-        self.select_image()
-
     def on_size(self, *args):
         self.select_image()
 
@@ -56,6 +57,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
 
     def update_imagelist(self, imagelist, _):
         self.imagelist = imagelist or []
+        self.select_image()
 
     @scheduled
     def select_image(self, *args):
