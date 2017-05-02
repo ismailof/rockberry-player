@@ -30,7 +30,7 @@ class TrackUtils(object):
 
     @staticmethod
     def words_in_track(track):
-        return RefUtils.clean_words(
+        return RefUtils.get_words(
             TrackUtils.title_text(track),
             TrackUtils.artists_text(track),
             TrackUtils.album_text(track))

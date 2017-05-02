@@ -56,6 +56,7 @@ class MediaManager(EventDispatcher):
 
     browser = ObjectProperty(BrowserControl(), rebind=True)
 
+
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
 
@@ -68,8 +69,13 @@ class MediaManager(EventDispatcher):
             error_handler=self.on_mopidy_error,
             connection_handler=self.on_connection,
         )
-
         self.mopidy.debug_client(True)
+
+        self.controllers = (
+            self.state, self.mixer,
+            self.current, self.next, self.prev,
+            self.options, self.queue, self.browser)
+
         self.bind_events()
 
     @scheduled
@@ -87,7 +93,7 @@ class MediaManager(EventDispatcher):
     def choose_window(self, *args, **kwargs):
         if not self.connected:
             screen = 'server'
-        elif self.state.playback_state == 'playing':
+        elif self.state.playback_state != 'stopped':
             screen = 'playback'
         elif self.queue.tracklist:
             screen = 'tracklist'
@@ -141,25 +147,11 @@ class MediaManager(EventDispatcher):
         self.check_playback_end = Clock.create_trigger(self.refresh_main_info, 1)
 
     def init_player_state(self):
-        for controller in (self.state,
-                           self.mixer,
-                           self.current,
-                           self.next,
-                           self.prev,
-                           self.options,
-                           self.queue,
-                           self.browser):
+        for controller in self.controllers:
             controller.refresh()
 
     def reset_player_state(self):
-        for controller in (self.state,
-                           self.mixer,
-                           self.current,
-                           self.next,
-                           self.prev,
-                           self.options,
-                           self.queue,
-                           self.browser):
+        for controller in self.controllers:
             controller.reset()
 
     def on_mopidy_error(self, error):
@@ -234,16 +226,18 @@ class MediaManager(EventDispatcher):
             return
 
         # Select tune_id as first and shuffle if aplicable
-        first_uri = [uris.pop(tune_id)] if tune_id is not None else []
         if self.queue.shuffle_mode:
+            first_uri = [uris.pop(tune_id)] if tune_id is not None else []
             random.shuffle(uris)
-        uris = first_uri + uris
+            uris = first_uri + uris
+            if tune_id is not None:
+                tune_id = 0
 
         if tune_id is not None:
             self.mopidy.tracklist.clear()
 
-        self.mopidy.tracklist.add(uris=uris)
+        tl_tracks = self.mopidy.tracklist.add(uris=uris, timeout=30)
 
-        if tune_id is not None:
-            self.app.mm.mopidy.playback.play()
+        if tl_tracks and tune_id is not None:
+            self.app.mm.mopidy.playback.play(tlid=tl_tracks[tune_id].tlid)
             self.app.main.switch_to(screen='playback')
