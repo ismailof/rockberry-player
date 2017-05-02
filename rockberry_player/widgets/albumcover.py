@@ -6,7 +6,8 @@ from kivy.uix.image import AsyncImage
 
 from ..widgets.holdbutton import HoldButtonBehavior
 from ..music.base import MediaController
-from ..music.images import ImageUtils, ImageCache
+from ..music.images import ImageUtils
+from ..music.cache import MediaCache
 from ..music.refs import RefUtils
 from ..utils import scheduled
 
@@ -20,6 +21,8 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
     default = StringProperty(None, allownone=True)
     imagelist = ListProperty([])
     background = ListProperty([0, 0, 0, 0])
+
+    cache = MediaCache(method='library.get_images')
     _prev_uri = ''
 
     def get_border_rectangle(self):
@@ -39,14 +42,14 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
             return
         self._prev_uri = self.uri
         self.source = self.default or ImageUtils.IMG_NONE
-        ImageCache.remove_callback(self.update_imagelist)
-        ImageCache.request_item(uri=self.uri, callback=self.update_imagelist)
+        self.cache.remove_callback(self.update_imagelist)
+        self.cache.request_item(uri=self.uri, callback=self.update_imagelist)
 
     def on_parent(self, _, parent):
         if self.parent is not None:
             self.select_image()
         else:
-            ImageCache.remove_callback(self.update_imagelist)
+            self.cache.remove_callback(self.update_imagelist)
 
     def on_size(self, *args):
         self.select_image()
@@ -69,18 +72,17 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
         if img_source \
                 and RefUtils.get_media_from_uri(self.uri) == 'local' \
                 and not self.is_uri(img_source):
-            img_source = 'http://' + ImageCache.app.MOPIDY_SERVER + img_source
+            img_source = 'http://' + MediaCache.app.MOPIDY_SERVER + img_source
 
         self.source = img_source or self.default or ImageUtils.IMG_NONE
 
     def refresh(self, *args):
         self.imagelist = []
-        ImageCache.remove_items(uris=[self.uri])
-        ImageCache.request_item(self.uri, self.update_imagelist)
+        self.cache.remove_items(uris=[self.uri])
+        self.cache.request_item(self.uri, self.update_imagelist)
 
 
 Builder.load_string("""
-#:import ImageUtils rockberry_player.music.images.ImageUtils
 
 <AlbumCover>:
     canvas.before:

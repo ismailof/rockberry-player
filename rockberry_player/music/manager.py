@@ -14,7 +14,6 @@ from ..utils import scheduled, delayed
 from .base import MediaController
 from .refs import RefUtils
 from .tracks import TrackItem, TrackControl
-from .images import ImageCache
 from .playback import PlaybackControl
 from .options import OptionsControl
 from .mixer import MixerControl
@@ -104,7 +103,6 @@ class MediaManager(EventDispatcher):
         PlaybackControl.set_interface(self.mopidy.playback)
         MixerControl.set_interface(self.mopidy.mixer)
         OptionsControl.set_interface(self.mopidy.tracklist)
-        ImageCache.set_interface(self.mopidy.library.get_images)
         QueueControl.set_interface(self.mopidy.tracklist)
         BrowserControl.set_interface(self.mopidy.library)
 

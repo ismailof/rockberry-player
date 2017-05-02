@@ -24,16 +24,10 @@ class MediaController(EventDispatcher):
 
     def call_method(self, method, **parameters):
         if not self.mopidy:
-            return
+            raise Exception('%r.call_method: Mopidy server is not set' %
+                self.__class__.__name__)
+        if not method:
+            raise Exception('%r.call_method: No server method set' %
+                self.__class__.__name__)
 
-        self.mopidy.core.send(method, **parameters)
-
-    def bind_event(self, method, events):
-        if not self.mopidy:
-            return
-
-        if type(events) != list:
-            events = [events]
-
-        for event in events:
-            self.mopidy.bind_event(event, method)
+        return self.mopidy.core.send(method, **parameters)
