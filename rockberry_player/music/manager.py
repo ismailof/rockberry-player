@@ -32,6 +32,19 @@ class MediaManager(EventDispatcher):
                      refresh_args={}),
         rebind=True)
 
+    prev = ObjectProperty(
+        TrackControl(refresh_method='tracklist.previous_track',
+                     refresh_args={'tl_track':None}),
+        rebind=True)
+    next = ObjectProperty(
+        TrackControl(refresh_method='tracklist.next_track',
+                     refresh_args={'tl_track':None}),
+        rebind=True)
+    eot = ObjectProperty(
+        TrackControl(refresh_method='tracklist.eot_track',
+                     refresh_args={'tl_track':None}),
+        rebind=True)
+
     state = ObjectProperty(
         PlaybackControl(resolution=0.001, update_interval=0.25),
         rebind=True)
@@ -59,7 +72,8 @@ class MediaManager(EventDispatcher):
         self.mopidy.debug_client(True)
 
         self.controllers = (
-            self.state, self.mixer, self.current,
+            self.state, self.mixer,
+            self.current, self.next, self.prev,
             self.options, self.queue, self.browser)
 
         self.bind_events()
@@ -119,14 +133,15 @@ class MediaManager(EventDispatcher):
         self.mopidy.bind_event('track_playback_resumed', self.track_playback_paused_or_resumed)
 
         # Current track updates
-        self.current.bind(item=self.queue.refresh_context_info)
+        self.current.bind(item=self.refresh_context_info)
         self.state.bind(on_next=self.current.refresh,
                         on_prev=self.current.refresh)
 
         # Context update: Options and Tracklist
-        self.mopidy.bind_event('tracklist_changed', self.queue.refresh)
         self.mopidy.bind_event('options_changed', self.options.refresh)
-        self.mopidy.bind_event('options_changed', self.queue.refresh_context_info)        
+        self.mopidy.bind_event('tracklist_changed', self.queue.refresh)
+        self.mopidy.bind_event('options_changed', self.refresh_context_info)
+        self.mopidy.bind_event('tracklist_changed', self.refresh_context_info)
 
         # Trigger to update status on playback end
         self.check_playback_end = Clock.create_trigger(self.refresh_main_info, 1)
@@ -147,6 +162,12 @@ class MediaManager(EventDispatcher):
                            self.current):
             controller.refresh()
 
+    @delayed(1)
+    def refresh_context_info(self, *args):
+        for trackitem in (self.next,
+                          self.prev,
+                          self.eot):
+            trackitem.refresh()
 
     # Track playback events
 

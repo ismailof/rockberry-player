@@ -91,7 +91,7 @@ Builder.load_string("""
                 spacing: 10
 
                 Label:
-                    text: app.mm.queue.prev.title
+                    text: app.mm.prev.title
                     text_size: self.size
                     halign: 'left'
                     valign: 'top'
@@ -101,7 +101,7 @@ Builder.load_string("""
                 Widget:
 
                 Label:
-                    text: app.mm.queue.next.title
+                    text: app.mm.next.title
                     text_size: self.size
                     halign: 'right'
                     valign: 'top'
@@ -116,7 +116,7 @@ Builder.load_string("""
                     size_hint_x: None
                     width: self.height
                     border_width: 2
-                    uri: app.mm.queue.prev.uri
+                    uri: app.mm.prev.uri
 
                     PlaybackButton:
                         action: 'prev'
@@ -162,7 +162,7 @@ Builder.load_string("""
                     size_hint_x: None
                     width: self.height
                     border_width: 2
-                    uri: app.mm.queue.next.uri
+                    uri: app.mm.next.uri
 
                     PlaybackButton:
                         action: 'next'
