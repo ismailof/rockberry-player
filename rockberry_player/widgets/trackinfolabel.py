@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from kivy.properties import StringProperty
 
 from ..widgets.referencelabel import ReferenceLabel
-from ..music.tracks import TrackItem
+from ..music.tracks import TrackUtils, TrackItem
 from ..utils import MarkupText
 
 
@@ -52,7 +52,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                           self.format_album(self.item.get('album', {}))])
 
     def format_title(self, title):
-        parts = self._split_text(title, max=3)
+        parts = TrackUtils.split_title(title, max=3)
         parts = [MarkupText(textpart,
                             size=self.font_size if index > 0
                                  else int(self.font_size * 1.3),
@@ -77,7 +77,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         return ' \xb7 '.join(artists_list)
 
     def format_album(self, album):
-        parts = self._split_text(album.get('name', ''))
+        parts = TrackUtils.split_title(album.get('name', ''))
         parts = [MarkupText(item,
                             size=self.font_size if index == 0
                                 else self.font_size - 2)
@@ -87,16 +87,4 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                           color='#e7e7e7',
                           ref=self.new_ref(album))
 
-    def _split_text(self, text,  max=None):
-        separators = [(' - ', '~'), ('[', '~['), ('(', '~(')]
-        for sep, sub in separators:
-            if max:
-                remain = max - text.count('~') - 1
-                if remain <= 0:
-                    break
-                text = text.replace(sep, sub, remain)
-            else:
-                text = text.replace(sep, sub)
-        text = text.strip('~')
-        return [part.strip(' \t\n\r') for part in text.split('~')]
 

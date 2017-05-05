@@ -50,6 +50,20 @@ class TrackUtils(object):
 
         return time_format.format(**time_st)
 
+    @staticmethod
+    def split_title(text,  max=None):
+        separators = [(' - ', '~'), ('[', '~['), ('(', '~('), (' | ', '~')]
+        for sep, sub in separators:
+            if max:
+                remain = max - text.count('~') - 1
+                if remain <= 0:
+                    break
+                text = text.replace(sep, sub, remain)
+            else:
+                text = text.replace(sep, sub)
+        text = text.strip('~')        
+        return [part.strip(' \t\n\r') for part in text.split('~')]
+        
 
 class TrackItem(RefItem):
 

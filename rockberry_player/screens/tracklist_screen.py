@@ -90,6 +90,7 @@ Builder.load_string("""
             PlaybackArea:
                 size_hint_x: 0.4
                 item: app.mm.current.item
+                #on_press: tlview.scroll_to_index(tlview.current_id - 1)
 
                 BoxLayout:
                     spacing: 5
