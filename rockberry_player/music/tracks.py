@@ -61,9 +61,9 @@ class TrackUtils(object):
                 text = text.replace(sep, sub, remain)
             else:
                 text = text.replace(sep, sub)
-        text = text.strip('~')        
+        text = text.strip('~')
         return [part.strip(' \t\n\r') for part in text.split('~')]
-        
+
 
 class TrackItem(RefItem):
 
@@ -81,12 +81,6 @@ class TrackItem(RefItem):
                           bind=['title', 'album', 'artists'])
     duration = AliasProperty(get_duration, None, bind=['item'])
 
-
-class TrackControl(TrackItem, MediaController):
-
-    refresh_method = StringProperty('')
-    refresh_args = DictProperty({})
-
     @scheduled
     def set_tl_track(self, tl_track=None, *args, **kwargs):
         self.tlid = tl_track.get('tlid') if tl_track else 0
@@ -95,6 +89,15 @@ class TrackControl(TrackItem, MediaController):
     @scheduled
     def set_track(self, track=None, *args, **kwargs):
         self.item = track if track else {}
+        
+    def reset(self, *args):
+        self.set_tl_track(tl_track=None)
+
+    
+class TrackControl(TrackItem, MediaController):
+
+    refresh_method = StringProperty('')
+    refresh_args = DictProperty({})
 
     def refresh(self, *args, **kwargs):
         if self.refresh_method:
@@ -103,6 +106,3 @@ class TrackControl(TrackItem, MediaController):
                 on_result=self.set_tl_track,
                 **self.refresh_args
             )
-
-    def reset(self, *args):
-        self.set_tl_track(tl_track=None)
