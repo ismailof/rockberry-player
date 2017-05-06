@@ -52,7 +52,7 @@ class TrackUtils(object):
 
     @staticmethod
     def split_title(text,  max=None):
-        separators = [(' - ', '~'), ('[', '~['), ('(', '~('), (' | ', '~')]
+        separators = [(' - ', '~'), (' | ', '~'), ('[', '~['), ('(', '~(')]
         for sep, sub in separators:
             if max:
                 remain = max - text.count('~') - 1
