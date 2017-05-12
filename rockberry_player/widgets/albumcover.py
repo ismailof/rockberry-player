@@ -1,17 +1,13 @@
 from kivy.lang import Builder
-from kivy.loader import Loader
 from kivy.clock import mainthread
 from kivy.properties import NumericProperty, StringProperty,\
     ListProperty, AliasProperty
 from kivy.uix.image import AsyncImage
 
 from ..widgets.holdbutton import HoldButtonBehavior
-from ..music.base import MediaController
 from ..music.images import ImageUtils
 from ..music.cache import MediaCache
 from ..music.refs import RefUtils
-
-from ..debug import debug_function
 
 
 class AlbumCover(HoldButtonBehavior, AsyncImage):

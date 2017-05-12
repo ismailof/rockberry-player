@@ -1,8 +1,6 @@
 from kivy.lang import Builder
 from kivy.uix.image import Image
-from kivy.properties import StringProperty, NumericProperty, VariableListProperty
-
-from ..music.images import ImageUtils
+from kivy.properties import StringProperty
 
 
 class AtlasIcon(Image):

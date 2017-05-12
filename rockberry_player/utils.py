@@ -51,4 +51,3 @@ def delayed(timeout):
         return schedule_function
 
     return scheduled
-

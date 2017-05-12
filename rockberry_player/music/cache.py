@@ -1,7 +1,6 @@
 from functools import partial
 
 from kivy.clock import Clock
-from kivy.properties import StringProperty
 from kivy.logger import Logger
 
 from .base import MediaController
@@ -72,7 +71,7 @@ class MediaCache(MediaController):
         if not items:
             return
 
-        Logger.debug('{} : _update_cache: {}'.format (self.__class__.__name__, items))
+        Logger.debug('{} : _update_cache: {}'.format(self.__class__.__name__, items))
         self._cache.update(items)
         for uri in items.keys():
             self._dispatch_item(uri, items[uri])

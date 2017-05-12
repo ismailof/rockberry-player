@@ -1,8 +1,8 @@
 from kivy.clock import Clock, mainthread
-from kivy.properties import ObjectProperty, ListProperty, AliasProperty
+from kivy.properties import ListProperty, AliasProperty
 
 from base import MediaController
-from refs import RefUtils, RefItem
+from refs import RefUtils
 
 
 class BrowserControl (MediaController):

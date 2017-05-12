@@ -1,5 +1,4 @@
 from kivy.lang import Builder
-from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 

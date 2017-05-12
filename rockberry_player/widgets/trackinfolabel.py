@@ -86,5 +86,3 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
         return MarkupText(' '.join(parts),
                           color='#e7e7e7',
                           ref=self.new_ref(album))
-
-

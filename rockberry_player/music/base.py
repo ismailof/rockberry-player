@@ -1,4 +1,3 @@
-from kivy.app import App
 from kivy.event import EventDispatcher
 
 

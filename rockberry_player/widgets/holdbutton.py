@@ -1,8 +1,7 @@
 import time
-from functools import partial
 
 from kivy.clock import Clock
-from kivy.properties import NumericProperty, BooleanProperty
+from kivy.properties import NumericProperty
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivy.uix.button import Button
 
@@ -74,4 +73,3 @@ class HoldButtonBehavior(ButtonBehavior):
 
 class HoldButton(HoldButtonBehavior, Button):
     pass
-

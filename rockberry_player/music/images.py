@@ -1,8 +1,3 @@
-from os import path
-from kivy.resources import resource_find
-from ..music.cache import MediaCache
-
-
 class ImageUtils(object):
 
     # TODO: Get base directory to do relative searching
@@ -49,5 +44,3 @@ class ImageUtils(object):
         image_url = imagelist[item_fit].get('uri', '')
 
         return image_url
-
-

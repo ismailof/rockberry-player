@@ -13,14 +13,12 @@ from ..utils import delayed
 
 from .base import MediaController
 from .refs import RefUtils
-from .tracks import TrackItem, TrackControl
+from .tracks import TrackControl
 from .playback import PlaybackControl
 from .options import OptionsControl
 from .mixer import MixerControl
 from .queue import QueueControl
 from .browser import BrowserControl
-
-from ..debug import debug_function
 
 
 class MediaManager(EventDispatcher):
@@ -34,15 +32,15 @@ class MediaManager(EventDispatcher):
 
     prev = ObjectProperty(
         TrackControl(refresh_method='tracklist.previous_track',
-                     refresh_args={'tl_track':None}),
+                     refresh_args={'tl_track': None}),
         rebind=True)
     next = ObjectProperty(
         TrackControl(refresh_method='tracklist.next_track',
-                     refresh_args={'tl_track':None}),
+                     refresh_args={'tl_track': None}),
         rebind=True)
     eot = ObjectProperty(
         TrackControl(refresh_method='tracklist.eot_track',
-                     refresh_args={'tl_track':None}),
+                     refresh_args={'tl_track': None}),
         rebind=True)
 
     state = ObjectProperty(PlaybackControl(), rebind=True)
@@ -54,7 +52,6 @@ class MediaManager(EventDispatcher):
 
     browser = ObjectProperty(BrowserControl(), rebind=True)
 
-
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
 
@@ -62,7 +59,7 @@ class MediaManager(EventDispatcher):
         MediaController.app = self.app
 
         self.mopidy = MopidyClient(
-            ws_url = 'ws://' + self.app.MOPIDY_SERVER + '/mopidy/ws',
+            ws_url='ws://' + self.app.MOPIDY_SERVER + '/mopidy/ws',
             version='2.0.1',
             error_handler=self.on_mopidy_error,
             connection_handler=self.on_connection,
@@ -186,7 +183,6 @@ class MediaManager(EventDispatcher):
         self.state.set_time_position(time_position)
         self.current.set_tl_track(tl_track)
 
-
     # TODO: Move to a proper place (queue)
     # TODO: The two actions are quite the same. Join.
 
@@ -195,7 +191,7 @@ class MediaManager(EventDispatcher):
 
         if refs:
             uris = [RefUtils.get_uri(ref) for ref in refs
-                    if RefUtils.get_type(ref)=='track']
+                    if RefUtils.get_type(ref) == 'track']
         if not uris:
             return
 
@@ -209,7 +205,7 @@ class MediaManager(EventDispatcher):
             tlid_first = tltracks[0]['tlid']
             self.mopidy.playback.play(tlid=tlid_first)
             self.app.main.switch_to(screen='playback')
-        except Exception as ex:
+        except Exception:
             pass
 
     @mainthread
@@ -219,7 +215,7 @@ class MediaManager(EventDispatcher):
                          ):
         if refs:
             uris = [RefUtils.get_uri(ref) for ref in refs
-                    if RefUtils.get_type(ref)=='track']
+                    if RefUtils.get_type(ref) == 'track']
         if not uris:
             return
 
@@ -234,7 +230,7 @@ class MediaManager(EventDispatcher):
         if tune_id is not None:
             self.mopidy.tracklist.clear()
 
-        tl_tracks = self.mopidy.tracklist.add(uris=uris, timeout=30)
+        tl_tracks = self.mopidy.tracklist.add(uris=uris, timeout=40)
 
         if tl_tracks and tune_id is not None:
             self.app.mm.mopidy.playback.play(tlid=tl_tracks[tune_id].tlid)

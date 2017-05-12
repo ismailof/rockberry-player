@@ -1,10 +1,7 @@
 from __future__ import absolute_import
 
-from kivy.app import App
 from kivy.clock import Clock, mainthread
-from kivy.event import EventDispatcher
-from kivy.properties import NumericProperty, OptionProperty, \
-    AliasProperty, ObjectProperty, DictProperty, StringProperty
+from kivy.properties import NumericProperty, OptionProperty, StringProperty
 
 from .base import MediaController
 from .tracks import TrackUtils

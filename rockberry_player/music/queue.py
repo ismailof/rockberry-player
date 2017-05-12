@@ -1,4 +1,4 @@
-from kivy.clock import Clock, mainthread
+from kivy.clock import mainthread
 from kivy.properties import ListProperty, NumericProperty, \
     BooleanProperty
 
