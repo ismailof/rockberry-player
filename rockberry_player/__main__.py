@@ -4,7 +4,7 @@ __package__ = 'rockberry_player'
 
 import os
 import kivy
-kivy.require('1.9.2')
+kivy.require('1.10.0')
 from kivy.app import App
 
 from .screens import RockberryMainScreen

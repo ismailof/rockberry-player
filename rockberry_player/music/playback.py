@@ -22,14 +22,16 @@ class PlaybackControl(MediaController):
                                     errorvalue=STATES[0])
 
     stream_title = StringProperty('')
-
     time_position = NumericProperty(0)
-    update_interval = NumericProperty(0.25)
 
     def __init__(self, controls=None, **kwargs):
         for action in self.ACTIONS:
             self.register_event_type('on_' + action)
         super(PlaybackControl, self).__init__(**kwargs)
+        self._tick_event = Clock.create_trigger(
+            self._tick_position,
+            timeout=0.25,
+            interval=True)
 
     def refresh(self, *args):
         self.interface.get_state(on_result=self.set_playback_state)
@@ -41,15 +43,10 @@ class PlaybackControl(MediaController):
         self.set_time_position(0)
         self.set_stream_title(None)
 
-    def tick_position(self, dt=0, *args):
-        self.time_position = (self.time_position
-                                + dt / TrackUtils.time_resolution)
-
     def on_playback_state(self, *args):
+        self._tick_event.cancel()
         if self.playback_state == 'playing':
-            Clock.schedule_interval(self.tick_position, self.update_interval)
-        else:
-            Clock.unschedule(self.tick_position)
+            self._tick_event()
 
     @scheduled
     def set_playback_state(self, state=None, new_state=None, **kwargs):
@@ -61,12 +58,17 @@ class PlaybackControl(MediaController):
 
     @scheduled
     def set_time_position(self, time_position, *args, **kwargs):
-        Clock.unschedule(self.tick_position)
+        self._tick_event.cancel()
         self.time_position = time_position or 0
-        self.on_playback_state()
+        if self.playback_state == 'playing':
+            self._tick_event()
 
     def seek(self, time_position, *args):
         self.interface.seek(int(time_position))
+
+    def _tick_position(self, dt=0, *args):
+        self.time_position = (self.time_position
+                                + dt / TrackUtils.time_resolution)
 
     # ACTION BUTTONS METHODS
 

@@ -49,9 +49,7 @@ def delayed(timeout):
                 return _function_(*args, **kwargs)
 
             # Remove dt parameter (last 'args' item)
-            largs = list(args)
-            dt = largs.pop(-1)
-            args = tuple(largs)
+            args = tuple(list(args)[:-1])
             # Call the function
             do_function(*args, **kwargs)
 

@@ -45,9 +45,7 @@ class MediaManager(EventDispatcher):
                      refresh_args={'tl_track':None}),
         rebind=True)
 
-    state = ObjectProperty(
-        PlaybackControl(resolution=0.001, update_interval=0.25),
-        rebind=True)
+    state = ObjectProperty(PlaybackControl(), rebind=True)
 
     mixer = ObjectProperty(MixerControl(), rebind=True)
     options = ObjectProperty(OptionsControl(), rebind=True)
