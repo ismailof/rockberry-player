@@ -21,8 +21,7 @@ class DeviceImage(Image):
                  'bt': 'bluetooth',
                  'youtube': 'tv'}
 
-    dev_images = {None: 'transparent.png',
-                  'turntable': 'turntable.zip',
+    dev_images = {'turntable': 'turntable.zip',
                   'radio': 'dev_radio.png',
                   'microphone': 'dev_mic.png',
                   'bluetooth': 'dev_bt.png',
@@ -40,22 +39,12 @@ class DeviceImage(Image):
     def on_device(self, *args):
         device_image = self.dev_images.get(self.device)
         self.source = device_image or ImageUtils.IMG_NONE
-        self.set_anim_delay()
-
-    def on_playing(self, *args):
-        self.set_anim_delay()
-
-    def set_anim_delay(self, *args):
-        # Required to avoid Clock.max_iteration
-        self.anim_delay = 1
-        # Set to vinyl speed 33rev/min if playing and turntable
-        self.anim_delay = 60.0 / (28 * 33) \
-            if self.playing and self.device == 'turntable' else -1
 
 
 Builder.load_string("""
 
 <DeviceImage>:
     allow_stretch: True
+    anim_delay: 60.0 / (28 * 33) if self.playing and self.device == 'turntable' else -1
 
 """)
