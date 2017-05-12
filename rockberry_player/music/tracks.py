@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
 
-from kivy.event import EventDispatcher
+from kivy.clock import mainthread
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
 from base import MediaController
-from ..utils import scheduled
 from refs import RefUtils, RefItem
 
 
@@ -61,9 +60,9 @@ class TrackUtils(object):
                 text = text.replace(sep, sub, remain)
             else:
                 text = text.replace(sep, sub)
-        text = text.strip('~')        
+        text = text.strip('~')
         return [part.strip(' \t\n\r') for part in text.split('~')]
-        
+
 
 class TrackItem(RefItem):
 
@@ -87,12 +86,12 @@ class TrackControl(TrackItem, MediaController):
     refresh_method = StringProperty('')
     refresh_args = DictProperty({})
 
-    @scheduled
+    @mainthread
     def set_tl_track(self, tl_track=None, *args, **kwargs):
         self.tlid = tl_track.get('tlid') if tl_track else 0
         self.item = tl_track.get('track') if tl_track else {}
 
-    @scheduled
+    @mainthread
     def set_track(self, track=None, *args, **kwargs):
         self.item = track if track else {}
 

@@ -1,5 +1,6 @@
 from kivy.lang import Builder
 from kivy.loader import Loader
+from kivy.clock import mainthread
 from kivy.properties import NumericProperty, StringProperty,\
     ListProperty, AliasProperty
 from kivy.uix.image import AsyncImage
@@ -9,7 +10,6 @@ from ..music.base import MediaController
 from ..music.images import ImageUtils
 from ..music.cache import MediaCache
 from ..music.refs import RefUtils
-from ..utils import scheduled
 
 from ..debug import debug_function
 
@@ -54,7 +54,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
     def on_size(self, *args):
         self.select_image()
 
-    @scheduled
+    @mainthread
     def on_error(self, error):
         self.source = self.default or ImageUtils.IMG_NONE
 
@@ -62,7 +62,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
         self.imagelist = imagelist or []
         self.select_image()
 
-    @scheduled
+    @mainthread
     def select_image(self, *args):
         img_source = ImageUtils.get_fittest_image(
             imagelist=self.imagelist,

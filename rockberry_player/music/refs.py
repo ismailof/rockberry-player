@@ -6,7 +6,6 @@ import re
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, AliasProperty
 
-from ..utils import scheduled
 from ..music.images import ImageUtils
 
 

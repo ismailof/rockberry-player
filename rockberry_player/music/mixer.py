@@ -1,7 +1,7 @@
-from kivy.event import EventDispatcher
+from kivy.clock import mainthread
 from kivy.properties import BoundedNumericProperty, \
     BooleanProperty, AliasProperty
-from ..utils import scheduled, delayed
+from ..utils import delayed
 
 from base import MediaController
 
@@ -20,11 +20,11 @@ class MixerControl(MediaController):
         self.interface.get_volume(on_result=self.update_volume)
         self.interface.get_mute(on_result=self.update_mute)
 
-    @scheduled
+    @mainthread
     def update_volume(self, volume, *args, **kwargs):
         self.volume = volume
 
-    @scheduled
+    @mainthread
     def update_mute(self, mute, *args, **kwargs):
         self.mute = mute
 

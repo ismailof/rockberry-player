@@ -3,13 +3,13 @@ import random
 
 from kivy.app import App
 from kivy.event import EventDispatcher
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
 
-from ..utils import scheduled, delayed
+from ..utils import delayed
 
 from .base import MediaController
 from .refs import RefUtils
@@ -76,7 +76,7 @@ class MediaManager(EventDispatcher):
 
         self.bind_events()
 
-    @scheduled
+    @mainthread
     def on_connection(self, connection_state, *args):
         self.connected = connection_state
 
@@ -169,19 +169,19 @@ class MediaManager(EventDispatcher):
 
     # Track playback events
 
-    @scheduled
+    @mainthread
     def track_playback_started(self, tl_track):
         self.check_playback_end.cancel()
         self.state.set_time_position(0)
         self.current.set_tl_track(tl_track)
 
-    @scheduled
+    @mainthread
     def track_playback_ended(self, time_position, tl_track):
         self.state.set_time_position(0)
         self.state.set_stream_title(None)
         self.check_playback_end()
 
-    @scheduled
+    @mainthread
     def track_playback_paused_or_resumed(self, time_position, tl_track):
         self.state.set_time_position(time_position)
         self.current.set_tl_track(tl_track)
@@ -190,7 +190,7 @@ class MediaManager(EventDispatcher):
     # TODO: Move to a proper place (queue)
     # TODO: The two actions are quite the same. Join.
 
-    @scheduled
+    @mainthread
     def play_uris(self, uris=None, refs=None):
 
         if refs:
@@ -212,7 +212,7 @@ class MediaManager(EventDispatcher):
         except Exception as ex:
             pass
 
-    @scheduled
+    @mainthread
     def add_to_tracklist(self,
                          refs=None, uris=None,
                          tune_id=None,

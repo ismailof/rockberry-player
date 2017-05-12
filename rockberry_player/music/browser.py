@@ -1,11 +1,8 @@
-from kivy.clock import Clock
-from kivy.event import EventDispatcher
+from kivy.clock import Clock, mainthread
 from kivy.properties import ObjectProperty, ListProperty, AliasProperty
 
 from base import MediaController
 from refs import RefUtils, RefItem
-
-from ..utils import scheduled
 
 
 class BrowserControl (MediaController):
@@ -16,11 +13,11 @@ class BrowserControl (MediaController):
                                None,
                                bind=['browse_tree'])
 
-    @scheduled
+    @mainthread
     def set_reflist(self, reflist, *args):
         self.reflist = reflist or []
 
-    @scheduled
+    @mainthread
     def set_reflist_from_tracks(self, tracks, *args):
         self.reflist = [RefUtils.make_reference(track) for track in tracks] \
             if tracks else []
@@ -61,17 +58,17 @@ class BrowserControl (MediaController):
 
         Clock.schedule_once(self.refresh, 2)
 
-    @scheduled
+    @mainthread
     def browse(self, item):
         self.browse_tree.append(RefUtils.make_reference(item))
         self.app.main.switch_to(screen='browse')
 
-    @scheduled
+    @mainthread
     def browse_back(self):
         if len(self.browse_tree) > 1:
             self.browse_tree.pop()
 
-    @scheduled
+    @mainthread
     def browse_home(self):
         self.browse_tree = [RefUtils.RefNone]
 

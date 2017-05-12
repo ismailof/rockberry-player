@@ -1,11 +1,10 @@
-from kivy.clock import Clock
-from kivy.event import EventDispatcher
+from kivy.clock import Clock, mainthread
 from kivy.properties import ListProperty, NumericProperty, \
     BooleanProperty
 
 from base import MediaController
 
-from ..utils import scheduled, delayed
+from ..utils import delayed
 
 
 class QueueControl(MediaController):
@@ -22,7 +21,7 @@ class QueueControl(MediaController):
         if self.interface:
             self.interface.get_tl_tracks(on_result=self.set_tracklist)
 
-    @scheduled
+    @mainthread
     def set_tracklist(self, tracklist, *args):
         self.tracklist = tracklist or []
         self.queue_point = 0

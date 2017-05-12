@@ -27,18 +27,6 @@ def MarkupText(text, **fmt_options):
     return markup_text
 
 
-def scheduled(_function_):
-    @wraps(_function_)
-    def do_function(*args, **kwargs):
-        return _function_(*args, **kwargs)
-
-    def schedule_function(*args, **kwargs):
-        Clock.schedule_once(
-            lambda dt: do_function(*args, **kwargs))
-
-    return schedule_function
-
-
 def delayed(timeout):
 
     def scheduled(_function_):

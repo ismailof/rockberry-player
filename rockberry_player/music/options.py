@@ -1,7 +1,5 @@
-from kivy.event import EventDispatcher
+from kivy.clock import mainthread
 from kivy.properties import BooleanProperty
-from ..utils import scheduled
-
 from base import MediaController
 
 
@@ -12,7 +10,7 @@ class OptionsControl(MediaController):
     repeat = BooleanProperty(False)
     consume = BooleanProperty(False)
 
-    @scheduled
+    @mainthread
     def update_tl_options(self, *args, **kwargs):
         self.random = self.interface.get_random(timeout=5) or False
         self.single = self.interface.get_single(timeout=5) or False

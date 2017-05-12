@@ -1,34 +1,30 @@
 from __future__ import absolute_import, print_function
 
 from kivy.lang import Builder
+from kivy.clock import mainthread
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import BooleanProperty, StringProperty,\
-    NumericProperty, ObjectProperty
+from kivy.properties import StringProperty, ObjectProperty
 
 from ..music.mixer import MixerControl
 from ..widgets.seekslider import SeekSlider
-#from ..gpio.gpiodial import GpioDialBehavior
-from ..utils import scheduled
 
 
-#class VolumeBar(GpioDialBehavior, BoxLayout):
 class VolumeBar(BoxLayout):
 
     text = StringProperty('')
     mixer = ObjectProperty(None, rebind=True)
 
-    @scheduled
+    @mainthread
     def on_rotate(self, value):
         self.ids['sld_volume'].manual_step(value * self.gpio_step)
 
-    @scheduled
+    @mainthread
     def on_click(self):
         self.mixer.set_mute(not self.mixer.mute)
 
 
 Builder.load_string("""
 #:set default_atlas 'atlas:///usr/local/lib/python2.7/dist-packages/kivy/data/images/defaulttheme/'
-
 
 <VolumeBar>:
     spacing: 5

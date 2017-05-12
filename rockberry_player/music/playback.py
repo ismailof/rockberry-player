@@ -1,15 +1,13 @@
 from __future__ import absolute_import
 
 from kivy.app import App
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty, OptionProperty, \
     AliasProperty, ObjectProperty, DictProperty, StringProperty
 
 from .base import MediaController
 from .tracks import TrackUtils
-
-from ..utils import scheduled
 
 
 class PlaybackControl(MediaController):
@@ -48,15 +46,15 @@ class PlaybackControl(MediaController):
         if self.playback_state == 'playing':
             self._tick_event()
 
-    @scheduled
+    @mainthread
     def set_playback_state(self, state=None, new_state=None, **kwargs):
         self.playback_state = state or new_state
 
-    @scheduled
+    @mainthread
     def set_stream_title(self, title, *args, **kwargs):
         self.stream_title = title or ''
 
-    @scheduled
+    @mainthread
     def set_time_position(self, time_position, *args, **kwargs):
         self._tick_event.cancel()
         self.time_position = time_position or 0
