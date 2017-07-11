@@ -186,7 +186,6 @@ class MediaManager(EventDispatcher):
     # TODO: Move to a proper place (queue)
     # TODO: The two actions are quite the same. Join.
 
-    @mainthread
     def play_uris(self, uris=None, refs=None):
 
         if refs:
@@ -208,7 +207,6 @@ class MediaManager(EventDispatcher):
         except Exception:
             pass
 
-    @mainthread
     def add_to_tracklist(self,
                          refs=None, uris=None,
                          tune_id=None,
@@ -220,18 +218,15 @@ class MediaManager(EventDispatcher):
             return
 
         # Select tune_id as first and shuffle if aplicable
-        if self.queue.shuffle_mode:
-            first_uri = [uris.pop(tune_id)] if tune_id is not None else []
-            random.shuffle(uris)
-            uris = first_uri + uris
-            if tune_id is not None:
-                tune_id = 0
-
+ 
         if tune_id is not None:
+            tune_uri = uris.pop(tune_id)
             self.mopidy.tracklist.clear()
-
-        tl_tracks = self.mopidy.tracklist.add(uris=uris, timeout=40)
-
-        if tl_tracks and tune_id is not None:
-            self.app.mm.mopidy.playback.play(tlid=tl_tracks[tune_id].tlid)
+            self.mopidy.tracklist.add(uris=[tune_uri])
+            self.mopidy.playback.play()
             self.app.main.switch_to(screen='playback')
+
+        if self.queue.shuffle_mode:
+            random.shuffle(uris)
+ 
+        self.mopidy.tracklist.add(uris=uris)

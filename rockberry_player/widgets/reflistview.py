@@ -28,7 +28,7 @@ Builder.load_string("""
 
 <RefListView>:
     viewclass: 'RefListItem'
-    bar_width: 20
+    bar_width: 40
     bar_margin: 2
     scroll_type: ['bars', 'content']
     RecycleBoxLayout:
