@@ -218,15 +218,20 @@ class MediaManager(EventDispatcher):
             return
 
         # Select tune_id as first and shuffle if aplicable
- 
+
         if tune_id is not None:
             tune_uri = uris.pop(tune_id)
             self.mopidy.tracklist.clear()
             self.mopidy.tracklist.add(uris=[tune_uri])
             self.mopidy.playback.play()
             self.app.main.switch_to(screen='playback')
+        else:
+            tune_id = 0
 
         if self.queue.shuffle_mode:
             random.shuffle(uris)
- 
-        self.mopidy.tracklist.add(uris=uris)
+            tune_id = 0
+
+        self.mopidy.tracklist.add(uris=uris[tune_id:])
+        if tune_id:
+            self.mopidy.tracklist.add(uris=uris[:tune_id], at_position=0)

@@ -73,7 +73,7 @@ class MediaCache(MediaController):
 
         Logger.debug('{} : _update_cache: {}'.format(self.__class__.__name__, items))
         self._cache.update(items)
-        for uri in items.keys():
+        for uri in items.iterkeys():
             self._dispatch_item(uri, items[uri])
 
     def _dispatch_item(self, uri, item):
