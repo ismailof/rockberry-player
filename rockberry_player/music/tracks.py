@@ -35,6 +35,13 @@ class TrackUtils(object):
             TrackUtils.album_text(track))
 
     @staticmethod
+    def matches_words(track, words):
+        track_words = TrackUtils.words_in_track(track)
+        return all(any(track_word.startswith(filter_word)
+                       for track_word in track_words)
+                   for filter_word in words)
+
+    @staticmethod
     def format_time(time):
         if time is None:
             return ''

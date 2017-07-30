@@ -24,13 +24,17 @@ class TrackListView(RefListView):
                       'tlid': tl_track['tlid'],
                       'current': tl_track['tlid'] == self.tlid
                      } for tl_track in self.tracklist]
+        self.scroll_to_current()
 
     def on_current_id(self, *args):
-        if self.current_id is not None:
-            self.scroll_to_index(self.current_id - 1)
+        self.scroll_to_current()
 
     def on_size(self, *args):
-        self.on_current_id()
+        self.scroll_to_current()
+
+    def scroll_to_current(self):
+        if self.current_id is not None:
+            self.scroll_to_index(self.current_id - 1)
 
 
 Builder.load_string("""

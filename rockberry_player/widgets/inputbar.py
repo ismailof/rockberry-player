@@ -11,19 +11,16 @@ class InputBar(BoxLayout):
 Builder.load_string("""
 
 <InputBar>:
-    size_hint_y: None
-    height: 45
-    spacing: 30
     text: input.text
 
-    Label:
-        size_hint_x: 0.2
-        font_size: 23
-        bold: True
-        text: root.title + ' '
-        halign: 'right'
-        valign: 'middle'
-        text_size: self.size
+    # Label:
+        # size_hint_x: 0.2
+        # font_size: 23
+        # bold: True
+        # text: root.title + ' '
+        # halign: 'right'
+        # valign: 'middle'
+        # text_size: self.size
     TextInput:
         id: input
         valign: 'middle'
@@ -32,7 +29,8 @@ Builder.load_string("""
         write_tab: False
         hint_text: root.title
     ImageButton:
-        size_hint_x: 0.1
+        size_hint_x: None
+        width: self.height
         source: 'button_x.png'
         on_press: input.text = ''
 """)
