@@ -38,18 +38,22 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
                                  for artist in artists.split(',')]
                 return '\n'.join([self.format_title(title),
                                   self.format_artists(artists_items),
-                                  self.format_album(self.item.get('album', {}))])
+                                  self.format_album(self.item.get('album'))])
             except:
                 pass
 
-        # Tunein station with no stream_title. Return only station name
-        if self.media == 'tunein' and not self.stream_title:
-            return self.format_title(self.title)
+        # Tunein station. Return only stream and station name
+        if self.media == 'tunein':
+            if self.stream_title:
+                return '\n'.join([self.format_title(self.stream_title),
+                                  self.format_album(self.item.get('album'))])
+            else:
+                return self.format_title(self.title)
 
         # Usual format: Title, Artists, Album
         return '\n'.join([self.format_title(self.stream_title or self.title),
                           self.format_artists(self.item.get('artists')),
-                          self.format_album(self.item.get('album', {}))])
+                          self.format_album(self.item.get('album'))])
 
     def format_title(self, title):
         parts = TrackUtils.split_title(title, max=3)
@@ -76,7 +80,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
 
         return ' \xb7 '.join(artists_list)
 
-    def format_album(self, album):
+    def format_album(self, album={}):
         parts = TrackUtils.split_title(album.get('name', ''))
         parts = [MarkupText(item,
                             size=self.font_size if index == 0
