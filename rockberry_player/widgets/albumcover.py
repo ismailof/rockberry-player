@@ -64,6 +64,10 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
             imagelist=self.imagelist,
             size=self.size)
 
+        #Use http: instead of https:
+        if img_source.startswith('https:'):
+            img_source = 'http:' + img_source[6:]
+
         # Local backend. Add server path
         if img_source \
                 and RefUtils.get_media_from_uri(self.uri) == 'local' \
