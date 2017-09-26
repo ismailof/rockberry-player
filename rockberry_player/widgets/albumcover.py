@@ -37,44 +37,47 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
         if self.uri == self._prev_uri:
             return
         self._prev_uri = self.uri
-        self.source = self.default or ImageUtils.IMG_NONE
+        self.source = self.default
         self.cache.remove_callback(self.update_imagelist)
         self.cache.request_item(uri=self.uri, callback=self.update_imagelist)
 
     def on_parent(self, _, parent):
         if self.parent is not None:
-            self.select_image()
+            self.source = self.select_image()
         else:
             self.cache.remove_callback(self.update_imagelist)
 
     def on_size(self, *args):
-        self.select_image()
+        self.source = self.select_image()
 
     @mainthread
     def on_error(self, error):
         self.source = self.default or ImageUtils.IMG_NONE
 
+    @mainthread
     def update_imagelist(self, imagelist, _):
         self.imagelist = imagelist or []
-        self.select_image()
+        self.source = self.select_image()
 
-    @mainthread
     def select_image(self, *args):
-        img_source = ImageUtils.get_fittest_image(
-            imagelist=self.imagelist,
-            size=self.size)
+        # Get URL (source) of the fittest image on imagelist
+        image = ImageUtils.get_fittest_image(self.imagelist, self.size)
+        img_source = image.get('uri')
+        if not img_source:
+            return self.default
 
-        #Use http: instead of https:
-        if img_source.startswith('https:'):
-            img_source = 'http:' + img_source[6:]
+        # Tweeks
+        if self.is_uri(img_source):
+            # Do not use https
+            if img_source.startswith('https:'):
+                img_source = 'http:' + img_source[6:]
+        else:
+            # Local backend. Add server path
+            if RefUtils.get_media_from_uri(self.uri) == 'local':
+                img_source = 'http://{}{}'.format(MediaCache.app.MOPIDY_SERVER,
+                                                  img_source)
 
-        # Local backend. Add server path
-        if img_source \
-                and RefUtils.get_media_from_uri(self.uri) == 'local' \
-                and not self.is_uri(img_source):
-            img_source = 'http://' + MediaCache.app.MOPIDY_SERVER + img_source
-
-        self.source = img_source or self.default or ImageUtils.IMG_NONE
+        return img_source
 
     def refresh(self, *args):
         self.imagelist = []
