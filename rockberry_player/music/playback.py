@@ -18,6 +18,7 @@ class PlaybackControl(MediaController):
 
     stream_title = StringProperty('')
     time_position = NumericProperty(0)
+    refresh_time = NumericProperty(5)
 
     def __init__(self, controls=None, **kwargs):
         for action in self.ACTIONS:
@@ -26,6 +27,10 @@ class PlaybackControl(MediaController):
         self._tick_event = Clock.create_trigger(
             self._tick_position,
             timeout=0.25,
+            interval=True)
+        self._refresh_event = Clock.create_trigger(
+            self._refresh_position,
+            timeout=5,
             interval=True)
 
     def refresh(self, *args):
@@ -40,8 +45,14 @@ class PlaybackControl(MediaController):
 
     def on_playback_state(self, *args):
         self._tick_event.cancel()
+        self._refresh_event.cancel()
         if self.playback_state == 'playing':
             self._tick_event()
+            if self.refresh_time:
+                self._refresh_event()
+
+    def on_refresh_time(self, *args):
+        self._refresh_event.timeout = self.refresh_time
 
     @mainthread
     def set_playback_state(self, state=None, new_state=None, **kwargs):
@@ -64,6 +75,9 @@ class PlaybackControl(MediaController):
     def _tick_position(self, dt=0, *args):
         self.time_position = (self.time_position
                                 + dt / TrackUtils.time_resolution)
+
+    def _refresh_position(self, dt=0, *args):
+        self.interface.get_time_position(on_result=self.set_time_position)
 
     # ACTION BUTTONS METHODS
 
