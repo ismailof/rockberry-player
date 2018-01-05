@@ -14,7 +14,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
 
     border_width = NumericProperty(0)
     uri = StringProperty('', allownone=True)
-    default = StringProperty(None, allownone=True)
+    default = StringProperty(ImageUtils.IMG_NONE)
     imagelist = ListProperty([])
     background = ListProperty([0, 0, 0, 0])
 
@@ -37,7 +37,7 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
         if self.uri == self._prev_uri:
             return
         self._prev_uri = self.uri
-        self.source = self.default
+        self.source = self.default or ImageUtils.IMG_NONE
         self.cache.remove_callback(self.update_imagelist)
         self.cache.request_item(uri=self.uri, callback=self.update_imagelist)
 
