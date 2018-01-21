@@ -29,25 +29,29 @@ def MarkupText(text, **fmt_options):
 
 def delayed(timeout):
 
-    def scheduled(_function_):
+    def wrapper_delayed(_function_):
 
-        def cb_function(*args, **kwargs):
+        _args = []
+        _kwargs = {}
+
+        def cb_function(dt):
             @wraps(_function_)
             def do_function(*args, **kwargs):
                 return _function_(*args, **kwargs)
 
-            # Remove dt parameter (last 'args' item)
-            args = tuple(list(args)[:-1])
             # Call the function
-            do_function(*args, **kwargs)
+            do_function(*tuple(_args), **_kwargs)
+
+        cb_trigger = Clock.create_trigger(cb_function, timeout)
 
         @wraps(_function_)
-        def schedule_function(*args, **kwargs):
-            Clock.unschedule(cb_function)
-            Clock.schedule_once(
-                partial(cb_function, *args, **kwargs),
-                timeout=timeout)
+        def trigger_function(*args, **kwargs):
+            _args[:] = []
+            _args.extend(list(args))
+            _kwargs.clear() 
+            _kwargs.update(kwargs) 
+            cb_trigger()
 
-        return schedule_function
+        return trigger_function
 
-    return scheduled
+    return wrapper_delayed
