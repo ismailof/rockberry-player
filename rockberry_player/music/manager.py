@@ -64,7 +64,7 @@ class MediaManager(EventDispatcher):
             error_handler=self.on_mopidy_error,
             connection_handler=self.on_connection,
         )
-        self.mopidy.debug_client(True)
+#        self.mopidy.debug_client(True)
 
         self.controllers = (
             self.state, self.mixer,

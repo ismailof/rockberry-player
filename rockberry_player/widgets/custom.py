@@ -21,4 +21,7 @@ Builder.load_string("""
             pos: self.pos
             size: self.size
 
+<Button>:
+    always_release: True
+
 """)
