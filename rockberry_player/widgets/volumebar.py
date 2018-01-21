@@ -7,16 +7,17 @@ from kivy.properties import StringProperty, ObjectProperty
 
 from ..music.mixer import MixerControl
 from ..widgets.seekslider import SeekSlider
+from ..widgets.gpiowidgets import GPIOBehavior
 
 
-class VolumeBar(BoxLayout):
+class VolumeBar(GPIOBehavior, BoxLayout):
 
     text = StringProperty('')
     mixer = ObjectProperty(None, rebind=True)
 
     @mainthread
-    def on_rotate(self, value):
-        self.ids['sld_volume'].manual_step(value * self.gpio_step)
+    def on_dial(self, value):
+        self.ids['sld_volume'].manual_step(value)
 
     @mainthread
     def on_click(self):
@@ -28,6 +29,7 @@ Builder.load_string("""
 
 <VolumeBar>:
     spacing: 5
+    gpio_group: 'volume'
     disabled: root.mixer is None or root.mixer.disabled
 
     Label:

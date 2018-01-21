@@ -10,7 +10,8 @@ def _constraint(x, min, max):
 class GPIOBehavior(EventDispatcher):
 
     gpio_group = StringProperty(None, allownone=True)
-
+    dial_step = NumericProperty(1)
+ 
     def __init__(self, *args, **kwargs):
         super(GPIOBehavior, self).__init__(*args, **kwargs)
         self.register_event_type('on_dial')
@@ -22,17 +23,16 @@ class GPIOBehavior(EventDispatcher):
         if self.gpio_group is not None and self.gpio_group != event.gpio_group:
             return
         if 'dial' in event.profile:
-            self.dispatch('on_dial', event.device, event.dial)
+            self.dispatch('on_dial', event.dial * self.dial_step)
  
-    def on_dial(self, device, value):
+    def on_dial(self, value):
         pass
 
 
-class GPIODialSlider(GPIOBehavior, Slider):
-    dial_step = NumericProperty(1)
- 
-    def on_dial(self, device, dial):
+class GPIODialSlider(GPIOBehavior, Slider): 
+
+    def on_dial(self, dial):
         self.value = _constraint(
-            self.value + dial * self.dial_step,
+            self.value + dial,
             self.min,
             self.max)
