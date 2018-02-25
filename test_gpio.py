@@ -34,11 +34,21 @@ Builder.load_string("""
         value: 100
 
     DialSlider:
+        dial_device: 'rot_menu'
         dial_axis: 'x'
         size_hint_y: 0.1
         min: 0
         max: 200
         value: 100
+
+    DialSlider:
+        dial_device: 'rot_menu'
+        dial_axis: 'y'
+        size_hint_y: 0.1
+        min: 0
+        max: 200
+        value: 100
+
 """)
 
 
