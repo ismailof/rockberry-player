@@ -64,6 +64,7 @@ Builder.load_string("""
 
             RefListView:
                 viewclass: 'RefListItem'
+                dial_axis: 'y'
                 item_height: 56
                 reflist: app.mm.browser.reflist
 

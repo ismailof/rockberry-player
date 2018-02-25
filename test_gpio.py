@@ -7,7 +7,7 @@ from kivy.lang import Builder
 
 from kivy.uix.boxlayout import BoxLayout
 
-from rockberry_player.widgets.gpiowidgets import GPIODialSlider
+from rockberry_player.widgets.gpiowidgets import DialSlider
 class TestWidget(BoxLayout):
     pass
 
@@ -18,19 +18,26 @@ Builder.load_string("""
     orientation: 'vertical'
     padding: 30
  
-    GPIODialSlider:
-        gpio_group: 'volume'
+    DialSlider:
+        dial_axis: 'x'
         size_hint_y: 0.1
         min: 0
-        max: 100
-        value: 50
+        max: 200
+        value: 100
  
-    GPIODialSlider:
-        dial_step: -2
+    DialSlider:
+        dial_axis: 'y'
         size_hint_y: 0.1
         min: 0
-        max: 100
-        value: 50
+        max: 200
+        value: 100
+
+    DialSlider:
+        dial_axis: 'x'
+        size_hint_y: 0.1
+        min: 0
+        max: 200
+        value: 100
 """)
 
 

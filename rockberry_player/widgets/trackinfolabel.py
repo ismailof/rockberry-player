@@ -73,7 +73,7 @@ class TrackInfoLabel(TrackItem, ReferenceLabel):
 
         artists_list = [
             MarkupText(artist.get('name'),
-                       size=max(self.font_size - len(artists) // 2, 10),
+                       size=max(self.font_size - int(round(len(artists) / 2)), 10),
                        color='#d0d0d0',
                        ref=self.new_ref(artist))
             for artist in artists]

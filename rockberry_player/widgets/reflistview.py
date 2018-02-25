@@ -1,42 +1,79 @@
 from kivy.lang import Builder
-from kivy.properties import ListProperty, NumericProperty
-from kivy.uix.recycleview import RecycleView
+from kivy.properties import ListProperty, AliasProperty
+from kivy.uix.boxlayout import BoxLayout
+
+from ..widgets.dialrecycleview import DialRecycleView, SelectableItem
+from ..widgets.holdbutton import HoldButton, HoldButtonBehavior
+from ..widgets.albumcover import AlbumCover
+from ..widgets.atlasicon import AtlasIcon
+
+from ..music.refs import RefItem
 
 
-class RefListView(RecycleView):
+class RefListItem(RefItem, SelectableItem):
+
+    def get_ref_action(self, *args):
+        return 'play' if self.reftype == 'track' else 'browse'
+
+    action = AliasProperty(get_ref_action, None, bind=['reftype'])
+
+
+class RefListView(DialRecycleView):
 
     reflist = ListProperty()
-    item_height = NumericProperty(56)
 
     def on_reflist(self, *args):
         self.data = [{'ref': ref,
                       'index': index}
                      for index, ref in enumerate(self.reflist)]
-        self.scroll_to_index(0)
-
-    # Scrolls the view to position item 'index' at top
-    def scroll_to_index(self, index):
-        if not self.data:
-            return
-        relative_pos = index / float(len(self.data)
-                                     - self.height / self.item_height)
-        self.scroll_y = min(1, max(0, 1 - relative_pos))
+        self._last_index = None
+        self.selected_id = 0
 
 
 Builder.load_string("""
-#:import RefListItem rockberry_player.widgets.reflistitem.RefListItem
 
 <RefListView>:
     viewclass: 'RefListItem'
-    bar_width: 40
-    bar_margin: 2
-    scroll_type: ['bars', 'content']
-    RecycleBoxLayout:
-        orientation: 'vertical'
-        size_hint: (None, None)
-        width: root.width - root.bar_width - root.bar_margin
-        height: self.minimum_height
-        default_size_hint: (None, None)
-        default_size: (self.width, root.item_height)
+    item_height: 56
+
+<RefListItem>:
+    size_hint_y: None
+    height: 70
+    padding: 2
+    spacing: 10
+
+    RelativeLayout:
+        size_hint_x: None
+        width: cover.height
+
+        AlbumCover:
+            id: cover
+            border_width: 1
+            background: (0.3, 0.3, 0.3, 0.5)
+            default: root.typeimg
+            mipmap: True
+            uri: root.uri
+
+        AtlasIcon:
+            atlas: 'media'
+            item: root.media
+            size: (22, 22)
+            right: cover.right
+
+    Label:
+        text: root.title
+        halign: 'left'
+        valign: 'top'
+        text_size: self.size
+        font_size: 20
+        bold: (root.reftype != 'track')
+
+    HoldButton:
+        size_hint_x: 0.2
+        opacity: 0.7
+        text: root.action
+        holdtime: 2.5
+        on_click: app.mm.play_uris(uris=[root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
+        on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index) if root.action == 'play' else app.mm.browser.browse(root.ref)
 
 """)

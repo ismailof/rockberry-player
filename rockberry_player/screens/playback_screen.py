@@ -75,6 +75,7 @@ Builder.load_string("""
             VolumeBar:
                 size_hint: (1, 0.1)
                 pos_hint: {'right': 1}
+                dial_axis: 'x'
                 opacity: 0.4
                 text: 'MASTER'
                 mixer: app.mm.mixer

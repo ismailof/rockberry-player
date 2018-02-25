@@ -7,10 +7,10 @@ from kivy.properties import StringProperty, ObjectProperty
 
 from ..music.mixer import MixerControl
 from ..widgets.seekslider import SeekSlider
-from ..widgets.gpiowidgets import GPIOBehavior
+from ..widgets.gpiowidgets import DialBehavior
 
 
-class VolumeBar(GPIOBehavior, BoxLayout):
+class VolumeBar(DialBehavior, BoxLayout):
 
     text = StringProperty('')
     mixer = ObjectProperty(None, rebind=True)

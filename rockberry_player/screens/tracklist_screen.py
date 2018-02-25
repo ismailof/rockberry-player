@@ -127,4 +127,5 @@ Builder.load_string("""
                 id: tlview
                 tlid: root.tlid
                 tracklist: root.filtered_tracklist
+                dial_axis: 'y'
 """)
