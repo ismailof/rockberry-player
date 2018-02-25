@@ -7,7 +7,7 @@ from kivy.properties import StringProperty, ObjectProperty
 
 from ..music.mixer import MixerControl
 from ..widgets.seekslider import SeekSlider
-from ..widgets.gpiowidgets import DialBehavior
+from ..widgets.dialbehavior import DialBehavior
 
 
 class VolumeBar(DialBehavior, BoxLayout):
