@@ -3,7 +3,7 @@ from kivy.properties import ListProperty, NumericProperty, AliasProperty, \
     BooleanProperty
 from kivy.uix.boxlayout import BoxLayout
 
-from ..widgets.dialrecycleview import DialRecycleView, SelectableItem
+from ..widgets.dialrecycleview import DialRecycleView
 #from ..widgets.reflistview import RefListView
 from ..widgets.albumcover import AlbumCover
 from ..widgets.atlasicon import AtlasIcon
@@ -12,7 +12,7 @@ from ..widgets.simpletrackinfo import SimpleTrackInfo
 from ..music.tracks import TrackItem
 
 
-class TrackListItem(TrackItem, SelectableItem):
+class TrackListItem(TrackItem, BoxLayout):
     current = BooleanProperty(False)
 
 

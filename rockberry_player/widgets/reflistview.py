@@ -2,7 +2,7 @@ from kivy.lang import Builder
 from kivy.properties import ListProperty, AliasProperty
 from kivy.uix.boxlayout import BoxLayout
 
-from ..widgets.dialrecycleview import DialRecycleView, SelectableItem
+from ..widgets.dialrecycleview import DialRecycleView
 from ..widgets.holdbutton import HoldButton, HoldButtonBehavior
 from ..widgets.albumcover import AlbumCover
 from ..widgets.atlasicon import AtlasIcon
@@ -10,7 +10,7 @@ from ..widgets.atlasicon import AtlasIcon
 from ..music.refs import RefItem
 
 
-class RefListItem(RefItem, SelectableItem):
+class RefListItem(RefItem, BoxLayout):
 
     def get_ref_action(self, *args):
         return 'play' if self.reftype == 'track' else 'browse'
