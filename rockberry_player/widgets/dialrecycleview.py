@@ -1,4 +1,4 @@
-from __future__ import division, absolute_import
+from __future__ import division
 
 from kivy.lang import Builder
 from kivy.properties import NumericProperty, AliasProperty, BooleanProperty
@@ -6,13 +6,12 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 
-from ..widgets.dialbehavior import DialBehavior
-from ..utils import delayed
+from dialbehavior import DialBehavior
 
 
 class DialRecycleView(DialBehavior, RecycleView):
 
-    nav_id = BoundedNumericProperty(0)
+    nav_id = NumericProperty(0)
     item_height = NumericProperty(45)
 
     def _get_reftop_id(self):
@@ -30,10 +29,7 @@ class DialRecycleView(DialBehavior, RecycleView):
             self.width - self.bar_width - self.bar_margin,
             self.item_height)
 
-    def _get_num_items:
-        return len(self.data)
-
-    num_items = AliasProperty(_get_num_items, None,
+    num_items = AliasProperty(lambda self: len(self.data), None,
         bind=['data'])
 
     items_per_page = AliasProperty(lambda self: self.height / self.item_height, None,
@@ -43,7 +39,7 @@ class DialRecycleView(DialBehavior, RecycleView):
         bind=['scroll_y', 'num_items', 'items_per_page'])
 
     nav_border = AliasProperty(_get_nav_border, None,
-        bind=['nav_id', 'reftop_id', 'item_height', 'pos'])
+        bind=['nav_id', 'reftop_id', 'item_height', 'pos', 'size'])
 
     # Scrolls the view to position item 'index' at top
     def scroll_to_index(self, index):
@@ -104,22 +100,19 @@ if __name__ == '__main__':
     kivy.require('1.9.2')
     from kivy.base import runTouchApp
 
-    class TestItem(SelectableItem):
-        pass
-
-    class TestRecycleView(DialRecycleView):
-        pass
+    class TestItem(BoxLayout):
+        number = NumericProperty(0)
 
     Builder.load_string("""
 
-    <TestItem>:
-        Label:
-            text: 'Item #%02d' % root.number
+<TestItem>:
+    Label:
+        text: 'Item #%02d' % root.number
 
-    <TestRecycleView>:
-        dial_axis: 'y'
-        viewclass: 'TestItem'
-        data: [{'number': i} for i in range(0, 100)]
+<DialRecycleView>:
+    dial_axis: 'y'
+    viewclass: 'TestItem'
+    data: [{'number': i} for i in range(0, 100)]
 
     """)
 
