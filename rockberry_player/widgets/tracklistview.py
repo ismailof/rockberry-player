@@ -35,18 +35,9 @@ class TrackListView(DialRecycleView):
                       'tlid': tl_track['tlid'],
                       'current': tl_track['tlid'] == self.tlid
                      } for tl_track in self.tracklist]
-        self.scroll_to_current()
 
     def on_current_id(self, *args):
-        self.scroll_to_current()
-
-    def on_size(self, *args):
-        self.scroll_to_current()
-
-    def scroll_to_current(self):
-        if self.current_id is not None:
-            self.selected_id = self.current_id
-            self.scroll_to_index(self.current_id)
+        self.nav_id = self.current_id
 
 
 Builder.load_string("""
