@@ -1,7 +1,8 @@
 from __future__ import division
 
 from kivy.lang import Builder
-from kivy.properties import NumericProperty, AliasProperty, BooleanProperty
+from kivy.properties import NumericProperty, BoundedNumericProperty, \
+    AliasProperty, BooleanProperty, ListProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
@@ -11,15 +12,29 @@ from dialbehavior import DialBehavior
 
 class DialRecycleView(DialBehavior, RecycleView):
 
-    nav_id = NumericProperty(0)
+    nav_id = NumericProperty(None, allownone=True)
+    nav_border_color = ListProperty([0.9, 0.9, 0.9, 0.9])
+
     item_height = NumericProperty(45)
 
     def _get_reftop_id(self):
+        if self.num_items < self.items_per_page:
+            return 0.0
         return (1 - self.scroll_y) * (self.num_items - self.items_per_page)
 
     def _set_reftop_id(self, index_f):
         relative_pos = index_f / (self.num_items - self.items_per_page)
         self.scroll_y = min(1, max(0, 1 - relative_pos))
+
+    def _constraint_nav_id(self):
+        if not self.num_items:
+            self.nav_id = None
+            return
+
+        if self.nav_id < 0:
+            self.nav_id = 0
+        elif self.nav_id >= self.num_items:
+            self.nav_id = self.num_items - 1
 
     def _get_nav_border(self):
         if self.nav_id is None:
@@ -39,7 +54,7 @@ class DialRecycleView(DialBehavior, RecycleView):
         bind=['scroll_y', 'num_items', 'items_per_page'])
 
     nav_border = AliasProperty(_get_nav_border, None,
-        bind=['nav_id', 'reftop_id', 'item_height', 'pos', 'size'])
+       bind=['nav_id', 'reftop_id', 'item_height', 'pos', 'size'])
 
     # Scrolls the view to position item 'index' at top
     def scroll_to_index(self, index):
@@ -56,26 +71,34 @@ class DialRecycleView(DialBehavior, RecycleView):
             return
 
     def on_dial(self, dial_value):
-        self.nav_id = self.constraint(self.nav_id + dial_value,
-                                      min=0, max=self.num_items - 1)
+        if self.nav_id is None:
+            self.nav_id = 0
+        else:
+            self.nav_id += dial_value
+
+    def on_num_items(self, instance, index):
+        self._constraint_nav_id()
 
     def on_nav_id(self, instance, index):
-        self.scroll_to_index(index)
+        self._constraint_nav_id()
+        self.scroll_to_index(self.nav_id)
 
-    # TODO: Navigate to item with touch down
-    # def on_touch_down(self, touch):
-        # if super(DialRecycleView, self).on_touch_down(touch):
-            # return True
-        # if self.collide_point(*touch.pos):
-            # self.nav_id
+    def on_touch_down(self, touch):
+        super(DialRecycleView, self).on_touch_down(touch)
+
+        if self.collide_point(*touch.pos):
+            self.nav_id = int(self.reftop_id + (self.top - touch.y) / self.item_height)
+            return True
+
+        return False
 
 
 Builder.load_string("""
 
 <DialRecycleView>:
-    canvas.after:
+    canvas.before:
         Color:
-            rgba: (0.9, 0.8, 0.8, 0.9) if root.nav_border else (0,0,0,0)
+            rgba: root.nav_border_color if root.nav_border else (0,0,0,0)
         Line:
             width: 2
             rectangle: root.nav_border or (0,0,0,0)
@@ -116,4 +139,4 @@ if __name__ == '__main__':
 
     """)
 
-    runTouchApp(widget=TestRecycleView())
+    runTouchApp(widget=DialRecycleView())

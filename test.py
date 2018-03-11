@@ -11,6 +11,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleview.layout import RecycleLayoutManagerBehavior
 
+from rockberry_player.widgets.dialbehavior import DialSlider
 from rockberry_player.widgets.dialrecycleview import DialRecycleView
 
 
@@ -33,10 +34,15 @@ Builder.load_string("""
 
 <TestWidget>:
     orientation: 'horizontal'
-    list_size: 500
+    list_size: int(dial.value)
 
     BoxLayout:
         orientation: 'vertical'
+        DialSlider:
+            id: dial
+            dial_axis: 'x'
+            min: 0
+            max: 500
         Label:
             text: 'Num_Items: %d' % len(testview.data)
         Label:
