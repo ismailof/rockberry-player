@@ -1,7 +1,7 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
-from ..widgets.atlasicon import AtlasIcon
+from ..widgets.refitemimage import RefItemImage
 from ..music.refs import RefItem
 
 
@@ -24,24 +24,12 @@ Builder.load_string("""
             pos: self.pos
             size: self.size
 
-    RelativeLayout:
-
-        AlbumCover:
-            id: cover
-            uri: root.uri
-            default: root.typeimg
-            border_width: 2
-            background: (0.3, 0.3, 0.3, 0.5)
-            size_hint_x: 0.9
-            pos_hint: {'center_x': 0.5}
-            on_hold: self.refresh()
-
-        AtlasIcon:
-            atlas: 'media'
-            item: root.media
-            size: (32, 32)
-            right: cover.border_rectangle[0] + cover.border_rectangle[2] - 2
-            y: cover.border_rectangle[1] + 2
+    RefItemImage:
+        ref: root.ref
+        iconsize: 32
+        size_hint_x: 0.9
+        pos_hint: {'center_x': 0.5}
+        #on_hold: self.refresh()
 
     Label:
         text: root.title

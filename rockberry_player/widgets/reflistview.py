@@ -4,8 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
 from ..widgets.holdbutton import HoldButton
-from ..widgets.albumcover import AlbumCover
-from ..widgets.atlasicon import AtlasIcon
+from ..widgets.refitemimage import RefItemImage
 
 from ..music.refs import RefItem
 
@@ -41,23 +40,11 @@ Builder.load_string("""
     padding: 2
     spacing: 10
 
-    RelativeLayout:
+    RefItemImage:
+        ref: root.ref
         size_hint_x: None
-        width: cover.height
-
-        AlbumCover:
-            id: cover
-            border_width: 1
-            background: (0.3, 0.3, 0.3, 0.5)
-            default: root.typeimg
-            mipmap: True
-            uri: root.uri
-
-        AtlasIcon:
-            atlas: 'media'
-            item: root.media
-            size: (22, 22)
-            right: cover.right
+        width: self.height
+        iconsize: 24
 
     Label:
         text: root.title

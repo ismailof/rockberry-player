@@ -4,9 +4,7 @@ from kivy.properties import ListProperty, NumericProperty, AliasProperty, \
 from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
-#from ..widgets.reflistview import RefListView
-from ..widgets.albumcover import AlbumCover
-from ..widgets.atlasicon import AtlasIcon
+from ..widgets.refitemimage import RefItemImage
 from ..widgets.simpletrackinfo import SimpleTrackInfo
 
 from ..music.tracks import TrackItem
@@ -61,23 +59,11 @@ Builder.load_string("""
             pos: self.pos
             size: self.size
 
-    RelativeLayout:
+    RefItemImage:
+        ref: root.ref
         size_hint_x: None
-        width: cover.height
-
-        AlbumCover:
-            id: cover
-            border_width: 1
-            background: (0.3, 0.3, 0.3, 0.5)
-            default: root.typeimg
-            mipmap: True
-            uri: root.uri
-
-        AtlasIcon:
-            atlas: 'media'
-            item: root.media
-            size: (22, 22)
-            right: cover.right
+        width: self.height
+        iconsize: 24
 
     Widget:
         size_hint_x: 0
