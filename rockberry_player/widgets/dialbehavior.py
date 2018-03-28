@@ -13,6 +13,7 @@ class DialBehavior(EventDispatcher):
     dial_device = StringProperty(None, allownone=True)
     dial_axis = OptionProperty(AXIS[0], options=AXIS)
     dial_step = NumericProperty(1)
+    dial_accelms = NumericProperty(200)
 
     def __init__(self, *args, **kwargs):
         super(DialBehavior, self).__init__(*args, **kwargs)
