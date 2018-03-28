@@ -13,6 +13,7 @@ from functools import partial
 from .playback_screen import PlaybackScreen
 from .tracklist_screen import TracklistScreen
 from .browse_screen import BrowseScreen
+from .history_screen import HistoryScreen
 from .system_screen import SystemScreen
 
 from ..widgets.backgroundimage import BackgroundImage
@@ -121,10 +122,10 @@ Builder.load_string("""
             BrowseScreen:
                 name: 'browse'
 
-            #Screen:
-                #name: 'history'
+            HistoryScreen:
+                name: 'history'
 
             SystemScreen:
-                name: 'server'
+                name: 'system'
 
 """)

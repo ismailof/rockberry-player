@@ -19,6 +19,7 @@ from .options import OptionsControl
 from .mixer import MixerControl
 from .queue import QueueControl
 from .browser import BrowserControl
+from .history import HistoryControl
 
 
 class MediaManager(EventDispatcher):
@@ -51,6 +52,8 @@ class MediaManager(EventDispatcher):
     queue = ObjectProperty(QueueControl(), rebind=True)
 
     browser = ObjectProperty(BrowserControl(), rebind=True)
+    history = ObjectProperty(HistoryControl(), rebind=True)
+
 
     def __init__(self, **kwargs):
         super(MediaManager, self).__init__(**kwargs)
@@ -67,9 +70,10 @@ class MediaManager(EventDispatcher):
 #        self.mopidy.debug_client(True)
 
         self.controllers = (
-            self.state, self.mixer,
+            self.state, self.mixer, self.options,
             self.current, self.next, self.prev,
-            self.options, self.queue, self.browser)
+            self.queue, self.browser, self.history
+            )
 
         self.bind_events()
 
@@ -87,7 +91,7 @@ class MediaManager(EventDispatcher):
 
     def choose_window(self, *args, **kwargs):
         if not self.connected:
-            screen = 'server'
+            screen = 'system'
         elif self.state.playback_state != 'stopped':
             screen = 'playback'
         elif self.queue.tracklist:
@@ -106,6 +110,7 @@ class MediaManager(EventDispatcher):
         OptionsControl.set_interface(self.mopidy.tracklist)
         QueueControl.set_interface(self.mopidy.tracklist)
         BrowserControl.set_interface(self.mopidy.library)
+        HistoryControl.set_interface(self.mopidy.history)
 
     def bind_events(self, *args):
 
@@ -171,6 +176,7 @@ class MediaManager(EventDispatcher):
         self.check_playback_end.cancel()
         self.state.set_time_position(0)
         self.current.set_tl_track(tl_track)
+        self.history.refresh()
 
     @mainthread
     def track_playback_ended(self, time_position, tl_track):

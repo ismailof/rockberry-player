@@ -3,7 +3,7 @@ from kivy.properties import ListProperty, AliasProperty
 from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
-from ..widgets.holdbutton import HoldButton, HoldButtonBehavior
+from ..widgets.holdbutton import HoldButton
 from ..widgets.albumcover import AlbumCover
 from ..widgets.atlasicon import AtlasIcon
 
@@ -26,8 +26,7 @@ class RefListView(DialRecycleView):
         self.data = [{'ref': ref,
                       'index': index}
                      for index, ref in enumerate(self.reflist)]
-        self._last_index = None
-        self.selected_id = 0
+        self.nav_id = 0
 
 
 Builder.load_string("""
