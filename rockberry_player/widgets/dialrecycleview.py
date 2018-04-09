@@ -44,7 +44,7 @@ class DialRecycleView(DialBehavior, RecycleView):
             self.width - self.bar_width - self.bar_margin,
             self.item_height)
 
-    num_items = AliasProperty(lambda self: len(self.data), None,
+    num_items = AliasProperty(lambda self: len(self.data) if self.data else 0, None,
         bind=['data'])
 
     items_per_page = AliasProperty(lambda self: self.height / self.item_height, None,

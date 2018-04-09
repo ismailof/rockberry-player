@@ -118,7 +118,7 @@ Builder.load_string("""
 
                 Label:
                     text: root.format_tracknumber(root.filtered_tracklist)
-                    fontsize: 20
+                    font_size: 20
                     size_hint_x: 0.2
                     text_size: self.size
                     halign: 'right'

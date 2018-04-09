@@ -16,7 +16,7 @@ from ..widgets.holdbutton import HoldButton
 from ..music.refs import RefItem
 
 
-def format_time_diff(time, now):   
+def format_time_diff(time, now):
 
     elapsed_secs = now - time
     if elapsed_secs < 60:
@@ -28,9 +28,9 @@ def format_time_diff(time, now):
 
     dt_time = dt.fromtimestamp(time)
     dt_now = dt.fromtimestamp(now)
-    
+
     if dt_time.date() == dt_now.date():
-        return 'Hoy %s' % dt_time.strftime('%H:%M')    
+        return 'Hoy %s' % dt_time.strftime('%H:%M')
     if dt_time.date() == dt_now.date() - timedelta(days=1):
         return 'Ayer %s' % dt_time.strftime('%H:%M')
 
@@ -39,20 +39,26 @@ def format_time_diff(time, now):
 
 class HistoryItem(RefItem, BoxLayout):
     time = NumericProperty(0)
-    now = NumericProperty(0)    
+    now = NumericProperty(0)
 
     def __init__(self, **kwargs):
         super(HistoryItem, self).__init__(**kwargs)
-        self._refresh_event = Clock.schedule_interval(self._refresh_now, 30)
+        self._refresh_event = Clock.create_trigger(self._refresh_now, 
+                                                   timeout=30, interval=True)
         Clock.schedule_once(self._refresh_now)
-    
+
     time_str = AliasProperty(lambda self: format_time_diff(self.time, self.now),
         None, bind=['time', 'now'])
 
     def _refresh_now(self, *args):
         self.now = int(tm.time())
-        if self.now - self.time > 2 * 24 * 3600:            
+        if self.now - self.time > 2 * 24 * 3600:
             self._refresh_event.cancel()
+        else:
+            self._refresh_event()
+
+    def on_time(self, *args):
+        self._refresh_event()
 
 
 class HistoryView(DialRecycleView):
