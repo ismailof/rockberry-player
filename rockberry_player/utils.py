@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from functools import partial, wraps
 from kivy.clock import Clock
+from datetime import timedelta, datetime as dt
 
 from .debug import debug_function
 
@@ -48,10 +49,33 @@ def delayed(timeout):
         def trigger_function(*args, **kwargs):
             _args[:] = []
             _args.extend(list(args))
-            _kwargs.clear() 
-            _kwargs.update(kwargs) 
+            _kwargs.clear()
+            _kwargs.update(kwargs)
             cb_trigger()
 
         return trigger_function
 
     return wrapper_delayed
+
+
+def format_timestamp(time, now=None):
+
+    if now is not None:
+        elapsed_secs = now - time
+        if elapsed_secs < 60:
+            return ('Ahora')
+        if elapsed_secs < 3600:
+            return ('Hace %d minutos' % round(elapsed_secs / 60))
+        if elapsed_secs < 3600 * 6:
+            return ('Hace %d horas' % round(elapsed_secs / 3600))
+
+        dt_time = dt.fromtimestamp(time)
+        dt_now = dt.fromtimestamp(now)
+
+        if dt_time.date() == dt_now.date():
+            return 'Hoy %s' % dt_time.strftime('%H:%M')
+        if dt_time.date() == dt_now.date() - timedelta(days=1):
+            return 'Ayer %s' % dt_time.strftime('%H:%M')
+
+    return dt_time.strftime('%d-%b %H:%M')
+

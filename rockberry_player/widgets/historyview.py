@@ -1,7 +1,6 @@
 from __future__ import division
 
 import time as tm
-from datetime import timedelta, datetime as dt
 
 from kivy.lang import Builder
 from kivy.clock import Clock
@@ -14,27 +13,7 @@ from ..widgets.refitemimage import RefItemImage
 from ..widgets.holdbutton import HoldButton
 
 from ..music.refs import RefItem
-
-
-def format_time_diff(time, now):
-
-    elapsed_secs = now - time
-    if elapsed_secs < 60:
-        return ('Ahora')
-    if elapsed_secs < 3600:
-        return ('Hace %d minutos' % round(elapsed_secs / 60))
-    if elapsed_secs < 3600 * 6:
-        return ('Hace %d horas' % round(elapsed_secs / 3600))
-
-    dt_time = dt.fromtimestamp(time)
-    dt_now = dt.fromtimestamp(now)
-
-    if dt_time.date() == dt_now.date():
-        return 'Hoy %s' % dt_time.strftime('%H:%M')
-    if dt_time.date() == dt_now.date() - timedelta(days=1):
-        return 'Ayer %s' % dt_time.strftime('%H:%M')
-
-    return dt_time.strftime('%d-%b %H:%M')
+from ..utils import format_timestamp
 
 
 class HistoryItem(RefItem, BoxLayout):
@@ -43,11 +22,12 @@ class HistoryItem(RefItem, BoxLayout):
 
     def __init__(self, **kwargs):
         super(HistoryItem, self).__init__(**kwargs)
+        self.bind(time=self._refresh_now)
         self._refresh_event = Clock.create_trigger(self._refresh_now, 
                                                    timeout=30, interval=True)
         Clock.schedule_once(self._refresh_now)
 
-    time_str = AliasProperty(lambda self: format_time_diff(self.time, self.now),
+    time_str = AliasProperty(lambda self: format_timestamp(self.time, self.now),
         None, bind=['time', 'now'])
 
     def _refresh_now(self, *args):
@@ -56,9 +36,6 @@ class HistoryItem(RefItem, BoxLayout):
             self._refresh_event.cancel()
         else:
             self._refresh_event()
-
-    def on_time(self, *args):
-        self._refresh_event()
 
 
 class HistoryView(DialRecycleView):
