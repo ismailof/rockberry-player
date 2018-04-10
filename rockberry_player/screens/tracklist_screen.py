@@ -9,7 +9,7 @@ from ..widgets.tracklistview import TrackListView
 
 from ..music.tracks import TrackUtils
 
-from ..utils import delayed
+from ..utils import triggered
 
 
 class TracklistScreen(Screen):
@@ -28,7 +28,7 @@ class TracklistScreen(Screen):
     def on_filter_words(self, *args):
         self.do_filter()
 
-    @delayed(1.7)
+    @triggered(1.7)
     def do_filter(self, *args):
         self.filtered_tracklist = self.get_filtered_tracklist()
 

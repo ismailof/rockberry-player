@@ -4,7 +4,7 @@ from kivy.properties import ListProperty, NumericProperty, \
 
 from base import MediaController
 
-from ..utils import delayed
+from ..utils import triggered
 
 
 class QueueControl(MediaController):
@@ -16,7 +16,7 @@ class QueueControl(MediaController):
     def reset(self, *args):
         self.set_tracklist(None)
 
-    @delayed(2)
+    @triggered(2)
     def refresh(self, *args):
         if self.interface:
             self.interface.get_tl_tracks(on_result=self.set_tracklist)

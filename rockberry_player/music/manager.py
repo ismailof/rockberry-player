@@ -9,7 +9,7 @@ from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
 
-from ..utils import delayed
+from ..utils import triggered
 
 from .base import MediaController
 from .refs import RefUtils
@@ -162,7 +162,7 @@ class MediaManager(EventDispatcher):
                            self.current):
             controller.refresh()
 
-    @delayed(1)
+    @triggered(1)
     def refresh_context_info(self, *args):
         for trackitem in (self.next,
                           self.prev,

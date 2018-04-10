@@ -4,7 +4,7 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 
 from .base import MediaController
-from ..utils import delayed
+from ..utils import triggered
 
 
 class MediaCache(MediaController):
@@ -50,7 +50,7 @@ class MediaCache(MediaController):
         # Perform server request
         self._get_server_items()
 
-    @delayed(0.5)
+    @triggered(0.5)
     def _get_server_items(self):
         if not self.mopidy:
             return

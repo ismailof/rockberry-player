@@ -28,9 +28,9 @@ def MarkupText(text, **fmt_options):
     return markup_text
 
 
-def delayed(timeout):
+def triggered(timeout):
 
-    def wrapper_delayed(_function_):
+    def wrapper_triggered(_function_):
 
         _args = []
         _kwargs = {}
@@ -55,7 +55,7 @@ def delayed(timeout):
 
         return trigger_function
 
-    return wrapper_delayed
+    return wrapper_triggered
 
 
 def format_timestamp(time, now=None):
