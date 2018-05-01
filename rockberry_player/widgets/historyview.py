@@ -4,8 +4,7 @@ import time as tm
 
 from kivy.lang import Builder
 from kivy.clock import Clock
-from kivy.properties import ListProperty, NumericProperty, \
-    ObjectProperty, AliasProperty
+from kivy.properties import ListProperty, NumericProperty, AliasProperty
 from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
@@ -23,12 +22,12 @@ class HistoryItem(RefItem, BoxLayout):
     def __init__(self, **kwargs):
         super(HistoryItem, self).__init__(**kwargs)
         self.bind(time=self._refresh_now)
-        self._refresh_event = Clock.create_trigger(self._refresh_now, 
+        self._refresh_event = Clock.create_trigger(self._refresh_now,
                                                    timeout=30, interval=True)
         Clock.schedule_once(self._refresh_now)
 
     time_str = AliasProperty(lambda self: format_timestamp(self.time, self.now),
-        None, bind=['time', 'now'])
+                             None, bind=['time', 'now'])
 
     def _refresh_now(self, *args):
         self.now = int(tm.time())
