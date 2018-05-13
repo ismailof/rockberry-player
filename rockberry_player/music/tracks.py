@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from kivy.lang import Builder
 from kivy.clock import mainthread
 from kivy.properties import DictProperty, NumericProperty, StringProperty, AliasProperty
 
@@ -112,3 +113,11 @@ class TrackControl(TrackItem, MediaController):
 
     def reset(self, *args):
         self.set_tl_track(tl_track=None)
+
+
+Builder.load_string("""
+
+<TrackItem>:
+    is_current: root.tlid and root.tlid == app.mm.current.tlid
+
+""")

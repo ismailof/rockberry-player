@@ -15,7 +15,6 @@ from ..utils import triggered
 class TracklistScreen(Screen):
 
     tracklist = ListProperty()
-    tlid = NumericProperty(0)
     filter_words = ListProperty('')
     filtered_tracklist = ListProperty()
 
@@ -74,6 +73,8 @@ Builder.load_string("""
 
 <TracklistScreen>
 
+    tracklist: app.mm.queue.tracklist
+
     filter_words: filterbar.text.lower().split(' ') \
         if len(filterbar.text) >= 3 else []
 
@@ -125,7 +126,7 @@ Builder.load_string("""
 
             TrackListView:
                 id: tlview
-                tlid: root.tlid
+                tlid: app.mm.current.tlid
                 tracklist: root.filtered_tracklist
                 dial_axis: 'y'
 """)

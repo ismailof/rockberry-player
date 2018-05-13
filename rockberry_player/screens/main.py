@@ -116,8 +116,6 @@ Builder.load_string("""
 
             TracklistScreen:
                 name: 'tracklist'
-                tracklist: app.mm.queue.tracklist
-                tlid: app.mm.current.tlid
 
             BrowseScreen:
                 name: 'browse'
