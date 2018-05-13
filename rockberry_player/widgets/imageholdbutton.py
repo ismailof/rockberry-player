@@ -21,6 +21,7 @@ class PlaybackButton(ImageHoldButton):
     call = ObjectProperty(baseclass=collections.Callable)
     args = DictProperty(defaultvalue={}, rebind=True)
 
+
 Builder.load_string('''
 
 <ImageHoldButton>:
@@ -29,6 +30,7 @@ Builder.load_string('''
     allow_stretch: True
     always_release: True
     min_state_time: 0.1
+    anim_delay: 0.12
 
     canvas:
         Color:

@@ -1,9 +1,8 @@
-from __future__ import unicode_literals
+#from __future__ import unicode_literals
 
 from unidecode import unidecode
 import re
 
-from kivy.lang import Builder
 from kivy.event import EventDispatcher
 from kivy.properties import DictProperty, AliasProperty, BooleanProperty
 
@@ -89,10 +88,6 @@ class RefItem(EventDispatcher):
     ref = DictProperty(RefUtils.RefNone, rebind=True)
     item = DictProperty(rebind=True)
 
-    is_current = BooleanProperty(False)
-    is_playing = BooleanProperty(False)
-    is_paused = BooleanProperty(False)
-
     def __init__(self, item=None, **kwargs):
         super(RefItem, self).__init__(**kwargs)
         self.item = item or {}
@@ -106,13 +101,3 @@ class RefItem(EventDispatcher):
     media = AliasProperty(lambda x: RefUtils.get_media_from_uri(x.uri), None, bind=['uri'])
     typeimg = AliasProperty(lambda x: ImageUtils.get_type_image(x.reftype), None, bind=['reftype'])
     words = AliasProperty(lambda x: RefUtils.get_words(x.title), None, bind=['title'])
-
-
-Builder.load_string("""
-
-<RefItem>:
-    is_current: root.uri == app.mm.current.uri
-    is_playing: root.is_current and app.mm.state.playback_state == 'playing'
-    is_paused: root.is_current and app.mm.state.playback_state == 'paused'
-
-""")

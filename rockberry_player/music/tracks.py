@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+#from __future__ import unicode_literals
 
 from kivy.lang import Builder
 from kivy.clock import mainthread

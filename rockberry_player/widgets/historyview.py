@@ -8,14 +8,14 @@ from kivy.properties import ListProperty, NumericProperty, AliasProperty
 from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
-from ..widgets.refitemimage import RefItemImage
-from ..widgets.holdbutton import HoldButton
+from ..widgets.baserefitem import BaseRefListItem, RefItemImage
+from ..widgets.imageholdbutton import ImageHoldButton
 
 from ..music.refs import RefItem
 from ..utils import format_timestamp
 
 
-class HistoryItem(RefItem, BoxLayout):
+class HistoryItem(BaseRefListItem):
     time = NumericProperty(0)
     now = NumericProperty(0)
 
@@ -81,10 +81,10 @@ Builder.load_string("""
             halign: 'right'
             font_size: 16
 
-    HoldButton:
-        size_hint_x: 0.2
+    ImageHoldButton:
+        size_hint: 0.15, 0.5
         opacity: 0.7
-        text: 'play'
+        source: root.action_imgsrc
         on_click: app.mm.play_uris(uris=[root.uri])
 
 """)

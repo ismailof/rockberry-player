@@ -1,7 +1,7 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
-from ..widgets.refitemimage import RefItemImage
+from ..widgets.baserefitem import RefItemImage
 from ..music.refs import RefItem
 
 

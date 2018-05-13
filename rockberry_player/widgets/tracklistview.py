@@ -4,13 +4,13 @@ from kivy.properties import ListProperty, NumericProperty, AliasProperty, \
 from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
-from ..widgets.refitemimage import RefItemImage
+from ..widgets.baserefitem import BaseRefListItem, RefItemImage
 from ..widgets.simpletrackinfo import SimpleTrackInfo
 
 from ..music.tracks import TrackItem
 
 
-class TrackListItem(TrackItem, BoxLayout):
+class TrackListItem(TrackItem, BaseRefListItem):
     pass
 
 
@@ -18,7 +18,7 @@ class TrackListView(DialRecycleView):
     tracklist = ListProperty()
     tlid = NumericProperty()
 
-    def find_is_current_index(self):
+    def find_current_id(self):
         if not self.tlid:
             return None
         for index, tl_track in enumerate(self.tracklist):
@@ -26,7 +26,7 @@ class TrackListView(DialRecycleView):
                 return index
         return None
 
-    current_id = AliasProperty(find_is_current_index, None, bind=['tracklist', 'tlid'])
+    current_id = AliasProperty(find_current_id, None, bind=['tracklist', 'tlid'])
 
     def on_tracklist(self, *args):
         self.data = [{'item': tl_track['track'],
@@ -49,13 +49,6 @@ Builder.load_string("""
     padding: 5
     spacing: 5
 
-    canvas.before:
-        Color:
-            rgba: (0.4, 0.2, 0.2, 0.5) if root.is_current else (0,0,0,0)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
     RefItemImage:
         ref: root.ref
         size_hint_x: None
@@ -71,8 +64,8 @@ Builder.load_string("""
 
     ImageHoldButton:
         size_hint: 0.15, 0.5
-        source: 'playing.zip' if root.is_playing else 'playback_pause.png' if root.is_paused else 'playback_play.png'
-        anim_delay: 0.12
+        #source: 'playing.zip' if root.is_playing else 'playback_pause.png' if root.is_paused else 'playback_play.png'
+        source: root.action_imgsrc
         on_release: app.mm.mopidy.playback.play(tlid=root.tlid)
 
     ImageHoldButton:

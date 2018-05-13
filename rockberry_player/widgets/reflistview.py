@@ -1,20 +1,11 @@
 from kivy.lang import Builder
-from kivy.properties import ListProperty, AliasProperty
-from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import ListProperty
 
 from ..widgets.dialrecycleview import DialRecycleView
-from ..widgets.holdbutton import HoldButton
-from ..widgets.refitemimage import RefItemImage
+from ..widgets.imageholdbutton import ImageHoldButton
+from ..widgets.baserefitem import BaseRefListItem, RefItemImage
 
 from ..music.refs import RefItem
-
-
-class RefListItem(RefItem, BoxLayout):
-
-    def get_ref_action(self, *args):
-        return 'play' if self.reftype == 'track' else 'browse'
-
-    action = AliasProperty(get_ref_action, None, bind=['reftype'])
 
 
 class RefListView(DialRecycleView):
@@ -34,7 +25,8 @@ Builder.load_string("""
     viewclass: 'RefListItem'
     item_height: 56
 
-<RefListItem>:
+
+<RefListItem@BaseRefListItem>:
     size_hint_y: None
     height: 70
     padding: 2
@@ -54,10 +46,11 @@ Builder.load_string("""
         font_size: 20
         bold: (root.reftype != 'track')
 
-    HoldButton:
-        size_hint_x: 0.2
+    ImageHoldButton:
+        size_hint: 0.15, 0.5
         opacity: 0.7
-        text: root.action
+        #text: root.action
+        source: root.action_imgsrc
         holdtime: 2.5
         on_click: app.mm.play_uris(uris=[root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)
         on_hold: app.mm.add_to_tracklist(refs=app.mm.browser.reflist, tune_id=root.index) if root.action == 'play' else app.mm.browser.browse(root.ref)
