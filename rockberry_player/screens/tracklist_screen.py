@@ -20,12 +20,8 @@ class TracklistScreen(Screen):
 
     def __init__(self, **kwargs):
         super(TracklistScreen, self).__init__(**kwargs)
-
-    def on_tracklist(self, *args):
-        self.do_filter()
-
-    def on_filter_words(self, *args):
-        self.do_filter()
+        self.bind(tracklist=self.do_filter,
+                  filter_words=self.do_filter)
 
     @triggered(1.7)
     def do_filter(self, *args):

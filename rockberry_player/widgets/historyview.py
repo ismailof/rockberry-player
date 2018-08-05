@@ -15,6 +15,17 @@ from ..music.refs import RefItem
 from ..utils import format_timestamp
 
 
+class HistoryView(DialRecycleView):
+
+    historylist = ListProperty()
+
+    def on_historylist(self, *args):
+        self.data = [{'ref': ref,
+                      'time': int(time_ms / 1000)}
+                     for time_ms, ref in self.historylist]
+        self.nav_id = 0
+
+
 class HistoryItem(BaseRefListItem):
     time = NumericProperty(0)
     now = NumericProperty(0)
@@ -35,17 +46,6 @@ class HistoryItem(BaseRefListItem):
             self._refresh_event.cancel()
         else:
             self._refresh_event()
-
-
-class HistoryView(DialRecycleView):
-
-    historylist = ListProperty()
-
-    def on_historylist(self, *args):
-        self.data = [{'ref': ref,
-                      'time': int(time_ms / 1000)}
-                     for time_ms, ref in self.historylist]
-        self.nav_id = 0
 
 
 Builder.load_string("""

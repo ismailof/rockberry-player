@@ -10,10 +10,6 @@ from ..widgets.simpletrackinfo import SimpleTrackInfo
 from ..music.tracks import TrackItem
 
 
-class TrackListItem(TrackItem, BaseRefListItem):
-    pass
-
-
 class TrackListView(DialRecycleView):
     tracklist = ListProperty()
     tlid = NumericProperty()
@@ -30,11 +26,15 @@ class TrackListView(DialRecycleView):
 
     def on_tracklist(self, *args):
         self.data = [{'item': tl_track['track'],
-                      'tlid': tl_track['tlid'],
-                     } for tl_track in self.tracklist]
+                      'tlid': tl_track['tlid']}
+                     for tl_track in self.tracklist]
 
     def on_current_id(self, *args):
         self.nav_id = self.current_id
+
+
+class TrackListItem(TrackItem, BaseRefListItem):
+    pass
 
 
 Builder.load_string("""
