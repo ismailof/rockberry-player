@@ -1,10 +1,17 @@
 from kivy.core.window import Window
 from kivy.event import EventDispatcher
-from kivy.input.providers.gpioinput import GPIOEvent, AXIS_COORDS
 from kivy.uix.slider import Slider
 from kivy.properties import NumericProperty, OptionProperty, StringProperty
 from kivy.logger import Logger
 
+
+# Compatibility hack: If GPIOInputProvider is not available do nothing
+try:
+    from kivy.input.providers.gpioinput import GPIOEvent, AXIS_COORDS
+except:
+    AXIS_COORDS = {'x': 'x', 'y': 'y'}
+    class GPIOEvent(object):
+        pass
 
 class DialBehavior(EventDispatcher):
 
