@@ -4,14 +4,16 @@ from kivy.uix.slider import Slider
 from kivy.properties import NumericProperty, OptionProperty, StringProperty
 from kivy.logger import Logger
 
-
-# Compatibility hack: If GPIOInputProvider is not available do nothing
+# Compatibility HACK: If GPIOInputProvider is not available
+# launch warning instead of exception
 try:
     from kivy.input.providers.gpioinput import GPIOEvent, AXIS_COORDS
-except:
+except ImportError:
+    Logger.warning('GPIOInput: Module not found: DialBehavior is not available')
     AXIS_COORDS = {'x': 'x', 'y': 'y'}
     class GPIOEvent(object):
         pass
+
 
 class DialBehavior(EventDispatcher):
 
