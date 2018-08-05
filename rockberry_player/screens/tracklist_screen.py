@@ -1,5 +1,6 @@
 from kivy.lang import Builder
 from kivy.logger import Logger
+from kivy.clock import triggered
 from kivy.uix.screenmanager import Screen
 from kivy.properties import NumericProperty, ListProperty
 
@@ -8,8 +9,6 @@ from ..widgets.playbackarea import PlaybackArea
 from ..widgets.tracklistview import TrackListView
 
 from ..music.tracks import TrackUtils
-
-from ..utils import triggered
 
 
 class TracklistScreen(Screen):

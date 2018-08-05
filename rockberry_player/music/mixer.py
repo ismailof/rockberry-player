@@ -1,7 +1,6 @@
-from kivy.clock import mainthread
+from kivy.clock import mainthread, triggered
 from kivy.properties import BoundedNumericProperty, \
     BooleanProperty, AliasProperty
-from ..utils import triggered
 
 from base import MediaController
 

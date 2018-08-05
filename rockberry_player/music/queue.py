@@ -1,10 +1,8 @@
-from kivy.clock import mainthread
+from kivy.clock import mainthread, triggered
 from kivy.properties import ListProperty, NumericProperty, \
     BooleanProperty
 
 from base import MediaController
-
-from ..utils import triggered
 
 
 class QueueControl(MediaController):

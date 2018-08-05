@@ -1,4 +1,4 @@
-from __future__ import unicode_literals      
+from __future__ import unicode_literals
 from functools import partial, wraps
 from kivy.clock import Clock
 from datetime import timedelta, datetime as dt
@@ -26,36 +26,6 @@ def MarkupText(text, **fmt_options):
                                      tag=tag,
                                      value=value)
     return markup_text
-
-
-def triggered(timeout):
-
-    def wrapper_triggered(_function_):
-
-        _args = []
-        _kwargs = {}
-
-        def cb_function(dt):
-            @wraps(_function_)
-            def do_function(*args, **kwargs):
-                return _function_(*args, **kwargs)
-
-            # Call the function
-            do_function(*tuple(_args), **_kwargs)
-
-        cb_trigger = Clock.create_trigger(cb_function, timeout)
-
-        @wraps(_function_)
-        def trigger_function(*args, **kwargs):
-            _args[:] = []
-            _args.extend(list(args))
-            _kwargs.clear()
-            _kwargs.update(kwargs)
-            cb_trigger()
-
-        return trigger_function
-
-    return wrapper_triggered
 
 
 def format_timestamp(time, now=None):

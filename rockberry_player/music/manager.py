@@ -3,13 +3,11 @@ import random
 
 from kivy.app import App
 from kivy.event import EventDispatcher
-from kivy.clock import Clock, mainthread
+from kivy.clock import Clock, mainthread, triggered
 from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.logger import Logger
 
 from mopidy_json_client import MopidyClient
-
-from ..utils import triggered
 
 from .base import MediaController
 from .refs import RefUtils
@@ -113,7 +111,6 @@ class MediaManager(EventDispatcher):
         HistoryControl.set_interface(self.mopidy.history)
 
     def bind_events(self, *args):
-
         # Clear previous events to avoid duplicity
         self.mopidy.listener.clear()
 
@@ -143,9 +140,6 @@ class MediaManager(EventDispatcher):
         self.mopidy.bind_event('options_changed', self.refresh_context_info)
         self.mopidy.bind_event('tracklist_changed', self.refresh_context_info)
 
-        # Trigger to update status on playback end
-        self.check_playback_end = Clock.create_trigger(self.refresh_main_info, 1)
-
     def init_player_state(self):
         for controller in self.controllers:
             controller.refresh()
@@ -157,7 +151,8 @@ class MediaManager(EventDispatcher):
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
 
-    def refresh_main_info(self, *args):
+    @triggered(1)
+    def check_info_on_track_end(self, *args):
         for controller in (self.state,
                            self.current):
             controller.refresh()
@@ -173,7 +168,7 @@ class MediaManager(EventDispatcher):
 
     @mainthread
     def track_playback_started(self, tl_track):
-        self.check_playback_end.cancel()
+        self.check_info_on_track_end.cancel()
         self.state.set_time_position(0)
         self.current.set_tl_track(tl_track)
         self.history.refresh()
@@ -182,7 +177,7 @@ class MediaManager(EventDispatcher):
     def track_playback_ended(self, time_position, tl_track):
         self.state.set_time_position(0)
         self.state.set_stream_title(None)
-        self.check_playback_end()
+        self.check_info_on_track_end()
 
     @mainthread
     def track_playback_paused_or_resumed(self, time_position, tl_track):

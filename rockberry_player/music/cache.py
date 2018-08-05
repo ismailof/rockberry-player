@@ -1,10 +1,9 @@
 from functools import partial
 
-from kivy.clock import Clock
+from kivy.clock import Clock, triggered
 from kivy.logger import Logger
 
 from .base import MediaController
-from ..utils import triggered
 
 
 class MediaCache(MediaController):

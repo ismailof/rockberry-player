@@ -1,48 +1,38 @@
 #!/usr/bin/python
-# if __name__ == '__main__':
-    # import kivy
-    # kivy.require('1.9.2')
-
-# import json
-    
-# from kivy.base import runTouchApp
-# from kivy.lang import Builder
-# from kivy.properties import ListProperty
-# from kivy.uix.boxlayout import BoxLayout
+import kivy
+kivy.require('1.9.2')
 
 import time
-import json
-from rockberry_player.widgets.historyview import format_time_diff
-
     
-# class TestWidget(BoxLayout):
+from kivy.base import runTouchApp
+from kivy.lang import Builder
+from kivy.properties import ListProperty
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
 
-def get_historylist():
-    hl = None
-    with open('results/result_history1.json') as history_file:
-        hl = json.load(history_file)
-    return hl
+from kivy.clock import triggered
 
 
-#now = time.time()
-now = 1523204380
-print 'NOW [%d] %s' % (now, time.strftime('%d-%b %H:%M', time.localtime(now)))
+class TestWidget(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super(TestWidget, self).__init__(**kwargs)
+        self.label = Label(font_size=60)
+        self.add_widget(self.label)
+        self.update_label()
     
-for milisec, ref in get_historylist():
-    ts = milisec / 1000
-    print '[({0}) {1}] {2} {3}'.format(ts,
-        time.strftime('%d-%b %H:%M', time.localtime(ts)),
-        format_time_diff(ts, now),
-        ref['name'])
-    
-# if __name__ == '__main__':
-   # runTouchApp(widget=TestWidget())
+    @triggered(3, interval=True)
+    def update_label(self, *args):
+        self.label.text = time.strftime('%d-%b %H:%M:%S', time.localtime())
 
-   
+if __name__ == '__main__':
+    print time.strftime('%H%M%S', time.localtime())
+    runTouchApp(widget=TestWidget())
+
 # Builder.load_string("""
 
 # <TestWidget>:
-    # HistoryView:
-        # historylist: root.get_historylist()
+    # Label:
+        # text: time.strtime('%HMMSS', time.localtime())
 
 # """)
