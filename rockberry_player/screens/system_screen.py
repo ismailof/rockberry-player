@@ -1,13 +1,19 @@
 import subprocess
 
 from kivy.lang import Builder
+from kivy.clock import mainthread
 from kivy.uix.screenmanager import Screen
 
 from ..widgets.imageactionbutton import ImageActionButton
 
 
 class SystemScreen(Screen):
+    pass
 
+
+class SystemButton(ImageActionButton):
+
+    @mainthread
     def system_command(self, action=None):
 
         commands = {
@@ -25,6 +31,11 @@ class SystemScreen(Screen):
 
 
 Builder.load_string("""
+
+<SystemButton>
+    holdtime: 2.5
+    on_hold: self.system_command(action=self.action)
+
 
 <SystemScreen>
     BoxLayout:
@@ -44,15 +55,13 @@ Builder.load_string("""
             Button:
                 text: 'Reset Mopidy'
                 on_release: root.system_command('rst-mopidy')
-            ImageActionButton:
+            SystemButton:
                 scope: 'system'
-                call: root.system_command
                 color_released: [0.0, 0.0, 0.8, 1]
                 action: 'reboot'
-            ImageActionButton:
+            SystemButton:
                 scope: 'system'
                 color_released: [0.8, 0.0, 0.0, 1]
-                call: root.system_command
                 action: 'poweroff'
 
 """)
