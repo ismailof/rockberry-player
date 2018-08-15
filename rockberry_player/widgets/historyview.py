@@ -9,7 +9,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from ..widgets.dialrecycleview import DialRecycleView
 from ..widgets.baserefitem import BaseRefListItem, RefItemImage
-from ..widgets.imageholdbutton import ImageHoldButton
+from ..widgets.imageactionbutton import ImageActionButton
 
 from ..music.refs import RefItem
 from ..utils import format_timestamp
@@ -81,7 +81,7 @@ Builder.load_string("""
             halign: 'right'
             font_size: 16
 
-    ImageHoldButton:
+    ImageActionButton:
         size_hint: 0.15, 0.5
         opacity: 0.7
         source: root.action_imgsrc

@@ -2,7 +2,7 @@ from kivy.lang import Builder
 from kivy.properties import ListProperty
 
 from ..widgets.dialrecycleview import DialRecycleView
-from ..widgets.imageholdbutton import ImageHoldButton
+from ..widgets.imageactionbutton import ImageActionButton
 from ..widgets.baserefitem import BaseRefListItem, RefItemImage
 
 from ..music.refs import RefItem
@@ -46,10 +46,9 @@ Builder.load_string("""
         font_size: 20
         bold: (root.reftype != 'track')
 
-    ImageHoldButton:
+    ImageActionButton:
         size_hint: 0.15, 0.5
         opacity: 0.7
-        #text: root.action
         source: root.action_imgsrc
         holdtime: 2.5
         on_click: app.mm.play_uris(uris=[root.uri]) if root.action == 'play' else app.mm.browser.browse(root.ref)

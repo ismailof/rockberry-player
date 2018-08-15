@@ -24,7 +24,6 @@ class BaseRefListItem(RefItem, BoxLayout):
     def get_action_image(self, *args):
         if self.action == 'browse':
             return 'action_browse.png'
-
         if self.is_playing:
             return 'playing.zip'
         elif self.is_paused:

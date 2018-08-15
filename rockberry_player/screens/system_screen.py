@@ -3,12 +3,12 @@ import subprocess
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
-from ..widgets.imageholdbutton import ImageActionButton
+from ..widgets.imageactionbutton import ImageActionButton
 
 
 class SystemScreen(Screen):
 
-    def system_command(self, command):
+    def system_command(self, action=None):
 
         commands = {
             'poweroff': 'shutdown -P now',
@@ -18,7 +18,8 @@ class SystemScreen(Screen):
         }
 
         try:
-            subprocess.call(['sudo', command[action]], shell=True, stderr=subprocess.STDOUT)
+            subprocess.call(['sudo'] + commands[action].split(),
+                            stderr=subprocess.STDOUT)
         except KeyError:
             pass
 
@@ -26,7 +27,6 @@ class SystemScreen(Screen):
 Builder.load_string("""
 
 <SystemScreen>
-
     BoxLayout:
         orientation: 'vertical'
         Label:
@@ -46,11 +46,13 @@ Builder.load_string("""
                 on_release: root.system_command('rst-mopidy')
             ImageActionButton:
                 scope: 'system'
-                action: 'reboot'
                 call: root.system_command
+                color_released: [0.0, 0.0, 0.8, 1]
+                action: 'reboot'
             ImageActionButton:
                 scope: 'system'
-                action: 'poweroff'
+                color_released: [0.8, 0.0, 0.0, 1]
                 call: root.system_command
+                action: 'poweroff'
 
 """)

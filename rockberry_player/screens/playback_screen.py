@@ -8,7 +8,7 @@ from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
 from ..widgets.trackinfolabel import TrackInfoLabel
 from ..widgets.volumebar import VolumeBar
-from ..widgets.imageholdbutton import ImageActionButton
+from ..widgets.imageactionbutton import ImageActionButton
 from ..widgets.progress_rectangle import ProgressRectangle
 
 from ..music.tracks import TrackUtils
@@ -52,8 +52,7 @@ Builder.load_string("""
 
 <PlaybackButton>:
     scope: 'playback'
-    args: {'event_type': 'on_' + self.action}
-    call: app.mm.state.dispatch
+    on_click: app.mm.state.dispatch(event_type='on_' + self.action)
 
 <PlaybackScreen>:
     BoxLayout:
@@ -135,7 +134,6 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'prev'
-                        call: app.mm.state.dispatch
                         color_released: (1, 1, 1, 0.75)
                         pos: self.parent.pos
                         size: self.parent.size
@@ -143,7 +141,6 @@ Builder.load_string("""
                 PlaybackButton:
                     action: 'pause' if app.mm.state.playback_state == 'playing' else 'play'
                     on_hold: self.action = 'stop'
-                    call: app.mm.state.dispatch
                     size_hint_y: 0.8
                     holdtime: 1.5
 

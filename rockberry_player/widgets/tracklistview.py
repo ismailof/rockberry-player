@@ -62,15 +62,15 @@ Builder.load_string("""
     SimpleTrackInfo:
         item: root.item
 
-    ImageHoldButton:
+    ImageActionButton:
         size_hint: 0.15, 0.5
-        #source: 'playing.zip' if root.is_playing else 'playback_pause.png' if root.is_paused else 'playback_play.png'
         source: root.action_imgsrc
         on_release: app.mm.mopidy.playback.play(tlid=root.tlid)
 
-    ImageHoldButton:
+    ImageActionButton:
         size_hint: 0.15, 0.5
-        source: 'action_delete.png'
+        scope: 'action'
+        action: 'delete'
         on_release: app.mm.mopidy.tracklist.remove(criteria={'tlid':[root.tlid]})
 
 """)
