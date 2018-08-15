@@ -151,7 +151,7 @@ class MediaManager(EventDispatcher):
     def on_mopidy_error(self, error):
         self.app.main.show_error(error=error)
 
-    @triggered(1)
+    @triggered(3)
     def check_info_on_track_end(self, *args):
         for controller in (self.state,
                            self.current):

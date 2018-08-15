@@ -73,9 +73,8 @@ class AlbumCover(HoldButtonBehavior, AsyncImage):
                 img_source = 'http:' + img_source[6:]
         else:
             # Local backend. Add server path
-            if RefUtils.get_media_from_uri(self.uri) == 'local':
-                img_source = 'http://{}{}'.format(MediaCache.app.MOPIDY_SERVER,
-                                                  img_source)
+            img_source = 'http://{}{}'.format(MediaCache.app.MOPIDY_SERVER,
+                                              img_source)
 
         return img_source
 

@@ -3,11 +3,24 @@ import subprocess
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
+from ..widgets.imageholdbutton import ImageActionButton
+
 
 class SystemScreen(Screen):
 
     def system_command(self, command):
-        subprocess.call(command, shell=True, stderr=subprocess.STDOUT)
+
+        commands = {
+            'poweroff': 'shutdown -P now',
+            'reboot': 'reboot',
+            'rst-mopidy': 'systemctl restart mopidy',
+            'rst-wifi': 'ifdown wlan0; sudo ifup wlan0'
+        }
+
+        try:
+            subprocess.call(['sudo', command[action]], shell=True, stderr=subprocess.STDOUT)
+        except KeyError:
+            pass
 
 
 Builder.load_string("""
@@ -27,15 +40,17 @@ Builder.load_string("""
             size_hint_y: 0.3
             Button:
                 text: 'Reset WiFi'
-                on_release: root.system_command('sudo ifdown wlan0; sudo ifup wlan0')
+                on_release: root.system_command('rst-wifi')
             Button:
                 text: 'Reset Mopidy'
-                on_release: root.system_command('sudo systemctl restart mopidy')
-            Button:
-                text: 'Reset'
-                on_release: root.system_command('sudo reboot')
-            Button:
-                text: 'Apagar'
-                on_release: root.system_command('sudo shutdown -P now')
+                on_release: root.system_command('rst-mopidy')
+            ImageActionButton:
+                scope: 'system'
+                action: 'reboot'
+                call: root.system_command
+            ImageActionButton:
+                scope: 'system'
+                action: 'poweroff'
+                call: root.system_command
 
 """)

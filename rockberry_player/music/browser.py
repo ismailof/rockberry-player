@@ -50,7 +50,6 @@ class BrowserControl (MediaController):
         self.browse_home()
 
     def server_refresh(self, *args):
-
         if self.browse_ref['uri'] == 'playlists:':
             self.mopidy.playlists.refresh()
         else:

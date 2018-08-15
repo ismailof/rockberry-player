@@ -2,16 +2,24 @@ from __future__ import absolute_import, print_function
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+from kivy.properties import OptionProperty
 
 from ..widgets.albumcover import AlbumCover
 from ..widgets.deviceimage import DeviceImage
 from ..widgets.trackinfolabel import TrackInfoLabel
 from ..widgets.volumebar import VolumeBar
-from ..widgets.imageholdbutton import PlaybackButton
+from ..widgets.imageholdbutton import ImageActionButton
 from ..widgets.progress_rectangle import ProgressRectangle
 
 from ..music.tracks import TrackUtils
+from ..music.playback import PlaybackControl
+
 from ..utils import MarkupText
+
+
+class PlaybackButton(ImageActionButton):
+    action = OptionProperty(PlaybackControl.ACTIONS[0],
+                            options=PlaybackControl.ACTIONS)
 
 
 class PlaybackScreen(Screen):
@@ -40,6 +48,12 @@ class PlaybackScreen(Screen):
 
 
 Builder.load_string("""
+
+
+<PlaybackButton>:
+    scope: 'playback'
+    args: {'event_type': 'on_' + self.action}
+    call: app.mm.state.dispatch
 
 <PlaybackScreen>:
     BoxLayout:
@@ -167,7 +181,6 @@ Builder.load_string("""
 
                     PlaybackButton:
                         action: 'next'
-                        call: app.mm.state.dispatch
                         color_released: (1, 1, 1, 0.75)
                         pos: self.parent.pos
                         size: self.parent.size
