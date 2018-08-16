@@ -33,9 +33,9 @@ class SystemButton(ImageActionButton):
 Builder.load_string("""
 
 <SystemButton>
-    holdtime: 2.5
+    holdtime: 2
     on_hold: self.system_command(action=self.action)
-
+    color_pressed: [1, 1, 1, 1]
 
 <SystemScreen>
     BoxLayout:
@@ -49,12 +49,10 @@ Builder.load_string("""
             font_size: 40
         BoxLayout:
             size_hint_y: 0.3
-            Button:
-                text: 'Reset WiFi'
-                on_release: root.system_command('rst-wifi')
-            Button:
-                text: 'Reset Mopidy'
-                on_release: root.system_command('rst-mopidy')
+            SystemButton:
+                scope: 'system'
+                color_released: [0.0, 0.8, 0.0, 1]
+                action: 'rst-mopidy'
             SystemButton:
                 scope: 'system'
                 color_released: [0.0, 0.0, 0.8, 1]
